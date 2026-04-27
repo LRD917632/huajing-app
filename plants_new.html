@@ -1,0 +1,1243 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>花净 - 植物图鉴</title>
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Noto+Serif+SC:wght@400;600;700&family=PingFang+SC:wght@300;400;500;600;700&display=swap');
+        
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        
+        :root {
+            --primary: #2D5A3D;
+            --primary-light: #4A7C59;
+            --primary-dark: #1A3D2A;
+            --secondary: #6B8E6B;
+            --accent: #8FBC8F;
+            --bg-gradient-start: #F0F7F4;
+            --bg-gradient-end: #E0EDE6;
+            --card-bg: rgba(255, 255, 255, 0.85);
+            --card-shadow: 0 8px 32px rgba(45, 90, 61, 0.08);
+            --card-shadow-hover: 0 16px 48px rgba(45, 90, 61, 0.15);
+            --text-primary: #1A2F22;
+            --text-secondary: #5A7A62;
+            --text-muted: #8BA892;
+            --border-color: rgba(45, 90, 61, 0.08);
+            --border-radius-sm: 12px;
+            --border-radius-md: 16px;
+            --border-radius-lg: 24px;
+            --border-radius-xl: 32px;
+        }
+        
+        body {
+            font-family: 'PingFang SC', 'Microsoft YaHei', sans-serif;
+            background: linear-gradient(180deg, var(--bg-gradient-start) 0%, var(--bg-gradient-end) 100%);
+            min-height: 100vh;
+            color: var(--text-primary);
+            -webkit-font-smoothing: antialiased;
+            -moz-osx-font-smoothing: grayscale;
+        }
+
+        .header {
+            background: rgba(255, 255, 255, 0.7);
+            backdrop-filter: blur(20px);
+            -webkit-backdrop-filter: blur(20px);
+            border-bottom: 1px solid var(--border-color);
+            padding: 16px 32px;
+            position: sticky;
+            top: 0;
+            z-index: 100;
+            box-shadow: 0 2px 20px rgba(45, 90, 61, 0.06);
+        }
+        
+        .header-content {
+            max-width: 1400px;
+            margin: 0 auto;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+        
+        .logo {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            font-family: 'Noto Serif SC', serif;
+            font-size: 28px;
+            font-weight: 700;
+            color: var(--primary);
+            letter-spacing: 2px;
+        }
+        
+        .logo-icon {
+            width: 40px;
+            height: 40px;
+            background: linear-gradient(135deg, var(--primary) 0%, var(--primary-light) 100%);
+            border-radius: var(--border-radius-sm);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 20px;
+            box-shadow: 0 4px 12px rgba(45, 90, 61, 0.15);
+        }
+        
+        .nav {
+            display: flex;
+            gap: 8px;
+        }
+        
+        .nav a {
+            position: relative;
+            color: var(--text-secondary);
+            text-decoration: none;
+            padding: 10px 20px;
+            border-radius: var(--border-radius-lg);
+            font-weight: 500;
+            font-size: 14px;
+            transition: all 0.3s ease;
+            overflow: hidden;
+        }
+        
+        .nav a::before {
+            content: '';
+            position: absolute;
+            bottom: 0;
+            left: 50%;
+            width: 0;
+            height: 2px;
+            background: linear-gradient(90deg, var(--primary) 0%, var(--accent) 100%);
+            transform: translateX(-50%);
+            transition: width 0.3s ease;
+        }
+        
+        .nav a:hover {
+            color: var(--primary);
+            background: rgba(45, 90, 61, 0.05);
+        }
+        
+        .nav a:hover::before {
+            width: 60%;
+        }
+        
+        .nav a.active {
+            color: var(--primary);
+            background: rgba(45, 90, 61, 0.08);
+        }
+
+        .hero {
+            text-align: center;
+            padding: 60px 32px 40px;
+            position: relative;
+            overflow: hidden;
+        }
+        
+        .hero::before {
+            content: '';
+            position: absolute;
+            top: -50%;
+            left: -25%;
+            width: 100%;
+            height: 100%;
+            background: radial-gradient(circle at center, rgba(45, 90, 61, 0.06) 0%, transparent 70%);
+            pointer-events: none;
+        }
+        
+        .hero-title {
+            font-family: 'Noto Serif SC', serif;
+            font-size: 48px;
+            font-weight: 700;
+            color: var(--primary-dark);
+            margin-bottom: 16px;
+            letter-spacing: 4px;
+            position: relative;
+        }
+        
+        .hero-title::after {
+            content: '';
+            display: block;
+            width: 80px;
+            height: 3px;
+            background: linear-gradient(90deg, var(--primary) 0%, var(--accent) 100%);
+            margin: 20px auto 0;
+            border-radius: 2px;
+        }
+        
+        .hero-subtitle {
+            font-size: 16px;
+            color: var(--text-secondary);
+            font-weight: 400;
+            letter-spacing: 1px;
+        }
+
+        .search-section {
+            padding: 0 32px 32px;
+            max-width: 700px;
+            margin: 0 auto;
+        }
+        
+        .search-box {
+            position: relative;
+            display: flex;
+            gap: 12px;
+        }
+        
+        .search-input-wrapper {
+            flex: 1;
+            position: relative;
+        }
+        
+        .search-input {
+            width: 100%;
+            padding: 16px 24px 16px 56px;
+            border: none;
+            border-radius: var(--border-radius-xl);
+            font-size: 15px;
+            background: var(--card-bg);
+            backdrop-filter: blur(10px);
+            -webkit-backdrop-filter: blur(10px);
+            box-shadow: var(--card-shadow);
+            color: var(--text-primary);
+            transition: all 0.3s ease;
+        }
+        
+        .search-input:focus {
+            outline: none;
+            box-shadow: var(--card-shadow-hover);
+            transform: translateY(-1px);
+        }
+        
+        .search-input::placeholder {
+            color: var(--text-muted);
+        }
+        
+        .search-icon {
+            position: absolute;
+            left: 20px;
+            top: 50%;
+            transform: translateY(-50%);
+            font-size: 18px;
+            color: var(--text-muted);
+        }
+        
+        .search-btn {
+            padding: 16px 32px;
+            background: linear-gradient(135deg, var(--primary) 0%, var(--primary-light) 100%);
+            color: white;
+            border: none;
+            border-radius: var(--border-radius-xl);
+            cursor: pointer;
+            font-size: 15px;
+            font-weight: 600;
+            box-shadow: 0 8px 24px rgba(45, 90, 61, 0.25);
+            transition: all 0.3s ease;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+        
+        .search-btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 12px 32px rgba(45, 90, 61, 0.35);
+        }
+
+        .stats {
+            display: flex;
+            justify-content: center;
+            gap: 48px;
+            padding: 32px;
+            background: var(--card-bg);
+            backdrop-filter: blur(10px);
+            -webkit-backdrop-filter: blur(10px);
+            margin: 0 32px 32px;
+            border-radius: var(--border-radius-lg);
+            box-shadow: var(--card-shadow);
+            border: 1px solid var(--border-color);
+        }
+        
+        .stat-item {
+            text-align: center;
+            position: relative;
+            padding: 0 24px;
+        }
+        
+        .stat-item:not(:last-child)::after {
+            content: '';
+            position: absolute;
+            right: -24px;
+            top: 50%;
+            transform: translateY(-50%);
+            width: 1px;
+            height: 40px;
+            background: var(--border-color);
+        }
+        
+        .stat-number {
+            font-family: 'Noto Serif SC', serif;
+            font-size: 36px;
+            font-weight: 700;
+            background: linear-gradient(135deg, var(--primary) 0%, var(--primary-light) 100%);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+            margin-bottom: 8px;
+        }
+        
+        .stat-label {
+            font-size: 13px;
+            color: var(--text-muted);
+            font-weight: 500;
+            letter-spacing: 0.5px;
+        }
+
+        .filters {
+            padding: 0 32px 24px;
+            display: flex;
+            justify-content: center;
+            gap: 12px;
+            flex-wrap: wrap;
+        }
+        
+        .filter-btn {
+            padding: 10px 24px;
+            border: 1px solid var(--border-color);
+            color: var(--text-secondary);
+            background: var(--card-bg);
+            backdrop-filter: blur(10px);
+            -webkit-backdrop-filter: blur(10px);
+            border-radius: var(--border-radius-lg);
+            cursor: pointer;
+            font-size: 14px;
+            font-weight: 500;
+            transition: all 0.3s ease;
+            position: relative;
+            overflow: hidden;
+        }
+        
+        .filter-btn::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(135deg, var(--primary) 0%, var(--primary-light) 100%);
+            opacity: 0;
+            transition: opacity 0.3s ease;
+        }
+        
+        .filter-btn span {
+            position: relative;
+            z-index: 1;
+        }
+        
+        .filter-btn:hover {
+            border-color: var(--primary);
+            color: var(--primary);
+            transform: translateY(-2px);
+        }
+        
+        .filter-btn.active::before {
+            opacity: 1;
+        }
+        
+        .filter-btn.active {
+            border-color: var(--primary);
+            color: white;
+            box-shadow: 0 8px 20px rgba(45, 90, 61, 0.2);
+        }
+        
+        .add-btn {
+            padding: 10px 24px;
+            background: linear-gradient(135deg, var(--primary) 0%, var(--primary-light) 100%);
+            color: white;
+            border: none;
+            border-radius: var(--border-radius-lg);
+            cursor: pointer;
+            font-size: 14px;
+            font-weight: 600;
+            box-shadow: 0 6px 16px rgba(45, 90, 61, 0.2);
+            transition: all 0.3s ease;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+        
+        .add-btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 10px 24px rgba(45, 90, 61, 0.3);
+        }
+
+        .plants-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+            gap: 24px;
+            padding: 0 32px 48px;
+            max-width: 1400px;
+            margin: 0 auto;
+        }
+        
+        .plant-card {
+            background: var(--card-bg);
+            backdrop-filter: blur(10px);
+            -webkit-backdrop-filter: blur(10px);
+            border-radius: var(--border-radius-lg);
+            overflow: hidden;
+            box-shadow: var(--card-shadow);
+            border: 1px solid var(--border-color);
+            transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+            cursor: pointer;
+        }
+        
+        .plant-card:hover {
+            transform: translateY(-8px) scale(1.02);
+            box-shadow: var(--card-shadow-hover);
+        }
+        
+        .plant-card-image-wrapper {
+            position: relative;
+            height: 200px;
+            overflow: hidden;
+        }
+        
+        .plant-card-image {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            transition: transform 0.6s cubic-bezier(0.4, 0, 0.2, 1);
+        }
+        
+        .plant-card:hover .plant-card-image {
+            transform: scale(1.15);
+        }
+        
+        .plant-card-overlay {
+            position: absolute;
+            bottom: 0;
+            left: 0;
+            right: 0;
+            height: 60%;
+            background: linear-gradient(to top, rgba(0, 0, 0, 0.6) 0%, transparent 100%);
+            opacity: 0;
+            transition: opacity 0.3s ease;
+        }
+        
+        .plant-card:hover .plant-card-overlay {
+            opacity: 1;
+        }
+        
+        .plant-card-content {
+            padding: 20px;
+        }
+        
+        .plant-card-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: flex-start;
+            margin-bottom: 12px;
+        }
+        
+        .plant-card-title {
+            font-family: 'Noto Serif SC', serif;
+            font-size: 22px;
+            font-weight: 600;
+            color: var(--primary-dark);
+            margin-bottom: 4px;
+        }
+        
+        .plant-card-family {
+            font-size: 13px;
+            color: var(--text-muted);
+        }
+        
+        .plant-card-badge {
+            padding: 4px 12px;
+            background: rgba(45, 90, 61, 0.08);
+            color: var(--primary);
+            border-radius: var(--border-radius-sm);
+            font-size: 12px;
+            font-weight: 500;
+        }
+        
+        .plant-card-desc {
+            font-size: 14px;
+            color: var(--text-secondary);
+            line-height: 1.7;
+            margin-bottom: 16px;
+            display: -webkit-box;
+            -webkit-line-clamp: 2;
+            -webkit-box-orient: vertical;
+            overflow: hidden;
+        }
+        
+        .plant-card-tags {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 8px;
+        }
+        
+        .plant-tag {
+            padding: 5px 12px;
+            background: linear-gradient(135deg, rgba(45, 90, 61, 0.08) 0%, rgba(74, 124, 89, 0.08) 100%);
+            color: var(--primary);
+            border-radius: var(--border-radius-sm);
+            font-size: 12px;
+            font-weight: 500;
+            transition: all 0.3s ease;
+        }
+        
+        .plant-tag:hover {
+            background: linear-gradient(135deg, var(--primary) 0%, var(--primary-light) 100%);
+            color: white;
+        }
+
+        .modal-overlay {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(26, 47, 34, 0.6);
+            backdrop-filter: blur(10px);
+            -webkit-backdrop-filter: blur(10px);
+            justify-content: center;
+            align-items: center;
+            z-index: 1000;
+            animation: fadeIn 0.3s ease;
+        }
+        
+        .modal-overlay.show {
+            display: flex;
+        }
+        
+        @keyframes fadeIn {
+            from { opacity: 0; }
+            to { opacity: 1; }
+        }
+        
+        .modal {
+            background: white;
+            border-radius: var(--border-radius-xl);
+            max-width: 650px;
+            width: 90%;
+            max-height: 85vh;
+            overflow: hidden;
+            position: relative;
+            box-shadow: 0 20px 60px rgba(26, 47, 34, 0.25);
+            animation: slideUp 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+        }
+        
+        @keyframes slideUp {
+            from { 
+                opacity: 0;
+                transform: translateY(20px) scale(0.98);
+            }
+            to { 
+                opacity: 1;
+                transform: translateY(0) scale(1);
+            }
+        }
+        
+        .modal-header {
+            position: relative;
+            height: 320px;
+        }
+        
+        .modal-close {
+            position: absolute;
+            top: 20px;
+            right: 20px;
+            width: 40px;
+            height: 40px;
+            border-radius: 50%;
+            border: none;
+            background: rgba(255, 255, 255, 0.9);
+            backdrop-filter: blur(10px);
+            -webkit-backdrop-filter: blur(10px);
+            color: var(--text-secondary);
+            font-size: 20px;
+            cursor: pointer;
+            z-index: 10;
+            transition: all 0.3s ease;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+        }
+        
+        .modal-close:hover {
+            background: white;
+            transform: scale(1.1);
+            color: var(--primary);
+        }
+        
+        .modal img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+        }
+        
+        .modal-gradient {
+            position: absolute;
+            bottom: 0;
+            left: 0;
+            right: 0;
+            height: 60%;
+            background: linear-gradient(to top, rgba(26, 47, 34, 0.9) 0%, transparent 100%);
+        }
+        
+        .modal-title {
+            position: absolute;
+            bottom: 30px;
+            left: 30px;
+            color: white;
+            font-family: 'Noto Serif SC', serif;
+            font-size: 32px;
+            font-weight: 700;
+            text-shadow: 0 2px 20px rgba(0, 0, 0, 0.3);
+        }
+        
+        .modal-subtitle {
+            position: absolute;
+            bottom: 34px;
+            left: 30px;
+            transform: translateY(28px);
+            color: rgba(255, 255, 255, 0.85);
+            font-size: 14px;
+        }
+        
+        .modal-body {
+            padding: 30px;
+            max-height: calc(85vh - 200px);
+            overflow-y: auto;
+            overflow-x: hidden;
+        }
+        
+        .modal-info {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 16px;
+            margin-bottom: 24px;
+        }
+        
+        .info-item {
+            padding: 16px;
+            background: linear-gradient(135deg, rgba(45, 90, 61, 0.04) 0%, rgba(74, 124, 89, 0.04) 100%);
+            border-radius: var(--border-radius-md);
+            border: 1px solid var(--border-color);
+            transition: all 0.3s ease;
+        }
+        
+        .info-item:hover {
+            background: rgba(45, 90, 61, 0.06);
+            transform: translateY(-2px);
+        }
+        
+        .info-label {
+            font-size: 12px;
+            color: var(--text-muted);
+            margin-bottom: 6px;
+            font-weight: 500;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+        }
+        
+        .info-value {
+            font-size: 15px;
+            color: var(--text-primary);
+            font-weight: 600;
+        }
+        
+        .modal-desc {
+            background: linear-gradient(135deg, rgba(45, 90, 61, 0.06) 0%, rgba(139, 184, 146, 0.06) 100%);
+            padding: 20px;
+            border-radius: var(--border-radius-md);
+            margin-bottom: 20px;
+            border-left: 4px solid var(--primary);
+        }
+        
+        .modal-desc h4 {
+            color: var(--primary-dark);
+            margin-bottom: 12px;
+            font-family: 'Noto Serif SC', serif;
+            font-size: 16px;
+        }
+        
+        .modal-desc p {
+            color: var(--text-secondary);
+            line-height: 1.8;
+            font-size: 14px;
+        }
+        
+        .comments-section {
+            margin-bottom: 20px;
+        }
+        
+        .comments-section h4 {
+            margin-bottom: 16px;
+            color: var(--primary-dark);
+            font-family: 'Noto Serif SC', serif;
+        }
+        
+        .comments-list {
+            margin-bottom: 20px;
+        }
+        
+        .comment-item {
+            padding: 16px;
+            background: rgba(45, 90, 61, 0.04);
+            border-radius: var(--border-radius-md);
+            margin-bottom: 12px;
+            transition: all 0.3s ease;
+        }
+        
+        .comment-item:hover {
+            background: rgba(45, 90, 61, 0.08);
+        }
+        
+        .comment-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 8px;
+        }
+        
+        .comment-author {
+            font-weight: 600;
+            color: var(--primary-dark);
+        }
+        
+        .comment-time {
+            font-size: 12px;
+            color: var(--text-muted);
+        }
+        
+        .comment-text {
+            color: var(--text-secondary);
+            font-size: 14px;
+            line-height: 1.6;
+        }
+        
+        .comment-input-wrapper {
+            position: relative;
+        }
+        
+        .comment-input {
+            width: 100%;
+            padding: 14px 18px;
+            border: 1px solid var(--border-color);
+            border-radius: var(--border-radius-md);
+            font-size: 14px;
+            transition: all 0.3s ease;
+            resize: none;
+            min-height: 80px;
+        }
+        
+        .comment-input:focus {
+            outline: none;
+            border-color: var(--primary);
+            box-shadow: 0 0 0 3px rgba(45, 90, 61, 0.08);
+        }
+        
+        .comment-submit {
+            background: linear-gradient(135deg, var(--primary) 0%, var(--primary-light) 100%);
+            color: white;
+            border: none;
+            padding: 12px 28px;
+            border-radius: var(--border-radius-md);
+            cursor: pointer;
+            font-size: 14px;
+            font-weight: 600;
+            float: right;
+            margin-top: 12px;
+            box-shadow: 0 6px 16px rgba(45, 90, 61, 0.2);
+            transition: all 0.3s ease;
+        }
+        
+        .comment-submit:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 8px 20px rgba(45, 90, 61, 0.25);
+        }
+
+        .modal-add-header {
+            background: linear-gradient(135deg, var(--primary) 0%, var(--primary-light) 100%);
+            padding: 24px;
+            border-radius: var(--border-radius-xl) var(--border-radius-xl) 0 0;
+            position: relative;
+        }
+        
+        .modal-add-header .modal-close {
+            background: rgba(255, 255, 255, 0.2);
+            color: white;
+        }
+        
+        .modal-add-header .modal-close:hover {
+            background: rgba(255, 255, 255, 0.3);
+        }
+        
+        .modal-add-title {
+            color: white;
+            font-family: 'Noto Serif SC', serif;
+            font-size: 24px;
+            font-weight: 600;
+        }
+        
+        .add-plant-form {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 16px;
+        }
+        
+        .add-plant-form input,
+        .add-plant-form textarea {
+            padding: 12px 16px;
+            border: 1px solid var(--border-color);
+            border-radius: var(--border-radius-sm);
+            font-size: 14px;
+            transition: all 0.3s ease;
+            width: 100%;
+        }
+        
+        .add-plant-form input:focus,
+        .add-plant-form textarea:focus {
+            outline: none;
+            border-color: var(--primary);
+            box-shadow: 0 0 0 3px rgba(45, 90, 61, 0.08);
+        }
+        
+        .add-plant-form textarea {
+            grid-column: span 2;
+            min-height: 80px;
+            resize: none;
+        }
+        
+        .add-plant-submit {
+            grid-column: span 2;
+            background: linear-gradient(135deg, var(--primary) 0%, var(--primary-light) 100%);
+            color: white;
+            border: none;
+            padding: 14px;
+            border-radius: var(--border-radius-md);
+            cursor: pointer;
+            font-size: 15px;
+            font-weight: 600;
+            box-shadow: 0 6px 16px rgba(45, 90, 61, 0.2);
+            transition: all 0.3s ease;
+        }
+        
+        .add-plant-submit:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 8px 20px rgba(45, 90, 61, 0.25);
+        }
+
+        @media (max-width: 768px) {
+            .header {
+                padding: 12px 16px;
+            }
+            
+            .logo {
+                font-size: 22px;
+            }
+            
+            .logo-icon {
+                width: 32px;
+                height: 32px;
+                font-size: 16px;
+            }
+            
+            .nav {
+                display: none;
+            }
+            
+            .hero-title {
+                font-size: 32px;
+            }
+            
+            .hero {
+                padding: 40px 16px 24px;
+            }
+            
+            .search-section {
+                padding: 0 16px 24px;
+            }
+            
+            .stats {
+                gap: 24px;
+                padding: 20px;
+                margin: 0 16px 24px;
+            }
+            
+            .stat-item {
+                padding: 0 12px;
+            }
+            
+            .stat-item:not(:last-child)::after {
+                right: -12px;
+            }
+            
+            .stat-number {
+                font-size: 28px;
+            }
+            
+            .filters {
+                padding: 0 16px 20px;
+                gap: 8px;
+            }
+            
+            .filter-btn {
+                padding: 8px 16px;
+                font-size: 13px;
+            }
+            
+            .plants-grid {
+                grid-template-columns: 1fr;
+                gap: 20px;
+                padding: 0 16px 32px;
+            }
+            
+            .plant-card-image-wrapper {
+                height: 180px;
+            }
+            
+            .modal {
+                width: 95%;
+                max-height: 90vh;
+            }
+            
+            .modal-header {
+                height: 200px;
+            }
+            
+            .modal-body {
+                max-height: calc(90vh - 160px);
+            }
+            
+            .modal-info {
+                grid-template-columns: 1fr;
+            }
+            
+            .add-plant-form {
+                grid-template-columns: 1fr;
+            }
+            
+            .add-plant-form textarea {
+                grid-column: span 1;
+            }
+            
+            .add-plant-submit {
+                grid-column: span 1;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="header">
+        <div class="header-content">
+            <div class="logo">
+                <div class="logo-icon">🌿</div>
+                <span>花净</span>
+            </div>
+            <div class="nav">
+                <a href="index.html">首页</a>
+                <a href="plants_new.html" class="active">植物图鉴</a>
+                <a href="garden-diy.html">简创花境</a>
+                <a href="garden-diy.html">作品展示</a>
+                <a href="pet-diary.html">养宠日记</a>
+                <a href="profile.html">个人中心</a>
+                <a href="feedback.html">用户反馈</a>
+            </div>
+        </div>
+    </div>
+
+    <div class="hero">
+        <h1 class="hero-title">植物图鉴</h1>
+        <p class="hero-subtitle">探索大自然的奇妙世界，发现更多植物之美</p>
+    </div>
+
+    <div class="search-section">
+        <div class="search-box">
+            <div class="search-input-wrapper">
+                <span class="search-icon">🔍</span>
+                <input type="text" id="searchInput" class="search-input" placeholder="搜索植物名称、科属...">
+            </div>
+            <button class="search-btn" onclick="searchPlants()">
+                <span>搜索</span>
+            </button>
+        </div>
+    </div>
+
+    <div class="stats">
+        <div class="stat-item">
+            <div class="stat-number">100+</div>
+            <div class="stat-label">植物种类</div>
+        </div>
+        <div class="stat-item">
+            <div class="stat-number">20+</div>
+            <div class="stat-label">植物科属</div>
+        </div>
+        <div class="stat-item">
+            <div class="stat-number">1000+</div>
+            <div class="stat-label">养护知识</div>
+        </div>
+        <div class="stat-item">
+            <div class="stat-number">2000+</div>
+            <div class="stat-label">社区分享</div>
+        </div>
+    </div>
+
+    <div class="filters">
+        <button class="filter-btn active" onclick="filterPlants('all')"><span>全部</span></button>
+        <button class="filter-btn" onclick="filterPlants('乔木')"><span>乔木</span></button>
+        <button class="filter-btn" onclick="filterPlants('灌木')"><span>灌木</span></button>
+        <button class="filter-btn" onclick="filterPlants('藤本')"><span>藤本</span></button>
+        <button class="filter-btn" onclick="filterPlants('常绿')"><span>常绿</span></button>
+        <button class="filter-btn" onclick="filterPlants('落叶')"><span>落叶</span></button>
+        <button class="filter-btn" onclick="filterPlants('观花')"><span>观花</span></button>
+        <button class="filter-btn" onclick="filterPlants('观叶')"><span>观叶</span></button>
+        <button class="add-btn" onclick="openAddPlantModal()">
+            <span>+</span>
+            <span>添加植物</span>
+        </button>
+    </div>
+
+    <div id="plantsGrid" class="plants-grid"></div>
+
+    <div id="plantModal" class="modal-overlay">
+        <div class="modal">
+            <div class="modal-header">
+                <img id="modalImage" src="" alt="">
+                <div class="modal-gradient"></div>
+                <button class="modal-close" onclick="closeModal('plantModal')">×</button>
+                <div class="modal-subtitle" id="modalFamily"></div>
+                <div class="modal-title" id="modalTitle"></div>
+            </div>
+            <div class="modal-body">
+                <div class="modal-info">
+                    <div class="info-item"><div class="info-label">类型</div><div id="modalType" class="info-value"></div></div>
+                    <div class="info-item"><div class="info-label">原产地</div><div id="modalOrigin" class="info-value"></div></div>
+                    <div class="info-item"><div class="info-label">分布区域</div><div id="modalDistribution" class="info-value"></div></div>
+                    <div class="info-item"><div class="info-label">生长习性</div><div id="modalHabitat" class="info-value"></div></div>
+                    <div class="info-item"><div class="info-label">高度</div><div id="modalHeight" class="info-value"></div></div>
+                    <div class="info-item"><div class="info-label">花色</div><div id="modalFlowerColor" class="info-value"></div></div>
+                    <div class="info-item"><div class="info-label">花期</div><div id="modalFloweringPeriod" class="info-value"></div></div>
+                    <div class="info-item"><div class="info-label">果期</div><div id="modalFruitPeriod" class="info-value"></div></div>
+                </div>
+                <div class="modal-desc">
+                    <h4>形态特征</h4>
+                    <p id="modalCharacteristics"></p>
+                </div>
+                <div class="modal-desc">
+                    <h4>主要用途</h4>
+                    <p id="modalUses"></p>
+                </div>
+                <div class="modal-desc">
+                    <h4>栽培要点</h4>
+                    <p id="modalCultivation"></p>
+                </div>
+                <div class="comments-section">
+                    <h4>用户评论</h4>
+                    <div id="commentsList" class="comments-list"></div>
+                    <div class="comment-input-wrapper">
+                        <textarea id="commentInput" class="comment-input" placeholder="发表评论..."></textarea>
+                        <button class="comment-submit" onclick="submitComment()">发表</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div id="addPlantModal" class="modal-overlay">
+        <div class="modal" style="max-width: 550px;">
+            <div class="modal-add-header">
+                <button class="modal-close" onclick="closeModal('addPlantModal')">×</button>
+                <div class="modal-add-title">添加新植物</div>
+            </div>
+            <div class="modal-body">
+                <form class="add-plant-form">
+                    <input type="text" id="addName" placeholder="植物名称" required>
+                    <input type="text" id="addFamily" placeholder="科">
+                    <input type="text" id="addGenus" placeholder="属">
+                    <input type="text" id="addType" placeholder="类型（如：常绿乔木）">
+                    <input type="text" id="addOrigin" placeholder="原产地">
+                    <input type="text" id="addDistribution" placeholder="分布区域">
+                    <input type="text" id="addHabitat" placeholder="生长习性">
+                    <input type="text" id="addHeight" placeholder="高度">
+                    <input type="text" id="addFlowerColor" placeholder="花色">
+                    <input type="text" id="addFloweringPeriod" placeholder="花期">
+                    <input type="text" id="addFruitColor" placeholder="果色">
+                    <input type="text" id="addFruitPeriod" placeholder="果期">
+                    <textarea id="addCharacteristics" placeholder="形态特征"></textarea>
+                    <textarea id="addUses" placeholder="主要用途"></textarea>
+                    <textarea id="addCultivation" placeholder="栽培要点"></textarea>
+                    <input type="text" id="addTags" placeholder="标签（用逗号分隔）">
+                    <button type="button" class="add-plant-submit" onclick="addPlant()">添加植物</button>
+                </form>
+            </div>
+        </div>
+    </div>
+
+    <script src="plants_full.js"></script>
+    <script>
+        let plantComments = {
+            1: [{ author: '园艺爱好者', text: '雪松真的很壮观，适合做行道树！', time: '2小时前' }],
+            3: [{ author: '风景园林师', text: '银杏秋天的叶子太美了！', time: '1天前' }],
+            5: [{ author: '花迷', text: '玉兰花开的时候特别香！', time: '1周前' }]
+        };
+        let currentPlantId = null;
+
+        function renderPlants(filteredPlants = plants) {
+            const grid = document.getElementById('plantsGrid');
+            grid.innerHTML = '';
+            filteredPlants.forEach(plant => {
+                const card = document.createElement('div');
+                card.className = 'plant-card';
+                card.onclick = () => showPlantDetail(plant.id);
+                card.innerHTML = `
+                    <div class="plant-card-image-wrapper">
+                        <img src="${plant.image}" alt="${plant.name}" class="plant-card-image">
+                        <div class="plant-card-overlay"></div>
+                    </div>
+                    <div class="plant-card-content">
+                        <div class="plant-card-header">
+                            <div>
+                                <div class="plant-card-title">${plant.name}</div>
+                                <div class="plant-card-family">${plant.family} · ${plant.genus}</div>
+                            </div>
+                            <span class="plant-card-badge">${plant.type}</span>
+                        </div>
+                        <div class="plant-card-desc">${plant.characteristics || '暂无描述'}</div>
+                        <div class="plant-card-tags">
+                            ${plant.tags ? plant.tags.map(tag => `<span class="plant-tag">${tag}</span>`).join('') : `<span class="plant-tag">${plant.type}</span>`}
+                        </div>
+                    </div>
+                `;
+                grid.appendChild(card);
+            });
+        }
+
+        function searchPlants() {
+            const query = document.getElementById('searchInput').value.toLowerCase();
+            const filtered = plants.filter(plant =>
+                plant.name.toLowerCase().includes(query) ||
+                plant.family.toLowerCase().includes(query) ||
+                plant.genus.toLowerCase().includes(query) ||
+                plant.type.toLowerCase().includes(query)
+            );
+            renderPlants(filtered);
+        }
+
+        function filterPlants(filter) {
+            document.querySelectorAll('.filter-btn').forEach(btn => btn.classList.remove('active'));
+            event.target.classList.add('active');
+            
+            if (filter === 'all') {
+                renderPlants();
+            } else {
+                const filtered = plants.filter(plant =>
+                    plant.type.includes(filter) ||
+                    (plant.tags && plant.tags.includes(filter))
+                );
+                renderPlants(filtered);
+            }
+        }
+
+        function showPlantDetail(id) {
+            const plant = plants.find(p => p.id === id);
+            if (!plant) return;
+            
+            currentPlantId = id;
+            document.getElementById('modalImage').src = plant.image;
+            document.getElementById('modalTitle').textContent = plant.name;
+            document.getElementById('modalFamily').textContent = `${plant.family} ${plant.genus}`;
+            document.getElementById('modalType').textContent = plant.type;
+            document.getElementById('modalOrigin').textContent = plant.origin;
+            document.getElementById('modalDistribution').textContent = plant.distribution;
+            document.getElementById('modalHabitat').textContent = plant.habitat;
+            document.getElementById('modalHeight').textContent = plant.height;
+            document.getElementById('modalFlowerColor').textContent = plant.flowerColor;
+            document.getElementById('modalFloweringPeriod').textContent = plant.floweringPeriod;
+            document.getElementById('modalFruitPeriod').textContent = plant.fruitPeriod;
+            document.getElementById('modalCharacteristics').textContent = plant.characteristics;
+            document.getElementById('modalUses').textContent = plant.uses;
+            document.getElementById('modalCultivation').textContent = plant.cultivation;
+            
+            renderComments(id);
+            document.getElementById('plantModal').classList.add('show');
+        }
+
+        function renderComments(plantId) {
+            const list = document.getElementById('commentsList');
+            const comments = plantComments[plantId] || [];
+            list.innerHTML = comments.map(c => `
+                <div class="comment-item">
+                    <div class="comment-header">
+                        <span class="comment-author">${c.author}</span>
+                        <span class="comment-time">${c.time}</span>
+                    </div>
+                    <div class="comment-text">${c.text}</div>
+                </div>
+            `).join('');
+        }
+
+        function submitComment() {
+            const text = document.getElementById('commentInput').value.trim();
+            if (!text || !currentPlantId) return;
+            
+            if (!plantComments[currentPlantId]) plantComments[currentPlantId] = [];
+            plantComments[currentPlantId].push({
+                author: '用户',
+                text: text,
+                time: '刚刚'
+            });
+            
+            renderComments(currentPlantId);
+            document.getElementById('commentInput').value = '';
+        }
+
+        function closeModal(modalId) {
+            document.getElementById(modalId).classList.remove('show');
+        }
+
+        function openAddPlantModal() {
+            document.getElementById('addPlantModal').classList.add('show');
+        }
+
+        function addPlant() {
+            const newPlant = {
+                id: plants.length + 1,
+                name: document.getElementById('addName').value,
+                family: document.getElementById('addFamily').value,
+                genus: document.getElementById('addGenus').value,
+                type: document.getElementById('addType').value,
+                origin: document.getElementById('addOrigin').value,
+                distribution: document.getElementById('addDistribution').value,
+                habitat: document.getElementById('addHabitat').value,
+                height: document.getElementById('addHeight').value,
+                flowerColor: document.getElementById('addFlowerColor').value,
+                floweringPeriod: document.getElementById('addFloweringPeriod').value,
+                fruitColor: document.getElementById('addFruitColor').value,
+                fruitPeriod: document.getElementById('addFruitPeriod').value,
+                characteristics: document.getElementById('addCharacteristics').value,
+                uses: document.getElementById('addUses').value,
+                cultivation: document.getElementById('addCultivation').value,
+                image: `https://trae-api-cn.mchost.guru/api/ide/v1/text_to_image?prompt=${encodeURIComponent(document.getElementById('addName').value + ' 植物')}&image_size=landscape_4_3`,
+                tags: document.getElementById('addTags').value.split(',').map(t => t.trim()).filter(t => t)
+            };
+            
+            plants.push(newPlant);
+            renderPlants();
+            closeModal('addPlantModal');
+            document.querySelectorAll('#addPlantModal input, #addPlantModal textarea').forEach(input => input.value = '');
+            alert('植物添加成功！');
+        }
+
+        document.addEventListener('DOMContentLoaded', function() {
+            renderPlants();
+            document.getElementById('searchInput').addEventListener('keyup', function(e) {
+                if (e.key === 'Enter') searchPlants();
+            });
+        });
+    </script>
+</body>
+</html>

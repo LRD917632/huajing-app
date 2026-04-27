@@ -1,0 +1,1194 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>花净 - 个人中心</title>
+    <link rel="stylesheet" href="styles.css">
+    <style>
+
+        .navbar-nav {
+            display: flex;
+            list-style: none;
+            gap: 8px;
+        }
+
+        .navbar-nav a {
+            color: white;
+            text-decoration: none;
+            font-size: 15px;
+            padding: 10px 20px;
+            border-radius: 25px;
+            transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+            display: flex;
+            align-items: center;
+            gap: 6px;
+            font-weight: 500;
+        }
+
+        .navbar-nav a:hover {
+            background: rgba(255, 255, 255, 0.2);
+            transform: translateY(-2px);
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+        }
+
+        .navbar-nav a.active {
+            background: rgba(255, 255, 255, 0.3);
+            box-shadow: 0 6px 20px rgba(0, 0, 0, 0.2);
+            transform: translateY(-1px);
+        }
+
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 32px 24px;
+        }
+
+        .profile-header {
+            background: linear-gradient(145deg, #ffffff 0%, #fafafa 100%);
+            border-radius: 24px;
+            padding: 48px;
+            box-shadow: 0 8px 32px rgba(76, 175, 80, 0.12);
+            margin-bottom: 32px;
+            position: relative;
+            overflow: hidden;
+            border: 1px solid rgba(76, 175, 80, 0.08);
+        }
+
+        .profile-header::before {
+            content: '';
+            position: absolute;
+            top: -60%;
+            right: -40%;
+            width: 400px;
+            height: 400px;
+            background: radial-gradient(circle, rgba(34, 197, 94, 0.15) 0%, transparent 60%);
+            border-radius: 50%;
+        }
+        
+        .profile-header::after {
+            content: '';
+            position: absolute;
+            bottom: -30%;
+            left: -20%;
+            width: 250px;
+            height: 250px;
+            background: radial-gradient(circle, rgba(74, 222, 128, 0.1) 0%, transparent 60%);
+            border-radius: 50%;
+        }
+
+        .profile-main {
+            display: flex;
+            align-items: flex-start;
+            gap: 30px;
+            position: relative;
+            z-index: 1;
+        }
+
+        .avatar-section {
+            position: relative;
+        }
+
+        .avatar {
+            width: 140px;
+            height: 140px;
+            border-radius: 50%;
+            background: linear-gradient(135deg, var(--primary-color) 0%, var(--primary-light) 100%);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 56px;
+            border: 5px solid rgba(255, 255, 255, 0.9);
+            box-shadow: 0 10px 30px rgba(76, 175, 80, 0.35);
+            transition: all 0.35s ease;
+            cursor: pointer;
+        }
+
+        .avatar:hover {
+            transform: scale(1.08);
+            box-shadow: 0 15px 40px rgba(76, 175, 80, 0.45);
+        }
+
+        .avatar-edit {
+            position: absolute;
+            bottom: 5px;
+            right: 5px;
+            width: 36px;
+            height: 36px;
+            background: var(--primary-color);
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: white;
+            font-size: 14px;
+            box-shadow: 0 4px 12px rgba(76, 175, 80, 0.4);
+            transition: all 0.3s ease;
+        }
+
+        .avatar-edit:hover {
+            transform: scale(1.1);
+            background: var(--primary-dark);
+        }
+
+        .profile-info {
+            flex: 1;
+        }
+
+        .profile-info h1 {
+            font-size: 36px;
+            color: var(--text-primary);
+            margin-bottom: 8px;
+            font-weight: 700;
+            letter-spacing: -0.5px;
+        }
+
+        .profile-info p {
+            font-size: 15px;
+            color: var(--text-secondary);
+            margin-bottom: 25px;
+            line-height: 1.6;
+        }
+
+        .profile-badges {
+            display: flex;
+            gap: 10px;
+            margin-bottom: 25px;
+        }
+
+        .badge {
+            padding: 6px 14px;
+            background: rgba(76, 175, 80, 0.1);
+            border-radius: 20px;
+            font-size: 13px;
+            color: var(--primary-color);
+            font-weight: 500;
+        }
+
+        .stats-grid {
+            display: grid;
+            grid-template-columns: repeat(4, 1fr);
+            gap: 16px;
+        }
+
+        .stat-card {
+            background: linear-gradient(145deg, #f0fdf4 0%, #dcfce7 100%);
+            padding: 24px 20px;
+            border-radius: 16px;
+            text-align: center;
+            transition: all 0.35s cubic-bezier(0.4, 0, 0.2, 1);
+            cursor: pointer;
+            border: 1px solid rgba(34, 197, 94, 0.15);
+        }
+
+        .stat-card:hover {
+            transform: translateY(-8px) scale(1.02);
+            box-shadow: 0 12px 32px rgba(34, 197, 94, 0.2);
+            border-color: rgba(34, 197, 94, 0.3);
+        }
+
+        .stat-value {
+            font-size: 40px;
+            font-weight: 800;
+            background: linear-gradient(135deg, #166534 0%, #22c55e 50%, #4ade80 100%);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+            display: block;
+            margin-bottom: 6px;
+            letter-spacing: -1px;
+        }
+
+        .stat-label {
+            font-size: 14px;
+            color: #64748b;
+            font-weight: 600;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+        }
+
+        .profile-actions {
+            display: flex;
+            gap: 15px;
+            margin-top: 25px;
+        }
+
+        .btn {
+            padding: 12px 28px;
+            border-radius: 25px;
+            font-size: 15px;
+            font-weight: 500;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            border: none;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .btn-primary {
+            background: linear-gradient(135deg, var(--primary-color) 0%, var(--primary-light) 100%);
+            color: white;
+            box-shadow: 0 4px 15px rgba(76, 175, 80, 0.3);
+        }
+
+        .btn-primary:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 8px 25px rgba(76, 175, 80, 0.4);
+        }
+
+        .btn-secondary {
+            background: rgba(76, 175, 80, 0.1);
+            color: var(--primary-color);
+            border: 2px solid rgba(76, 175, 80, 0.2);
+        }
+
+        .btn-secondary:hover {
+            background: rgba(76, 175, 80, 0.15);
+            border-color: rgba(76, 175, 80, 0.3);
+        }
+
+        .tabs-container {
+            background: var(--card-bg);
+            border-radius: var(--radius-lg);
+            box-shadow: var(--shadow-sm);
+            overflow: hidden;
+            margin-bottom: 30px;
+        }
+
+        .tabs {
+            display: flex;
+            border-bottom: 1px solid rgba(76, 175, 80, 0.1);
+        }
+
+        .tab-btn {
+            flex: 1;
+            padding: 18px 24px;
+            border: none;
+            background: transparent;
+            font-size: 15px;
+            font-weight: 500;
+            color: var(--text-muted);
+            cursor: pointer;
+            transition: all 0.3s ease;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 8px;
+            position: relative;
+        }
+
+        .tab-btn.active {
+            color: var(--primary-color);
+            background: rgba(76, 175, 80, 0.05);
+        }
+
+        .tab-btn.active::after {
+            content: '';
+            position: absolute;
+            bottom: 0;
+            left: 20%;
+            right: 20%;
+            height: 3px;
+            background: linear-gradient(135deg, var(--primary-color) 0%, var(--primary-light) 100%);
+            border-radius: 2px;
+        }
+
+        .tab-btn:hover:not(.active) {
+            background: rgba(76, 175, 80, 0.03);
+            color: var(--text-secondary);
+        }
+
+        .tab-content {
+            padding: 24px;
+        }
+
+        .content-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+            gap: 20px;
+        }
+
+        .work-card {
+            background: var(--card-bg);
+            border-radius: var(--radius-md);
+            overflow: hidden;
+            box-shadow: var(--shadow-sm);
+            transition: all 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+            cursor: pointer;
+            border: 1px solid rgba(76, 175, 80, 0.08);
+        }
+
+        .work-card:hover {
+            transform: translateY(-8px) scale(1.02);
+            box-shadow: var(--shadow-lg);
+            border-color: rgba(76, 175, 80, 0.2);
+        }
+
+        .work-card-image {
+            width: 100%;
+            height: 200px;
+            object-fit: cover;
+            transition: transform 0.4s ease;
+        }
+
+        .work-card:hover .work-card-image {
+            transform: scale(1.08);
+        }
+
+        .work-card-content {
+            padding: 20px;
+        }
+
+        .work-card-title {
+            font-size: 16px;
+            font-weight: 600;
+            color: var(--text-primary);
+            margin-bottom: 8px;
+            white-space: nowrap;
+            overflow: hidden;
+            text-overflow: ellipsis;
+        }
+
+        .work-card-meta {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            font-size: 13px;
+            color: var(--text-muted);
+        }
+
+        .work-card-stats {
+            display: flex;
+            gap: 15px;
+        }
+
+        .work-stat {
+            display: flex;
+            align-items: center;
+            gap: 4px;
+        }
+
+        .empty-state {
+            text-align: center;
+            padding: 60px 20px;
+            background: var(--card-bg);
+            border-radius: var(--radius-md);
+            box-shadow: var(--shadow-sm);
+        }
+
+        .empty-icon {
+            font-size: 72px;
+            margin-bottom: 20px;
+            opacity: 0.5;
+        }
+
+        .empty-title {
+            font-size: 20px;
+            color: var(--text-primary);
+            margin-bottom: 10px;
+            font-weight: 600;
+        }
+
+        .empty-desc {
+            color: var(--text-muted);
+            margin-bottom: 20px;
+        }
+
+        .quick-actions {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(140px, 1fr));
+            gap: 15px;
+            margin-bottom: 30px;
+        }
+
+        .quick-action-card {
+            background: var(--card-bg);
+            border-radius: var(--radius-md);
+            padding: 20px;
+            box-shadow: var(--shadow-sm);
+            cursor: pointer;
+            transition: all 0.3s ease;
+            text-align: center;
+        }
+
+        .quick-action-card:hover {
+            transform: translateY(-5px);
+            box-shadow: var(--shadow-md);
+        }
+
+        .quick-action-icon {
+            font-size: 32px;
+            margin-bottom: 10px;
+        }
+
+        .quick-action-title {
+            font-size: 14px;
+            font-weight: 500;
+            color: var(--text-primary);
+        }
+
+        .settings-section {
+            background: var(--card-bg);
+            border-radius: var(--radius-lg);
+            box-shadow: var(--shadow-sm);
+            overflow: hidden;
+        }
+
+        .settings-group {
+            padding: 16px 24px;
+            border-bottom: 1px solid rgba(76, 175, 80, 0.08);
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            cursor: pointer;
+            transition: background 0.2s ease;
+        }
+
+        .settings-group:hover {
+            background: rgba(76, 175, 80, 0.03);
+        }
+
+        .settings-group:last-child {
+            border-bottom: none;
+        }
+
+        .settings-label {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+        }
+
+        .settings-icon {
+            font-size: 20px;
+        }
+
+        .settings-text {
+            font-size: 15px;
+            color: var(--text-primary);
+        }
+
+        .settings-arrow {
+            font-size: 16px;
+            color: var(--text-muted);
+        }
+
+        .modal {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0, 0, 0, 0.6);
+            justify-content: center;
+            align-items: center;
+            z-index: 2000;
+            animation: fadeIn 0.3s ease;
+        }
+
+        .modal.show {
+            display: flex;
+        }
+
+        @keyframes fadeIn {
+            from { opacity: 0; }
+            to { opacity: 1; }
+        }
+
+        .modal-content {
+            background: var(--card-bg);
+            border-radius: var(--radius-lg);
+            padding: 30px;
+            width: 90%;
+            max-width: 450px;
+            animation: slideUp 0.3s ease;
+        }
+
+        @keyframes slideUp {
+            from { transform: translateY(20px); opacity: 0; }
+            to { transform: translateY(0); opacity: 1; }
+        }
+
+        .modal-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 25px;
+        }
+
+        .modal-header h3 {
+            font-size: 20px;
+            color: var(--text-primary);
+            font-weight: 600;
+        }
+
+        .modal-close {
+            width: 32px;
+            height: 32px;
+            border: none;
+            border-radius: 50%;
+            background: rgba(0, 0, 0, 0.05);
+            font-size: 20px;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: var(--text-muted);
+            transition: all 0.2s ease;
+        }
+
+        .modal-close:hover {
+            background: rgba(0, 0, 0, 0.1);
+            color: var(--text-primary);
+        }
+
+        .form-group {
+            margin-bottom: 20px;
+        }
+
+        .form-group label {
+            display: block;
+            font-size: 14px;
+            color: var(--text-secondary);
+            margin-bottom: 8px;
+            font-weight: 500;
+        }
+
+        .form-group input,
+        .form-group textarea {
+            width: 100%;
+            padding: 14px;
+            border: 2px solid rgba(76, 175, 80, 0.15);
+            border-radius: var(--radius-sm);
+            font-size: 15px;
+            transition: border-color 0.3s ease;
+            background: rgba(76, 175, 80, 0.03);
+        }
+
+        .form-group input:focus,
+        .form-group textarea:focus {
+            outline: none;
+            border-color: var(--primary-color);
+        }
+
+        .form-group textarea {
+            resize: vertical;
+            min-height: 100px;
+        }
+
+        .form-group input[type="file"] {
+            border: none;
+            padding: 0;
+            background: transparent;
+        }
+
+        .modal-footer {
+            display: flex;
+            gap: 12px;
+            margin-top: 25px;
+        }
+
+        .modal-footer button {
+            flex: 1;
+            padding: 14px;
+            border-radius: var(--radius-sm);
+            font-size: 15px;
+            font-weight: 500;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            border: none;
+        }
+
+        .modal-footer button.cancel {
+            background: rgba(76, 175, 80, 0.1);
+            color: var(--text-secondary);
+        }
+
+        .modal-footer button.cancel:hover {
+            background: rgba(76, 175, 80, 0.15);
+        }
+
+        .modal-footer button.submit {
+            background: linear-gradient(135deg, var(--primary-color) 0%, var(--primary-light) 100%);
+            color: white;
+        }
+
+        .modal-footer button.submit:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 4px 15px rgba(76, 175, 80, 0.3);
+        }
+
+        .message-list {
+            display: flex;
+            flex-direction: column;
+            gap: 12px;
+        }
+
+        .message-item {
+            background: var(--card-bg);
+            border-radius: var(--radius-md);
+            padding: 16px;
+            display: flex;
+            align-items: flex-start;
+            gap: 12px;
+            box-shadow: var(--shadow-sm);
+            cursor: pointer;
+            transition: all 0.3s ease;
+            border: 1px solid rgba(76, 175, 80, 0.08);
+        }
+
+        .message-item:hover {
+            transform: translateX(5px);
+            box-shadow: var(--shadow-md);
+        }
+
+        .message-item.unread {
+            background: linear-gradient(145deg, #fff9f0 0%, #fff5eb 100%);
+            border-left: 4px solid var(--primary-color);
+        }
+
+        .message-avatar {
+            width: 48px;
+            height: 48px;
+            border-radius: 50%;
+            background: linear-gradient(135deg, rgba(76, 175, 80, 0.1) 0%, rgba(76, 175, 80, 0.2) 100%);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 22px;
+            flex-shrink: 0;
+        }
+
+        .message-content {
+            flex: 1;
+            min-width: 0;
+        }
+
+        .message-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 6px;
+        }
+
+        .message-sender {
+            font-weight: 600;
+            color: var(--text-primary);
+            font-size: 15px;
+        }
+
+        .message-time {
+            font-size: 12px;
+            color: var(--text-muted);
+        }
+
+        .message-preview {
+            font-size: 14px;
+            color: var(--text-secondary);
+            line-height: 1.5;
+            margin-bottom: 4px;
+            display: -webkit-box;
+            -webkit-line-clamp: 2;
+            -webkit-box-orient: vertical;
+            overflow: hidden;
+        }
+
+        .message-work {
+            font-size: 12px;
+            color: var(--primary-color);
+            background: rgba(76, 175, 80, 0.1);
+            padding: 4px 10px;
+            border-radius: 12px;
+            display: inline-block;
+        }
+
+        .message-badge {
+            background: #ff6b6b;
+            color: white;
+            width: 24px;
+            height: 24px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 12px;
+            font-weight: 600;
+            flex-shrink: 0;
+        }
+
+        @media (max-width: 768px) {
+            .profile-main {
+                flex-direction: column;
+                text-align: center;
+            }
+
+            .avatar-section {
+                margin: 0 auto;
+            }
+
+            .stats-grid {
+                grid-template-columns: repeat(2, 1fr);
+            }
+
+            .stat-value {
+                font-size: 28px;
+            }
+
+            .profile-actions {
+                flex-wrap: wrap;
+            }
+
+            .btn {
+                flex: 1;
+                justify-content: center;
+            }
+
+            .tab-btn {
+                font-size: 13px;
+                padding: 15px 12px;
+            }
+
+            .content-grid {
+                grid-template-columns: 1fr;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="header">
+        <div class="header-content">
+            <a href="index.html" class="logo">
+                <div class="logo-icon">🌸</div>
+                <span>花净</span>
+            </a>
+            <div class="nav">
+                <a href="index.html">首页</a>
+                <a href="plants_new.html">植物图鉴</a>
+                <a href="garden-diy.html">简创花境</a>
+                <a href="pet-diary.html">养宠日记</a>
+                <a href="profile.html" class="active">个人中心</a>
+            </div>
+        </div>
+    </div>
+
+    <div class="container">
+        <div class="profile-header">
+            <div class="profile-main">
+                <div class="avatar-section">
+                    <div class="avatar">👤</div>
+                    <div class="avatar-edit" onclick="showEditModal()">📷</div>
+                </div>
+                <div class="profile-info">
+                    <h1>园艺人小李</h1>
+                    <p>热爱园艺设计，分享美丽花园，记录每一个花草成长的瞬间 🌿</p>
+                    <div class="profile-badges">
+                        <span class="badge">🌱 新手园丁</span>
+                        <span class="badge">📝 原创作者</span>
+                        <span class="badge">🏆 优秀作品</span>
+                    </div>
+                    <div class="stats-grid">
+                        <div class="stat-card" onclick="showTab('works')">
+                            <div class="stat-value">12</div>
+                            <div class="stat-label">创作作品</div>
+                        </div>
+                        <div class="stat-card" onclick="showTab('likes')">
+                            <div class="stat-value">28</div>
+                            <div class="stat-label">喜欢作品</div>
+                        </div>
+                        <div class="stat-card" onclick="showTab('favorites')">
+                            <div class="stat-value">15</div>
+                            <div class="stat-label">收藏内容</div>
+                        </div>
+                        <div class="stat-card">
+                            <div class="stat-value">326</div>
+                            <div class="stat-label">获赞数</div>
+                        </div>
+                    </div>
+                    <div class="profile-actions">
+                        <button class="btn btn-primary" onclick="showEditModal()">✏️ 编辑资料</button>
+                        <button class="btn btn-secondary" onclick="location.href='pet-diary.html'">📝 写日记</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="quick-actions">
+            <div class="quick-action-card" onclick="location.href='garden-diy.html'">
+                <div class="quick-action-icon">🎨</div>
+                <div class="quick-action-title">开始设计</div>
+            </div>
+            <div class="quick-action-card" onclick="location.href='pet-diary.html'">
+                <div class="quick-action-icon">📷</div>
+                <div class="quick-action-title">发布日记</div>
+            </div>
+            <div class="quick-action-card" onclick="showTab('favorites')">
+                <div class="quick-action-icon">⭐</div>
+                <div class="quick-action-title">我的收藏</div>
+            </div>
+            <div class="quick-action-card" onclick="showSettings()">
+                <div class="quick-action-icon">⚙️</div>
+                <div class="quick-action-title">设置</div>
+            </div>
+        </div>
+
+        <div class="tabs-container">
+            <div class="tabs">
+                <button class="tab-btn active" onclick="showTab('works')">
+                    <span>🎨</span>
+                    <span>我的创作</span>
+                    <span style="background: rgba(76,175,80,0.15); padding: 2px 8px; border-radius: 10px; font-size: 12px;">12</span>
+                </button>
+                <button class="tab-btn" onclick="showTab('likes')">
+                    <span>❤️</span>
+                    <span>我的喜欢</span>
+                    <span style="background: rgba(76,175,80,0.15); padding: 2px 8px; border-radius: 10px; font-size: 12px;">28</span>
+                </button>
+                <button class="tab-btn" onclick="showTab('favorites')">
+                    <span>⭐</span>
+                    <span>我的收藏</span>
+                    <span style="background: rgba(76,175,80,0.15); padding: 2px 8px; border-radius: 10px; font-size: 12px;">15</span>
+                </button>
+                <button class="tab-btn" onclick="showTab('messages')">
+                    <span>💬</span>
+                    <span>消息</span>
+                    <span id="messageBadge" style="background: #ff6b6b; color: white; padding: 2px 8px; border-radius: 10px; font-size: 12px;">3</span>
+                </button>
+            </div>
+
+            <div class="tab-content">
+                <div id="works-tab" class="content-grid">
+                    <div class="work-card">
+                        <img src="https://neeko-copilot.bytedance.net/api/text2image?prompt=beautiful%20garden%20design%20top%20view%20with%20flowers&image_size=landscape_4_3" alt="作品1" class="work-card-image">
+                        <div class="work-card-content">
+                            <div class="work-card-title">春日花园设计图</div>
+                            <div class="work-card-meta">
+                                <span>2024-03-15</span>
+                                <div class="work-card-stats">
+                                    <span class="work-stat">❤️ 24</span>
+                                    <span class="work-stat">⭐ 18</span>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="work-card">
+                        <img src="https://neeko-copilot.bytedance.net/api/text2image?prompt=modern%20backyard%20garden%20landscaping%20design&image_size=landscape_4_3" alt="作品2" class="work-card-image">
+                        <div class="work-card-content">
+                            <div class="work-card-title">现代庭院改造</div>
+                            <div class="work-card-meta">
+                                <span>2024-03-10</span>
+                                <div class="work-card-stats">
+                                    <span class="work-stat">❤️ 32</span>
+                                    <span class="work-stat">⭐ 25</span>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="work-card">
+                        <img src="https://neeko-copilot.bytedance.net/api/text2image?prompt=japanese%20zen%20garden%20design%20with%20rocks&image_size=landscape_4_3" alt="作品3" class="work-card-image">
+                        <div class="work-card-content">
+                            <div class="work-card-title">日式枯山水庭院</div>
+                            <div class="work-card-meta">
+                                <span>2024-03-05</span>
+                                <div class="work-card-stats">
+                                    <span class="work-stat">❤️ 45</span>
+                                    <span class="work-stat">⭐ 30</span>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="work-card">
+                        <img src="https://neeko-copilot.bytedance.net/api/text2image?prompt=vegetable%20garden%20layout%20design&image_size=landscape_4_3" alt="作品4" class="work-card-image">
+                        <div class="work-card-content">
+                            <div class="work-card-title">家庭菜园规划</div>
+                            <div class="work-card-meta">
+                                <span>2024-02-28</span>
+                                <div class="work-card-stats">
+                                    <span class="work-stat">❤️ 18</span>
+                                    <span class="work-stat">⭐ 12</span>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div id="likes-tab" class="content-grid" style="display: none;">
+                    <div class="work-card">
+                        <img src="https://neeko-copilot.bytedance.net/api/text2image?prompt=beautiful%20rose%20garden%20with%20colorful%20roses&image_size=landscape_4_3" alt="喜欢1" class="work-card-image">
+                        <div class="work-card-content">
+                            <div class="work-card-title">玫瑰花园设计</div>
+                            <div class="work-card-meta">
+                                <span>作者: 花艺大师</span>
+                                <div class="work-card-stats">
+                                    <span class="work-stat">❤️ 已喜欢</span>
+                                    <span class="work-stat">⭐ 收藏</span>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="work-card">
+                        <img src="https://neeko-copilot.bytedance.net/api/text2image?prompt=tropical%20garden%20with%20palms%20and%20waterfall&image_size=landscape_4_3" alt="喜欢2" class="work-card-image">
+                        <div class="work-card-content">
+                            <div class="work-card-title">热带风情庭院</div>
+                            <div class="work-card-meta">
+                                <span>作者: 热带花园</span>
+                                <div class="work-card-stats">
+                                    <span class="work-stat">❤️ 已喜欢</span>
+                                    <span class="work-stat">⭐ 收藏</span>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div id="favorites-tab" class="content-grid" style="display: none;">
+                    <div class="work-card">
+                        <img src="https://neeko-copilot.bytedance.net/api/text2image?prompt=succulent%20garden%20arrangement%20beautiful&image_size=landscape_4_3" alt="收藏1" class="work-card-image">
+                        <div class="work-card-content">
+                            <div class="work-card-title">多肉植物花园</div>
+                            <div class="work-card-meta">
+                                <span>作者: 多肉爱好者</span>
+                                <div class="work-card-stats">
+                                    <span class="work-stat">❤️ 喜欢</span>
+                                    <span class="work-stat">⭐ 已收藏</span>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="work-card">
+                        <img src="https://neeko-copilot.bytedance.net/api/text2image?prompt=butterfly%20garden%20with%20colorful%20flowers&image_size=landscape_4_3" alt="收藏2" class="work-card-image">
+                        <div class="work-card-content">
+                            <div class="work-card-title">蝴蝶花园设计</div>
+                            <div class="work-card-meta">
+                                <span>作者: 自然爱好者</span>
+                                <div class="work-card-stats">
+                                    <span class="work-stat">❤️ 喜欢</span>
+                                    <span class="work-stat">⭐ 已收藏</span>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div id="messages-tab" style="display: none;">
+                    <div class="message-list">
+                        <div class="message-item unread" onclick="viewMessage(this)">
+                            <div class="message-avatar">👩‍🌾</div>
+                            <div class="message-content">
+                                <div class="message-header">
+                                    <span class="message-sender">花艺大师</span>
+                                    <span class="message-time">10分钟前</span>
+                                </div>
+                                <div class="message-preview">在你的作品「春日花园设计图」上评论：太美了！设计得很用心 🌸</div>
+                                <div class="message-work">作品: 春日花园设计图</div>
+                            </div>
+                            <div class="message-badge">1</div>
+                        </div>
+                        <div class="message-item unread" onclick="viewMessage(this)">
+                            <div class="message-avatar">🌿</div>
+                            <div class="message-content">
+                                <div class="message-header">
+                                    <span class="message-sender">园林设计师</span>
+                                    <span class="message-time">25分钟前</span>
+                                </div>
+                                <div class="message-preview">在你的作品「日式枯山水庭院」上评论：禅意十足，非常有意境！</div>
+                                <div class="message-work">作品: 日式枯山水庭院</div>
+                            </div>
+                            <div class="message-badge">1</div>
+                        </div>
+                        <div class="message-item" onclick="viewMessage(this)">
+                            <div class="message-avatar">🌸</div>
+                            <div class="message-content">
+                                <div class="message-header">
+                                    <span class="message-sender">小花匠</span>
+                                    <span class="message-time">2小时前</span>
+                                </div>
+                                <div class="message-preview">在你的作品「现代庭院改造」上评论：学习了，很有创意的设计！</div>
+                                <div class="message-work">作品: 现代庭院改造</div>
+                            </div>
+                        </div>
+                        <div class="message-item" onclick="viewMessage(this)">
+                            <div class="message-avatar">🌺</div>
+                            <div class="message-content">
+                                <div class="message-header">
+                                    <span class="message-sender">园艺爱好者</span>
+                                    <span class="message-time">昨天</span>
+                                </div>
+                                <div class="message-preview">在你的作品「家庭菜园规划」上评论：实用又美观，收藏了！</div>
+                                <div class="message-work">作品: 家庭菜园规划</div>
+                            </div>
+                        </div>
+                        <div class="message-item" onclick="viewMessage(this)">
+                            <div class="message-avatar">🌻</div>
+                            <div class="message-content">
+                                <div class="message-header">
+                                    <span class="message-sender">花仙子</span>
+                                    <span class="message-time">3天前</span>
+                                </div>
+                                <div class="message-preview">在你的作品「春日花园设计图」上评论：配色很舒服！</div>
+                                <div class="message-work">作品: 春日花园设计图</div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="settings-section" id="settingsSection" style="display: none; margin-top: 30px;">
+            <div class="settings-group">
+                <div class="settings-label">
+                    <span class="settings-icon">🔔</span>
+                    <span class="settings-text">通知设置</span>
+                </div>
+                <span class="settings-arrow">›</span>
+            </div>
+            <div class="settings-group">
+                <div class="settings-label">
+                    <span class="settings-icon">🔒</span>
+                    <span class="settings-text">隐私设置</span>
+                </div>
+                <span class="settings-arrow">›</span>
+            </div>
+            <div class="settings-group">
+                <div class="settings-label">
+                    <span class="settings-icon">💬</span>
+                    <span class="settings-text">消息设置</span>
+                </div>
+                <span class="settings-arrow">›</span>
+            </div>
+            <div class="settings-group">
+                <div class="settings-label">
+                    <span class="settings-icon">📊</span>
+                    <span class="settings-text">数据统计</span>
+                </div>
+                <span class="settings-arrow">›</span>
+            </div>
+            <div class="settings-group">
+                <div class="settings-label">
+                    <span class="settings-icon">❓</span>
+                    <span class="settings-text">帮助与反馈</span>
+                </div>
+                <span class="settings-arrow">›</span>
+            </div>
+            <div class="settings-group" style="color: #ff6b6b;">
+                <div class="settings-label">
+                    <span class="settings-icon">🚪</span>
+                    <span class="settings-text">退出登录</span>
+                </div>
+                <span class="settings-arrow">›</span>
+            </div>
+        </div>
+    </div>
+
+    <div class="modal" id="editModal">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h3>✏️ 编辑个人资料</h3>
+                <button class="modal-close" onclick="closeModal('editModal')">×</button>
+            </div>
+            <form id="editForm">
+                <div class="form-group">
+                    <label>用户名</label>
+                    <input type="text" id="username" value="园艺人小李">
+                </div>
+                <div class="form-group">
+                    <label>个人简介</label>
+                    <textarea id="bio">热爱园艺设计，分享美丽花园，记录每一个花草成长的瞬间 🌿</textarea>
+                </div>
+                <div class="form-group">
+                    <label>头像</label>
+                    <input type="file" id="avatarInput" accept="image/*">
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="cancel" onclick="closeModal('editModal')">取消</button>
+                    <button type="button" class="submit" onclick="saveProfile()">保存修改</button>
+                </div>
+            </form>
+        </div>
+    </div>
+
+    <script>
+        function showTab(tabName) {
+            document.querySelectorAll('.tab-btn').forEach(btn => btn.classList.remove('active'));
+            document.querySelectorAll('.content-grid').forEach(grid => grid.style.display = 'none');
+            document.getElementById('messages-tab').style.display = 'none';
+            
+            event.target.classList.add('active');
+            
+            if (tabName === 'messages') {
+                document.getElementById('messages-tab').style.display = 'block';
+                markAllMessagesAsRead();
+            } else {
+                document.getElementById(tabName + '-tab').style.display = 'grid';
+            }
+            
+            document.getElementById('settingsSection').style.display = 'none';
+        }
+
+        function viewMessage(element) {
+            element.classList.remove('unread');
+            const badge = element.querySelector('.message-badge');
+            if (badge) {
+                badge.remove();
+            }
+            updateUnreadCount();
+        }
+
+        function markAllMessagesAsRead() {
+            document.querySelectorAll('.message-item.unread').forEach(item => {
+                item.classList.remove('unread');
+                const badge = item.querySelector('.message-badge');
+                if (badge) {
+                    badge.remove();
+                }
+            });
+            updateUnreadCount();
+        }
+
+        function updateUnreadCount() {
+            const unreadCount = document.querySelectorAll('.message-item.unread').length;
+            const badge = document.getElementById('messageBadge');
+            if (unreadCount > 0) {
+                badge.textContent = unreadCount;
+                badge.style.display = 'inline-block';
+            } else {
+                badge.style.display = 'none';
+            }
+        }
+
+        function showEditModal() {
+            document.getElementById('editModal').classList.add('show');
+        }
+
+        function closeModal(modalId) {
+            document.getElementById(modalId).classList.remove('show');
+        }
+
+        function saveProfile() {
+            const username = document.getElementById('username').value;
+            const bio = document.getElementById('bio').value;
+            
+            document.querySelector('.profile-info h1').textContent = username;
+            document.querySelector('.profile-info p').textContent = bio;
+            
+            closeModal('editModal');
+            alert('资料已更新！');
+        }
+
+        function showSettings() {
+            document.querySelectorAll('.content-grid').forEach(grid => grid.style.display = 'none');
+            document.querySelectorAll('.tab-btn').forEach(btn => btn.classList.remove('active'));
+            document.getElementById('settingsSection').style.display = 'block';
+        }
+
+        window.onclick = function(event) {
+            const modals = document.querySelectorAll('.modal');
+            modals.forEach(modal => {
+                if (event.target === modal) {
+                    modal.classList.remove('show');
+                }
+            });
+        }
+    </script>
+</body>
+</html>

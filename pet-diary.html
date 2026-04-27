@@ -1,0 +1,1243 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>花净 - 养宠日记</title>
+    <link rel="stylesheet" href="styles.css">
+    <style>
+
+        .navbar-links {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .navbar-links a {
+            color: white;
+            text-decoration: none;
+            font-size: 15px;
+            padding: 10px 20px;
+            border-radius: 25px;
+            transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+            display: flex;
+            align-items: center;
+            gap: 6px;
+            font-weight: 500;
+        }
+
+        .navbar-links a:hover {
+            background: rgba(255, 255, 255, 0.2);
+            transform: translateY(-2px);
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+        }
+
+        .navbar-links a.active {
+            background: rgba(255, 255, 255, 0.3);
+            box-shadow: 0 6px 20px rgba(0, 0, 0, 0.2);
+            transform: translateY(-1px);
+        }
+
+        .main-content {
+            max-width: 600px;
+            margin: 0 auto;
+            padding: 24px 16px;
+        }
+
+        .ai-assistant {
+            position: fixed;
+            bottom: 30px;
+            right: 30px;
+            z-index: 500;
+        }
+
+        .ai-btn {
+            width: 60px;
+            height: 60px;
+            border-radius: 50%;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            border: none;
+            font-size: 24px;
+            cursor: pointer;
+            box-shadow: 0 4px 20px rgba(102, 126, 234, 0.4);
+            transition: all 0.3s ease;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .ai-btn:hover {
+            transform: scale(1.1);
+            box-shadow: 0 6px 25px rgba(102, 126, 234, 0.5);
+        }
+
+        .ai-btn.active {
+            transform: rotate(45deg);
+        }
+
+        .ai-chat-container {
+            position: absolute;
+            bottom: 80px;
+            right: 0;
+            width: 360px;
+            max-height: 500px;
+            background: var(--card-bg);
+            border-radius: var(--radius-lg);
+            box-shadow: var(--shadow-lg);
+            overflow: hidden;
+            transform: scale(0.9);
+            opacity: 0;
+            visibility: hidden;
+            transition: all 0.3s ease;
+        }
+
+        .ai-chat-container.show {
+            transform: scale(1);
+            opacity: 1;
+            visibility: visible;
+        }
+
+        .ai-chat-header {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            padding: 16px 20px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .ai-chat-title {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            color: white;
+        }
+
+        .ai-chat-title span {
+            font-size: 18px;
+            font-weight: 600;
+        }
+
+        .ai-chat-close {
+            width: 28px;
+            height: 28px;
+            border-radius: 50%;
+            background: rgba(255, 255, 255, 0.2);
+            border: none;
+            color: white;
+            font-size: 18px;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .ai-chat-messages {
+            padding: 16px;
+            max-height: 380px;
+            overflow-y: auto;
+        }
+
+        .ai-message {
+            display: flex;
+            gap: 10px;
+            margin-bottom: 16px;
+        }
+
+        .ai-message.user {
+            flex-direction: row-reverse;
+        }
+
+        .reminder-form {
+            padding: 20px;
+        }
+
+        .reminder-form .form-group {
+            margin-bottom: 16px;
+        }
+
+        .reminder-form label {
+            display: block;
+            margin-bottom: 8px;
+            font-weight: 600;
+            color: #333;
+        }
+
+        .reminder-form select,
+        .reminder-form input {
+            width: 100%;
+            padding: 10px;
+            border: 1px solid #ddd;
+            border-radius: 8px;
+            font-size: 14px;
+            box-sizing: border-box;
+        }
+
+        .reminder-form select:focus,
+        .reminder-form input:focus {
+            outline: none;
+            border-color: #71B280;
+            box-shadow: 0 0 0 2px rgba(113, 178, 128, 0.2);
+        }
+
+        .btn-block {
+            width: 100%;
+            margin-top: 10px;
+        }
+
+        .ai-avatar {
+            width: 36px;
+            height: 36px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 16px;
+            flex-shrink: 0;
+        }
+
+        .ai-message.bot .ai-avatar {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+        }
+
+        .ai-message.user .ai-avatar {
+            background: linear-gradient(135deg, var(--primary-color) 0%, var(--primary-light) 100%);
+            color: white;
+        }
+
+        .ai-message-content {
+            max-width: 75%;
+            padding: 12px 16px;
+            border-radius: 20px;
+            font-size: 14px;
+            line-height: 1.5;
+        }
+
+        .ai-message.bot .ai-message-content {
+            background: rgba(102, 126, 234, 0.1);
+            color: var(--text-primary);
+            border-radius: 20px 20px 20px 4px;
+        }
+
+        .ai-message.user .ai-message-content {
+            background: linear-gradient(135deg, var(--primary-color) 0%, var(--primary-light) 100%);
+            color: white;
+            border-radius: 20px 20px 4px 20px;
+        }
+
+        .ai-thinking {
+            display: flex;
+            gap: 6px;
+            padding: 8px 12px;
+            background: rgba(102, 126, 234, 0.1);
+            border-radius: 20px;
+            width: fit-content;
+        }
+
+        .ai-thinking-dot {
+            width: 8px;
+            height: 8px;
+            border-radius: 50%;
+            background: #667eea;
+            animation: thinking 1.4s infinite ease-in-out;
+        }
+
+        .ai-thinking-dot:nth-child(2) {
+            animation-delay: 0.2s;
+        }
+
+        .ai-thinking-dot:nth-child(3) {
+            animation-delay: 0.4s;
+        }
+
+        @keyframes thinking {
+            0%, 80%, 100% {
+                transform: scale(0.6);
+                opacity: 0.5;
+            }
+            40% {
+                transform: scale(1);
+                opacity: 1;
+            }
+        }
+
+        .ai-chat-input {
+            padding: 12px 16px;
+            border-top: 1px solid rgba(76, 175, 80, 0.1);
+            display: flex;
+            gap: 10px;
+        }
+
+        .ai-chat-input input {
+            flex: 1;
+            padding: 12px 16px;
+            border: 2px solid rgba(76, 175, 80, 0.15);
+            border-radius: 25px;
+            font-size: 14px;
+            transition: border-color 0.3s ease;
+        }
+
+        .ai-chat-input input:focus {
+            outline: none;
+            border-color: #667eea;
+        }
+
+        .ai-chat-input button {
+            padding: 12px 20px;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            border: none;
+            border-radius: 25px;
+            font-size: 14px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+
+        .ai-chat-input button:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 4px 12px rgba(102, 126, 234, 0.4);
+        }
+
+        .ai-tips {
+            padding: 12px 16px;
+            background: rgba(76, 175, 80, 0.05);
+            border-top: 1px solid rgba(76, 175, 80, 0.1);
+        }
+
+        .ai-tips-title {
+            font-size: 12px;
+            color: var(--primary-color);
+            font-weight: 600;
+            margin-bottom: 8px;
+        }
+
+        .ai-tips-list {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 8px;
+        }
+
+        .ai-tip-tag {
+            padding: 4px 10px;
+            background: rgba(76, 175, 80, 0.1);
+            border-radius: 12px;
+            font-size: 12px;
+            color: var(--primary-color);
+            cursor: pointer;
+            transition: all 0.2s ease;
+        }
+
+        .ai-tip-tag:hover {
+            background: rgba(76, 175, 80, 0.2);
+        }
+
+        .publish-card {
+            background: var(--card-bg);
+            border-radius: var(--radius-lg);
+            padding: 20px;
+            box-shadow: var(--shadow-sm);
+            margin-bottom: 20px;
+        }
+
+        .publish-header {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            margin-bottom: 16px;
+        }
+
+        .avatar {
+            width: 48px;
+            height: 48px;
+            border-radius: 50%;
+            background: linear-gradient(135deg, var(--primary-color) 0%, var(--primary-light) 100%);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 20px;
+            color: white;
+        }
+
+        .user-info {
+            flex: 1;
+        }
+
+        .user-name {
+            font-weight: 600;
+            color: var(--text-primary);
+            margin-bottom: 2px;
+        }
+
+        .user-motto {
+            font-size: 12px;
+            color: var(--text-muted);
+        }
+
+        .publish-input {
+            width: 100%;
+            padding: 16px;
+            border: 2px solid rgba(76, 175, 80, 0.1);
+            border-radius: var(--radius-md);
+            font-size: 15px;
+            resize: none;
+            min-height: 100px;
+            transition: border-color 0.3s ease;
+            background: rgba(76, 175, 80, 0.03);
+        }
+
+        .publish-input:focus {
+            outline: none;
+            border-color: var(--primary-color);
+        }
+
+        .publish-input::placeholder {
+            color: var(--text-muted);
+        }
+
+        .publish-actions {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-top: 16px;
+            padding-top: 16px;
+            border-top: 1px solid rgba(76, 175, 80, 0.1);
+        }
+
+        .action-icons {
+            display: flex;
+            gap: 20px;
+        }
+
+        .action-item {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            color: var(--text-secondary);
+            cursor: pointer;
+            transition: all 0.3s ease;
+            padding: 8px 12px;
+            border-radius: 20px;
+        }
+
+        .action-item:hover {
+            background: rgba(76, 175, 80, 0.1);
+            color: var(--primary-color);
+        }
+
+        .action-item span {
+            font-size: 14px;
+        }
+
+        .action-item i {
+            font-size: 20px;
+        }
+
+        .btn-publish {
+            padding: 10px 24px;
+            background: linear-gradient(135deg, var(--primary-color) 0%, var(--primary-light) 100%);
+            color: white;
+            border: none;
+            border-radius: 25px;
+            font-size: 15px;
+            font-weight: 500;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+
+        .btn-publish:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 4px 15px rgba(76, 175, 80, 0.3);
+        }
+
+        .btn-publish:disabled {
+            opacity: 0.5;
+            cursor: not-allowed;
+            transform: none;
+        }
+
+        .image-preview {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 10px;
+            margin-top: 16px;
+            max-height: 200px;
+            overflow-y: auto;
+        }
+
+        .preview-item {
+            position: relative;
+            aspect-ratio: 1;
+            border-radius: var(--radius-sm);
+            overflow: hidden;
+        }
+
+        .preview-item img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+        }
+
+        .preview-item .remove-btn {
+            position: absolute;
+            top: 5px;
+            right: 5px;
+            width: 24px;
+            height: 24px;
+            background: rgba(0, 0, 0, 0.6);
+            color: white;
+            border: none;
+            border-radius: 50%;
+            font-size: 14px;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .diary-list {
+            display: flex;
+            flex-direction: column;
+            gap: 20px;
+        }
+
+        .diary-card {
+            background: var(--card-bg);
+            border-radius: var(--radius-lg);
+            overflow: hidden;
+            box-shadow: var(--shadow-sm);
+            transition: all 0.3s ease;
+        }
+
+        .diary-card:hover {
+            box-shadow: var(--shadow-md);
+        }
+
+        .diary-header {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            padding: 16px 20px;
+        }
+
+        .diary-avatar {
+            width: 44px;
+            height: 44px;
+            border-radius: 50%;
+            background: linear-gradient(135deg, var(--primary-color) 0%, var(--primary-light) 100%);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 18px;
+            color: white;
+        }
+
+        .diary-user-name {
+            font-weight: 600;
+            color: var(--text-primary);
+            margin-bottom: 2px;
+        }
+
+        .diary-time {
+            font-size: 12px;
+            color: var(--text-muted);
+        }
+
+        .diary-content {
+            padding: 0 20px;
+            margin-bottom: 12px;
+        }
+
+        .diary-text {
+            font-size: 15px;
+            color: var(--text-primary);
+            line-height: 1.6;
+        }
+
+        .diary-images {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 3px;
+            margin-bottom: 12px;
+        }
+
+        .diary-images img {
+            width: 100%;
+            aspect-ratio: 1;
+            object-fit: cover;
+        }
+
+        .diary-images.single img {
+            grid-column: span 3;
+            aspect-ratio: 16/9;
+        }
+
+        .diary-images.double img {
+            grid-column: span 2;
+        }
+
+        .diary-actions {
+            display: flex;
+            justify-content: space-around;
+            padding: 12px 20px;
+            border-top: 1px solid rgba(76, 175, 80, 0.1);
+            border-bottom: 1px solid rgba(76, 175, 80, 0.1);
+        }
+
+        .diary-action {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            color: var(--text-secondary);
+            cursor: pointer;
+            transition: all 0.3s ease;
+            padding: 8px 16px;
+            border-radius: 20px;
+        }
+
+        .diary-action:hover {
+            background: rgba(76, 175, 80, 0.1);
+            color: var(--primary-color);
+        }
+
+        .diary-action.liked {
+            color: #ff6b6b;
+        }
+
+        .diary-action span {
+            font-size: 14px;
+        }
+
+        .diary-comments {
+            padding: 12px 20px;
+            background: rgba(76, 175, 80, 0.03);
+        }
+
+        .comment {
+            display: flex;
+            gap: 10px;
+            margin-bottom: 12px;
+        }
+
+        .comment:last-child {
+            margin-bottom: 0;
+        }
+
+        .comment-avatar {
+            width: 32px;
+            height: 32px;
+            border-radius: 50%;
+            background: linear-gradient(135deg, var(--primary-color) 0%, var(--primary-light) 100%);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 12px;
+            color: white;
+            flex-shrink: 0;
+        }
+
+        .comment-content {
+            flex: 1;
+        }
+
+        .comment-header {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            margin-bottom: 4px;
+        }
+
+        .comment-author {
+            font-weight: 600;
+            color: var(--text-primary);
+            font-size: 14px;
+        }
+
+        .comment-time {
+            font-size: 11px;
+            color: var(--text-muted);
+        }
+
+        .comment-text {
+            font-size: 14px;
+            color: var(--text-secondary);
+            line-height: 1.5;
+        }
+
+        .comment-input-container {
+            display: flex;
+            gap: 10px;
+            margin-top: 16px;
+            padding-top: 16px;
+            border-top: 1px solid rgba(76, 175, 80, 0.1);
+        }
+
+        .comment-input {
+            flex: 1;
+            padding: 10px 16px;
+            border: 2px solid rgba(76, 175, 80, 0.15);
+            border-radius: 25px;
+            font-size: 14px;
+            transition: border-color 0.3s ease;
+        }
+
+        .comment-input:focus {
+            outline: none;
+            border-color: var(--primary-color);
+        }
+
+        .btn-comment {
+            padding: 10px 20px;
+            background: linear-gradient(135deg, var(--primary-color) 0%, var(--primary-light) 100%);
+            color: white;
+            border: none;
+            border-radius: 25px;
+            font-size: 14px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+
+        .btn-comment:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 4px 12px rgba(76, 175, 80, 0.3);
+        }
+
+        .modal {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0, 0, 0, 0.6);
+            justify-content: center;
+            align-items: center;
+            z-index: 2000;
+        }
+
+        .modal.show {
+            display: flex;
+        }
+
+        .modal-content {
+            background: var(--card-bg);
+            border-radius: var(--radius-lg);
+            padding: 24px;
+            width: 90%;
+            max-width: 400px;
+        }
+
+        .modal-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 20px;
+        }
+
+        .modal-header h3 {
+            font-size: 18px;
+            color: var(--text-primary);
+        }
+
+        .modal-close {
+            width: 28px;
+            height: 28px;
+            border: none;
+            border-radius: 50%;
+            background: rgba(0, 0, 0, 0.05);
+            font-size: 18px;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: var(--text-muted);
+        }
+
+        .modal-close:hover {
+            background: rgba(0, 0, 0, 0.1);
+        }
+
+        .emoji-grid {
+            display: grid;
+            grid-template-columns: repeat(6, 1fr);
+            gap: 10px;
+            max-height: 200px;
+            overflow-y: auto;
+        }
+
+        .emoji-item {
+            font-size: 28px;
+            text-align: center;
+            padding: 8px;
+            cursor: pointer;
+            border-radius: 8px;
+            transition: all 0.2s ease;
+        }
+
+        .emoji-item:hover {
+            background: rgba(76, 175, 80, 0.1);
+            transform: scale(1.2);
+        }
+
+        #imageUpload {
+            display: none;
+        }
+
+        @media (max-width: 768px) {
+            .navbar-links {
+                gap: 10px;
+            }
+
+            .navbar-links a {
+                font-size: 13px;
+                padding: 6px 12px;
+            }
+
+            .main-content {
+                padding: 16px 12px;
+            }
+
+            .diary-actions {
+                padding: 10px 12px;
+            }
+
+            .diary-action {
+                padding: 6px 10px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="header">
+        <div class="header-content">
+            <a href="index.html" class="logo">
+                <div class="logo-icon">🌸</div>
+                <span>花净</span>
+            </a>
+            <div class="nav">
+                <a href="index.html">首页</a>
+                <a href="plants_new.html">植物图鉴</a>
+                <a href="garden-diy.html">简创花境</a>
+                <a href="pet-diary.html" class="active">养宠日记</a>
+                <a href="profile.html">个人中心</a>
+                <a href="feedback.html">用户反馈</a>
+            </div>
+        </div>
+    </div>
+
+    <div class="main-content">
+        <div class="publish-card">
+            <div class="publish-header">
+                <div class="avatar">👤</div>
+                <div class="user-info">
+                    <div class="user-name">园艺人小李</div>
+                    <div class="user-motto">记录花草成长的每一天</div>
+                </div>
+            </div>
+            <textarea class="publish-input" id="publishContent" placeholder="今天和你的植物发生了什么有趣的故事？"></textarea>
+            
+            <div class="image-preview" id="imagePreview" style="display: none;"></div>
+            
+            <div class="publish-actions">
+                <div class="action-icons">
+                    <div class="action-item" onclick="showEmojiPicker()">
+                        <i>😊</i>
+                        <span>表情</span>
+                    </div>
+                    <div class="action-item" onclick="document.getElementById('imageUpload').click()">
+                        <i>📷</i>
+                        <span>图片</span>
+                    </div>
+                    <div class="action-item">
+                        <i>📍</i>
+                        <span>位置</span>
+                    </div>
+                    <div class="action-item">
+                        <i>🏷️</i>
+                        <span>话题</span>
+                    </div>
+                </div>
+                <button class="btn-publish" id="btnPublish" onclick="publishDiary()" disabled>发布</button>
+            </div>
+            
+            <input type="file" id="imageUpload" accept="image/*" multiple onchange="handleImageUpload(event)">
+        </div>
+
+        <div class="diary-list" id="diaryList">
+        </div>
+    </div>
+
+    <div class="ai-assistant">
+        <button class="ai-btn" id="aiBtn" onclick="toggleAiChat()">🤖</button>
+        <div class="ai-chat-container" id="aiChatContainer">
+            <div class="ai-chat-header">
+                <div class="ai-chat-title">
+                    <span>🤖</span>
+                    <span>园艺小助手</span>
+                </div>
+                <button class="ai-chat-close" onclick="closeAiChat()">×</button>
+            </div>
+            <div class="ai-chat-messages" id="aiChatMessages">
+                <div class="ai-message bot">
+                    <div class="ai-avatar">🤖</div>
+                    <div class="ai-message-content">
+                        你好！我是园艺小助手，有什么关于花草养护的问题都可以问我哦！🌿
+                    </div>
+                </div>
+            </div>
+            <div class="ai-tips">
+                <div class="ai-tips-title">热门问题</div>
+                <div class="ai-tips-list">
+                    <span class="ai-tip-tag" onclick="sendAiQuestion('玫瑰怎么养')">玫瑰怎么养</span>
+                    <span class="ai-tip-tag" onclick="sendAiQuestion('多肉浇水频率')">多肉浇水频率</span>
+                    <span class="ai-tip-tag" onclick="sendAiQuestion('植物叶子发黄')">叶子发黄怎么办</span>
+                    <span class="ai-tip-tag" onclick="sendAiQuestion('施肥技巧')">施肥技巧</span>
+                    <span class="ai-tip-tag" onclick="sendAiQuestion('病虫害防治')">病虫害防治</span>
+                    <span class="ai-tip-tag" onclick="sendAiQuestion('室内植物推荐')">室内植物推荐</span>
+                </div>
+            </div>
+            <div class="ai-chat-input">
+                <input type="text" id="aiInput" placeholder="输入你的问题..." onkeyup="if(event.keyCode===13)sendAiMessage()">
+                <button onclick="sendAiMessage()">发送</button>
+            </div>
+        </div>
+    </div>
+
+    <div class="modal" id="emojiModal">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h3>选择表情</h3>
+                <button class="modal-close" onclick="closeEmojiModal()">×</button>
+            </div>
+            <div class="emoji-grid" id="emojiGrid">
+            </div>
+        </div>
+    </div>
+
+    <div class="modal" id="reminderModal" style="display: none;">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h3>🌸 设置养护提醒</h3>
+                <button class="modal-close" onclick="closeReminderModal()">×</button>
+            </div>
+            <div class="reminder-form">
+                <div class="form-group">
+                    <label>提醒类型：</label>
+                    <select id="reminderType">
+                        <option value="water">💧 浇水提醒</option>
+                        <option value="fertilize">🌿 施肥提醒</option>
+                    </select>
+                </div>
+                <div class="form-group">
+                    <label>植物名称：</label>
+                    <input type="text" id="reminderPlant" placeholder="请输入植物名称">
+                </div>
+                <div class="form-group">
+                    <label>提醒日期：</label>
+                    <input type="date" id="reminderDate">
+                </div>
+                <div class="form-group">
+                    <label>提醒时间：</label>
+                    <input type="time" id="reminderTime">
+                </div>
+                <button class="btn btn-primary btn-block" onclick="addCareReminder()">确认设置</button>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        const emojis = ['🌸', '🌺', '🌻', '🌹', '🌷', '🌼', '🌱', '🌿', '🍀', '🌵', '🌴', '🌳', '🌲', '🍃', '🍂', '🍁', '🎋', '🌾', '🌺', '🌻', '💐', '🌷', '🌹', '🌸', '🌼', '🌙', '☀️', '⭐', '🌈', '❤️', '💚', '💙', '💜', '💛', '🧡', '🖤', '🤍', '🤎', '✨', '🌟', '💫', '🎉', '🎊', '👏', '🙌', '👍', '👎', '❤️‍🔥', '💯', '✅', '🎉'];
+
+        let uploadedImages = [];
+        let diaries = [
+            {
+                id: 1,
+                author: '花草爱好者',
+                avatar: '🌸',
+                content: '今天我的玫瑰开花了！🌷经过三个月的精心照料，终于等到这一天。花瓣层层叠叠，香气扑鼻，太幸福了！🌹',
+                images: ['https://neeko-copilot.bytedance.net/api/text2image?prompt=beautiful%20pink%20rose%20flower%20blooming%20garden&image_size=landscape_4_3'],
+                likes: 128,
+                comments: [
+                    { id: 1, author: '园艺达人', text: '太美了！恭喜恭喜！', time: '2小时前' },
+                    { id: 2, author: '小花匠', text: '养护得真好，请问用的什么肥料？', time: '1小时前' }
+                ],
+                liked: false,
+                time: '3小时前'
+            },
+            {
+                id: 2,
+                author: '多肉控',
+                avatar: '🌵',
+                content: '晒晒我的多肉军团！🌵🌵🌵 最近入手了好多新品种，感觉阳台都快放不下了！#多肉植物 #阳台花园',
+                images: [
+                    'https://neeko-copilot.bytedance.net/api/text2image?prompt=succulent%20plants%20collection%20colorful&image_size=landscape_4_3',
+                    'https://neeko-copilot.bytedance.net/api/text2image?prompt=cute%20succulent%20arrangement&image_size=landscape_4_3',
+                    'https://neeko-copilot.bytedance.net/api/text2image?prompt=small%20succulent%20plants%20pot&image_size=landscape_4_3'
+                ],
+                likes: 89,
+                comments: [
+                    { id: 1, author: '绿植小白', text: '太可爱了！求链接！', time: '5小时前' }
+                ],
+                liked: true,
+                time: '6小时前'
+            },
+            {
+                id: 3,
+                author: '菜园新手',
+                avatar: '🥬',
+                content: '第一次尝试水培蔬菜，没想到这么简单！🥬🥦🥕 绿油油的一片，看着就开心！',
+                images: [
+                    'https://neeko-copilot.bytedance.net/api/text2image?prompt=hydroponic%20vegetables%20green%20fresh&image_size=landscape_4_3',
+                    'https://neeko-copilot.bytedance.net/api/text2image?prompt=home%20hydroponic%20garden%20kitchen&image_size=landscape_4_3'
+                ],
+                likes: 256,
+                comments: [
+                    { id: 1, author: '环保达人', text: '太厉害了！零农药！', time: '昨天' },
+                    { id: 2, author: '美食家', text: '现摘现吃，新鲜！', time: '昨天' },
+                    { id: 3, author: '好奇宝宝', text: '这是什么设备？', time: '12小时前' }
+                ],
+                liked: false,
+                time: '昨天'
+            },
+            {
+                id: 4,
+                author: '月季迷',
+                avatar: '🌹',
+                content: '我的月季园一角 🌹 品种太多了，每天都有不同的花开！',
+                images: ['https://neeko-copilot.bytedance.net/api/text2image?prompt=beautiful%20rose%20garden%20various%20colors&image_size=landscape_4_3'],
+                likes: 175,
+                comments: [],
+                liked: true,
+                time: '2天前'
+            }
+        ];
+
+        document.addEventListener('DOMContentLoaded', function() {
+            renderDiaries();
+            initEmojiGrid();
+
+            document.getElementById('publishContent').addEventListener('input', function() {
+                const btnPublish = document.getElementById('btnPublish');
+                btnPublish.disabled = !this.value.trim() && uploadedImages.length === 0;
+            });
+        });
+
+        function initEmojiGrid() {
+            const emojiGrid = document.getElementById('emojiGrid');
+            emojis.forEach(emoji => {
+                const emojiItem = document.createElement('div');
+                emojiItem.className = 'emoji-item';
+                emojiItem.textContent = emoji;
+                emojiItem.onclick = function() {
+                    insertEmoji(emoji);
+                    closeEmojiModal();
+                };
+                emojiGrid.appendChild(emojiItem);
+            });
+        }
+
+        function showEmojiPicker() {
+            document.getElementById('emojiModal').classList.add('show');
+        }
+
+        function closeEmojiModal() {
+            document.getElementById('emojiModal').classList.remove('show');
+        }
+
+        function insertEmoji(emoji) {
+            const textarea = document.getElementById('publishContent');
+            const start = textarea.selectionStart;
+            const end = textarea.selectionEnd;
+            const value = textarea.value;
+            textarea.value = value.substring(0, start) + emoji + value.substring(end);
+            textarea.focus();
+            textarea.setSelectionRange(start + emoji.length, start + emoji.length);
+            
+            document.getElementById('btnPublish').disabled = !textarea.value.trim() && uploadedImages.length === 0;
+        }
+
+        function handleImageUpload(event) {
+            const files = event.target.files;
+            if (!files.length) return;
+
+            const previewContainer = document.getElementById('imagePreview');
+            previewContainer.style.display = 'grid';
+
+            Array.from(files).forEach(file => {
+                if (uploadedImages.length >= 9) {
+                    alert('最多只能上传9张图片');
+                    return;
+                }
+
+                const reader = new FileReader();
+                reader.onload = function(e) {
+                    const imageData = {
+                        id: Date.now(),
+                        src: e.target.result,
+                        file: file
+                    };
+                    uploadedImages.push(imageData);
+
+                    const previewItem = document.createElement('div');
+                    previewItem.className = 'preview-item';
+                    previewItem.innerHTML = `
+                        <img src="${e.target.result}" alt="预览">
+                        <button class="remove-btn" onclick="removePreview(${imageData.id})">×</button>
+                    `;
+                    previewContainer.appendChild(previewItem);
+                };
+                reader.readAsDataURL(file);
+            });
+
+            document.getElementById('btnPublish').disabled = false;
+        }
+
+        function removePreview(id) {
+            uploadedImages = uploadedImages.filter(img => img.id !== id);
+            const previewContainer = document.getElementById('imagePreview');
+            const previewItems = previewContainer.querySelectorAll('.preview-item');
+            previewItems.forEach((item, index) => {
+                if (index >= uploadedImages.length) {
+                    item.remove();
+                }
+            });
+
+            if (uploadedImages.length === 0) {
+                previewContainer.style.display = 'none';
+                document.getElementById('btnPublish').disabled = !document.getElementById('publishContent').value.trim();
+            }
+        }
+
+        function publishDiary() {
+            const content = document.getElementById('publishContent').value.trim();
+            
+            if (!content && uploadedImages.length === 0) {
+                alert('请输入内容或上传图片');
+                return;
+            }
+
+            const newDiary = {
+                id: Date.now(),
+                author: '园艺人小李',
+                avatar: '👤',
+                content: content,
+                images: uploadedImages.map(img => img.src),
+                likes: 0,
+                comments: [],
+                liked: false,
+                time: '刚刚'
+            };
+
+            diaries.unshift(newDiary);
+            renderDiaries();
+
+            document.getElementById('publishContent').value = '';
+            document.getElementById('imagePreview').innerHTML = '';
+            document.getElementById('imagePreview').style.display = 'none';
+            document.getElementById('btnPublish').disabled = true;
+            uploadedImages = [];
+
+            alert('发布成功！');
+        }
+
+        function renderDiaries() {
+            const diaryList = document.getElementById('diaryList');
+            diaryList.innerHTML = '';
+
+            diaries.forEach(diary => {
+                const card = document.createElement('div');
+                card.className = 'diary-card';
+                card.innerHTML = `
+                    <div class="diary-header">
+                        <div class="diary-avatar">${diary.avatar}</div>
+                        <div>
+                            <div class="diary-user-name">${diary.author}</div>
+                            <div class="diary-time">${diary.time}</div>
+                        </div>
+                    </div>
+                    <div class="diary-content">
+                        <div class="diary-text">${diary.content}</div>
+                    </div>
+                    ${diary.images.length > 0 ? `
+                    <div class="diary-images ${diary.images.length === 1 ? 'single' : diary.images.length === 2 ? 'double' : ''}">
+                        ${diary.images.map(img => `<img src="${img}" alt="日记图片">`).join('')}
+                    </div>
+                    ` : ''}
+                    <div class="diary-actions">
+                        <div class="diary-action ${diary.liked ? 'liked' : ''}" onclick="toggleLike(${diary.id})">
+                            <span>${diary.liked ? '❤️' : '🤍'}</span>
+                            <span>${diary.likes}</span>
+                        </div>
+                        <div class="diary-action" onclick="focusComment(${diary.id})">
+                            <span>💬</span>
+                            <span>${diary.comments.length}</span>
+                        </div>
+                        <div class="diary-action">
+                            <span>🔗</span>
+                            <span>分享</span>
+                        </div>
+                    </div>
+                    <div class="diary-comments">
+                        ${diary.comments.length > 0 ? diary.comments.map(comment => `
+                        <div class="comment">
+                            <div class="comment-avatar">${comment.author.charAt(0)}</div>
+                            <div class="comment-content">
+                                <div class="comment-header">
+                                    <span class="comment-author">${comment.author}</span>
+                                    <span class="comment-time">${comment.time}</span>
+                                </div>
+                                <div class="comment-text">${comment.text}</div>
+                            </div>
+                        </div>
+                        `).join('') : ''}
+                        <div class="comment-input-container">
+                            <input type="text" class="comment-input" id="commentInput_${diary.id}" placeholder="写下你的评论...">
+                            <button class="btn-comment" onclick="addComment(${diary.id})">发送</button>
+                        </div>
+                    </div>
+                `;
+                diaryList.appendChild(card);
+            });
+        }
+
+        function toggleLike(diaryId) {
+            const diary = diaries.find(d => d.id === diaryId);
+            if (diary) {
+                diary.liked = !diary.liked;
+                diary.likes += diary.liked ? 1 : -1;
+                renderDiaries();
+            }
+        }
+
+        function focusComment(diaryId) {
+            document.getElementById(`commentInput_${diaryId}`).focus();
+        }
+
+        function addComment(diaryId) {
+            const input = document.getElementById(`commentInput_${diaryId}`);
+            const text = input.value.trim();
+            if (!text) return;
+
+            const diary = diaries.find(d => d.id === diaryId);
+            if (diary) {
+                diary.comments.push({
+                    id: Date.now(),
+                    author: '园艺人小李',
+                    text: text,
+                    time: '刚刚'
+                });
+                input.value = '';
+                renderDiaries();
+            }
+        }
+
+        window.onclick = function(event) {
+            const modal = document.getElementById('emojiModal');
+            if (event.target === modal) {
+                closeEmojiModal();
+            }
+        }
+    </script>
+    <script src="ai-assistant.js"></script>
+</body>
+</html>

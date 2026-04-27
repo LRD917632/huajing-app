@@ -1,0 +1,4204 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>花净 - 简创花境</title>
+    <link rel="stylesheet" href="styles.css">
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js"></script>
+    <style>
+        :root {
+            --secondary-color: #FF7043;
+            --accent-purple: #7E57C2;
+            --accent-blue: #2196F3;
+            --accent-pink: #E91E63;
+        }
+
+        .main-content {
+            width: 100%;
+            max-width: none;
+            margin: 0;
+            padding: 24px 16px;
+        }
+
+        .section-header {
+            text-align: center;
+            margin-bottom: 20px;
+            padding: 24px;
+            background: rgba(255, 255, 255, 0.8);
+            border-radius: var(--border-radius-lg);
+            box-shadow: var(--card-shadow-sm);
+            border: 1px solid var(--border-color);
+        }
+
+        .section-header h3 {
+            font-family: 'Noto Serif SC', serif;
+            font-size: 36px;
+            color: var(--primary-dark);
+            margin-bottom: 12px;
+            font-weight: 700;
+            letter-spacing: 2px;
+        }
+
+        .section-header p {
+            font-size: 15px;
+            color: var(--text-secondary);
+            max-width: 600px;
+            margin: 0 auto;
+        }
+
+        .main-content {
+            max-width: 1600px;
+            margin: 0 auto;
+            padding: 32px 24px;
+        }
+
+        .section-header {
+            text-align: center;
+            margin-bottom: 36px;
+            padding: 40px;
+            background: linear-gradient(145deg, #ffffff 0%, #f1f8e9 100%);
+            border-radius: var(--radius-xl);
+            box-shadow: var(--shadow-md);
+            border: 1px solid rgba(76, 175, 80, 0.1);
+        }
+
+        .section-header h3 {
+            font-size: 36px;
+            color: var(--text-primary);
+            margin-bottom: 12px;
+            font-weight: 700;
+            letter-spacing: -0.5px;
+        }
+
+        .section-header p {
+            font-size: 16px;
+            color: var(--text-secondary);
+            max-width: 600px;
+            margin: 0 auto;
+        }
+
+        .diy-container {
+            display: flex;
+            gap: 20px;
+            height: calc(100vh - 180px);
+            width: 100%;
+            max-width: none;
+            margin: 0;
+            padding: 0 12px;
+        }
+
+        .diy-sidebar {
+            width: 320px;
+            flex-shrink: 0;
+            display: flex;
+            flex-direction: column;
+            gap: 16px;
+            overflow-y: auto;
+            overflow-x: hidden;
+            padding-right: 8px;
+            max-height: calc(100vh - 180px);
+        }
+
+        .diy-sidebar::-webkit-scrollbar {
+            width: 6px;
+        }
+
+        .diy-sidebar::-webkit-scrollbar-track {
+            background: rgba(76, 175, 80, 0.05);
+            border-radius: 3px;
+        }
+
+        .diy-sidebar::-webkit-scrollbar-thumb {
+            background: rgba(76, 175, 80, 0.3);
+            border-radius: 3px;
+        }
+
+        .panel {
+            background: var(--card-bg);
+            border-radius: var(--radius-md);
+            padding: 16px;
+            box-shadow: var(--shadow-sm);
+            border: 1px solid rgba(76, 175, 80, 0.08);
+            transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+        }
+
+        .panel:hover {
+            box-shadow: var(--shadow-md);
+            transform: translateY(-2px);
+        }
+
+        .panel-header {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            margin-bottom: 20px;
+            padding-bottom: 14px;
+            border-bottom: 2px solid rgba(76, 175, 80, 0.1);
+        }
+
+        .panel h4 {
+            font-size: 17px;
+            font-weight: 600;
+            color: var(--text-primary);
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .panel-icon {
+            width: 28px;
+            height: 28px;
+            background: linear-gradient(135deg, var(--primary-color) 0%, var(--primary-light) 100%);
+            border-radius: 8px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: white;
+            font-size: 14px;
+        }
+
+        .tool-section {
+            margin-bottom: 24px;
+        }
+
+        .tool-section-title {
+            font-size: 14px;
+            font-weight: 600;
+            color: var(--text-secondary);
+            margin-bottom: 14px;
+            padding-left: 10px;
+            border-left: 3px solid var(--primary-color);
+        }
+
+        .brush-types {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 10px;
+        }
+
+        .brush-type-btn {
+            width: 56px;
+            height: 56px;
+            border: 2px solid rgba(76, 175, 80, 0.15);
+            border-radius: 14px;
+            font-size: 26px;
+            cursor: pointer;
+            transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+            background: linear-gradient(145deg, #ffffff 0%, #f8faf8 100%);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            position: relative;
+        }
+
+        .brush-type-btn:hover {
+            border-color: var(--primary-color);
+            transform: translateY(-3px) scale(1.05);
+            box-shadow: 0 6px 20px rgba(76, 175, 80, 0.2);
+        }
+
+        .brush-type-btn.active {
+            border-color: var(--primary-color);
+            background: linear-gradient(145deg, #e8f5e9 0%, #c8e6c9 100%);
+            box-shadow: 0 6px 20px rgba(76, 175, 80, 0.3);
+            transform: scale(1.05);
+        }
+
+        .drawing-tools {
+            display: grid;
+            grid-template-columns: repeat(4, 1fr);
+            gap: 8px;
+        }
+
+        .tool-btn {
+            width: 48px;
+            height: 48px;
+            border: 2px solid rgba(76, 175, 80, 0.15);
+            border-radius: 12px;
+            font-size: 20px;
+            cursor: pointer;
+            transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+            background: linear-gradient(145deg, #ffffff 0%, #f8faf8 100%);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            position: relative;
+        }
+
+        .tool-btn:hover:not(:disabled) {
+            border-color: var(--primary-color);
+            background: rgba(76, 175, 80, 0.05);
+            transform: translateY(-2px);
+            box-shadow: 0 4px 12px rgba(76, 175, 80, 0.15);
+        }
+
+        .tool-btn.active {
+            border-color: var(--primary-color);
+            background: linear-gradient(135deg, var(--primary-color) 0%, var(--primary-light) 100%);
+            color: white;
+            box-shadow: 0 6px 16px rgba(76, 175, 80, 0.4);
+            transform: scale(1.05);
+        }
+
+        .tool-btn:disabled {
+            opacity: 0.4;
+            cursor: not-allowed;
+        }
+
+        .tool-btn .tooltip {
+            position: absolute;
+            bottom: -40px;
+            left: 50%;
+            transform: translateX(-50%);
+            background: var(--text-primary);
+            color: white;
+            padding: 6px 12px;
+            border-radius: 8px;
+            font-size: 12px;
+            white-space: nowrap;
+            opacity: 0;
+            visibility: hidden;
+            transition: all 0.3s ease;
+            z-index: 100;
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.2);
+        }
+
+        .tool-btn:hover .tooltip {
+            opacity: 1;
+            visibility: visible;
+        }
+
+        .text-input-container {
+            margin-top: 16px;
+        }
+
+        .text-input-container input {
+            width: 100%;
+            padding: 14px;
+            border: 2px solid rgba(76, 175, 80, 0.15);
+            border-radius: 12px;
+            font-size: 14px;
+            transition: all 0.3s ease;
+            background: linear-gradient(145deg, #ffffff 0%, #fafafa 100%);
+        }
+
+        .text-input-container input:focus {
+            outline: none;
+            border-color: var(--primary-color);
+            box-shadow: 0 0 0 3px rgba(76, 175, 80, 0.1);
+        }
+
+        .fill-toggle {
+            display: flex;
+            align-items: center;
+            gap: 16px;
+            margin-top: 16px;
+            padding: 14px;
+            background: rgba(76, 175, 80, 0.05);
+            border-radius: 12px;
+        }
+
+        .fill-toggle label {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            font-size: 14px;
+            color: var(--text-secondary);
+            cursor: pointer;
+            font-weight: 500;
+        }
+
+        .fill-toggle input[type="checkbox"] {
+            width: 20px;
+            height: 20px;
+            cursor: pointer;
+            accent-color: var(--primary-color);
+        }
+
+        .color-picker {
+            margin-top: 16px;
+        }
+
+        .color-picker label {
+            display: block;
+            font-size: 14px;
+            color: var(--text-secondary);
+            margin-bottom: 12px;
+            font-weight: 600;
+        }
+
+        .color-options {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 10px;
+        }
+
+        .color-btn {
+            width: 40px;
+            height: 40px;
+            border: 3px solid transparent;
+            border-radius: 12px;
+            cursor: pointer;
+            transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+        }
+
+        .color-btn:hover {
+            transform: scale(1.15);
+            border-color: rgba(76, 175, 80, 0.5);
+        }
+
+        .color-btn.active {
+            border-color: var(--primary-dark);
+            box-shadow: 0 0 0 3px rgba(76, 175, 80, 0.3);
+        }
+
+        #customColorPicker {
+            width: 100%;
+            height: 48px;
+            margin-top: 14px;
+            cursor: pointer;
+            border: 2px solid rgba(76, 175, 80, 0.15);
+            border-radius: 12px;
+        }
+
+        .brush-size {
+            margin-top: 20px;
+        }
+
+        .brush-size label {
+            display: flex;
+            justify-content: space-between;
+            font-size: 14px;
+            color: var(--text-secondary);
+            margin-bottom: 12px;
+            font-weight: 600;
+        }
+
+        .brush-size input[type="range"] {
+            width: 100%;
+            height: 8px;
+            border-radius: 4px;
+            background: rgba(76, 175, 80, 0.1);
+            outline: none;
+            -webkit-appearance: none;
+        }
+
+        .brush-size input[type="range"]::-webkit-slider-thumb {
+            -webkit-appearance: none;
+            width: 24px;
+            height: 24px;
+            border-radius: 50%;
+            background: linear-gradient(135deg, var(--primary-color) 0%, var(--primary-light) 100%);
+            cursor: pointer;
+            box-shadow: 0 3px 10px rgba(76, 175, 80, 0.4);
+            transition: transform 0.3s ease;
+        }
+
+        .brush-size input[type="range"]::-webkit-slider-thumb:hover {
+            transform: scale(1.3);
+        }
+
+        .brush-size-display {
+            display: block;
+            text-align: center;
+            margin-top: 10px;
+            font-size: 14px;
+            color: var(--text-muted);
+            font-weight: 600;
+        }
+
+        .plant-category {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 8px;
+            margin-bottom: 16px;
+        }
+
+        .plant-category button {
+            padding: 10px 18px;
+            border: 2px solid rgba(76, 175, 80, 0.15);
+            border-radius: 25px;
+            font-size: 13px;
+            cursor: pointer;
+            transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+            background: var(--card-bg);
+            color: var(--text-secondary);
+            font-weight: 500;
+        }
+
+        .plant-category button:hover {
+            border-color: var(--primary-color);
+            color: var(--primary-color);
+            transform: translateY(-2px);
+        }
+
+        .plant-category button.active {
+            background: linear-gradient(135deg, var(--primary-color) 0%, var(--primary-light) 100%);
+            color: white;
+            border-color: var(--primary-color);
+            box-shadow: 0 4px 12px rgba(76, 175, 80, 0.3);
+        }
+
+        .plants-grid {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 8px;
+            max-height: 200px;
+            overflow-y: auto;
+            padding-right: 4px;
+        }
+
+        .custom-upload-section {
+            margin-top: 16px;
+            padding-top: 16px;
+            border-top: 1px solid rgba(76, 175, 80, 0.1);
+        }
+
+        .upload-area {
+            border: 2px dashed rgba(76, 175, 80, 0.3);
+            border-radius: var(--radius-md);
+            padding: 20px;
+            text-align: center;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            background: rgba(76, 175, 80, 0.02);
+        }
+
+        .upload-area:hover {
+            border-color: var(--primary-color);
+            background: rgba(76, 175, 80, 0.05);
+            transform: translateY(-2px);
+        }
+
+        .upload-area.dragover {
+            border-color: var(--primary-color);
+            background: rgba(76, 175, 80, 0.1);
+        }
+
+        .upload-icon {
+            font-size: 28px;
+            margin-bottom: 8px;
+        }
+
+        .upload-text {
+            font-size: 14px;
+            font-weight: 500;
+            color: var(--text-primary);
+            margin-bottom: 4px;
+        }
+
+        .upload-hint {
+            font-size: 12px;
+            color: var(--text-muted);
+        }
+
+        .plants-grid::-webkit-scrollbar {
+            width: 5px;
+        }
+
+        .plants-grid::-webkit-scrollbar-track {
+            background: rgba(76, 175, 80, 0.05);
+            border-radius: 3px;
+        }
+
+        .plants-grid::-webkit-scrollbar-thumb {
+            background: rgba(76, 175, 80, 0.3);
+            border-radius: 3px;
+        }
+
+        .plant-item {
+            background: linear-gradient(145deg, #ffffff 0%, #f1f8e9 100%);
+            border: 2px solid transparent;
+            border-radius: 14px;
+            padding: 14px;
+            cursor: grab;
+            transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            text-align: center;
+            position: relative;
+            overflow: visible;
+        }
+
+        .plant-item.custom {
+            background: linear-gradient(145deg, #fff5f5 0%, #ffebee 100%);
+            border-color: rgba(233, 30, 99, 0.3);
+        }
+
+        .remove-custom-btn {
+            position: absolute;
+            top: -8px;
+            right: -8px;
+            width: 20px;
+            height: 20px;
+            border: none;
+            border-radius: 50%;
+            background: #ff6b6b;
+            color: white;
+            font-size: 12px;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            opacity: 0;
+            transition: opacity 0.2s ease;
+            box-shadow: 0 2px 6px rgba(255, 107, 107, 0.4);
+        }
+
+        .plant-item:hover .remove-custom-btn {
+            opacity: 1;
+        }
+
+        .remove-custom-btn:hover {
+            background: #ff5252;
+            transform: scale(1.1);
+        }
+
+        .plant-item::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            height: 3px;
+            background: linear-gradient(90deg, var(--primary-color) 0%, var(--primary-light) 100%);
+            transform: scaleX(0);
+            transition: transform 0.3s ease;
+        }
+
+        .plant-item:hover::before {
+            transform: scaleX(1);
+        }
+
+        .plant-item:hover {
+            border-color: var(--primary-color);
+            transform: translateY(-4px);
+            box-shadow: var(--shadow-md);
+        }
+
+        .plant-item:active {
+            cursor: grabbing;
+        }
+
+        .plant-item.selected {
+            border-color: var(--primary-color);
+            background: linear-gradient(145deg, #e8f5e9 0%, #c8e6c9 100%);
+            box-shadow: 0 0 0 4px rgba(76, 175, 80, 0.15);
+        }
+
+        .plant-item img {
+            width: auto;
+            height: 56px;
+            max-width: 56px;
+            object-fit: contain;
+            border-radius: 2px;
+            margin-bottom: 10px;
+            box-shadow: 0 2px 8px rgba(0, 0, 0, 0.08);
+            background: transparent;
+        }
+
+        .plant-item span {
+            font-size: 12px;
+            color: var(--text-secondary);
+            font-weight: 600;
+        }
+
+        .terrain-options {
+            display: flex;
+            flex-direction: column;
+            gap: 14px;
+        }
+
+        .custom-terrain-upload {
+            border: 2px dashed rgba(76, 175, 80, 0.25);
+            border-radius: 14px;
+            padding: 24px;
+            text-align: center;
+            cursor: pointer;
+            transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+            background: linear-gradient(145deg, rgba(76, 175, 80, 0.03) 0%, rgba(76, 175, 80, 0.06) 100%);
+        }
+
+        .custom-terrain-upload:hover {
+            border-color: var(--primary-color);
+            background: rgba(76, 175, 80, 0.1);
+            transform: translateY(-2px);
+        }
+
+        .custom-terrain-upload.dragover {
+            border-color: var(--primary-color);
+            background: rgba(76, 175, 80, 0.15);
+            box-shadow: 0 0 0 3px rgba(76, 175, 80, 0.2);
+        }
+
+        .upload-icon {
+            font-size: 40px;
+            margin-bottom: 10px;
+            opacity: 0.7;
+        }
+
+        .custom-terrain-upload span {
+            display: block;
+            font-size: 14px;
+            color: var(--text-secondary);
+            font-weight: 500;
+        }
+
+        .custom-terrain-upload p {
+            font-size: 12px;
+            color: var(--text-muted);
+            margin-top: 6px;
+        }
+
+        #terrainFileInput {
+            display: none;
+        }
+
+        #customTerrainPreview {
+            margin-top: 16px;
+        }
+
+        #customTerrainPreview img {
+            width: 100%;
+            border-radius: 12px;
+            margin-bottom: 12px;
+            box-shadow: var(--shadow-sm);
+        }
+
+        .terrain-controls {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 8px;
+            margin-bottom: 14px;
+        }
+
+        .terrain-controls button {
+            flex: 1;
+            padding: 10px 14px;
+            border: 2px solid rgba(76, 175, 80, 0.15);
+            border-radius: 10px;
+            font-size: 12px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            background: var(--card-bg);
+            font-weight: 500;
+        }
+
+        .terrain-controls button:hover {
+            border-color: var(--primary-color);
+            background: rgba(76, 175, 80, 0.05);
+        }
+
+        .terrain-controls button.active {
+            background: linear-gradient(135deg, var(--primary-color) 0%, var(--primary-light) 100%);
+            color: white;
+            border-color: var(--primary-color);
+        }
+
+        .opacity-control {
+            margin-bottom: 12px;
+        }
+
+        .opacity-control label {
+            display: flex;
+            justify-content: space-between;
+            font-size: 13px;
+            color: var(--text-secondary);
+            margin-bottom: 10px;
+            font-weight: 500;
+        }
+
+        .opacity-control input[type="range"] {
+            width: 100%;
+            height: 6px;
+            border-radius: 3px;
+            background: rgba(76, 175, 80, 0.1);
+            outline: none;
+            -webkit-appearance: none;
+        }
+
+        .opacity-control input[type="range"]::-webkit-slider-thumb {
+            -webkit-appearance: none;
+            width: 18px;
+            height: 18px;
+            border-radius: 50%;
+            background: linear-gradient(135deg, var(--primary-color) 0%, var(--primary-light) 100%);
+            cursor: pointer;
+        }
+
+        .bg-scale-control {
+            margin-bottom: 12px;
+        }
+
+        .bg-scale-control label {
+            display: flex;
+            justify-content: space-between;
+            font-size: 13px;
+            color: var(--text-secondary);
+            margin-bottom: 10px;
+            font-weight: 500;
+        }
+
+        .bg-scale-control input[type="range"] {
+            width: 100%;
+            height: 6px;
+            border-radius: 3px;
+            background: rgba(76, 175, 80, 0.1);
+            outline: none;
+            -webkit-appearance: none;
+        }
+
+        .bg-scale-control input[type="range"]::-webkit-slider-thumb {
+            -webkit-appearance: none;
+            width: 18px;
+            height: 18px;
+            border-radius: 50%;
+            background: linear-gradient(135deg, var(--primary-color) 0%, var(--primary-light) 100%);
+            cursor: pointer;
+        }
+
+        .bg-position-controls {
+            margin-top: 12px;
+            padding: 12px;
+            background: rgba(76, 175, 80, 0.05);
+            border-radius: var(--radius-sm);
+        }
+
+        .bg-position-row {
+            display: flex;
+            gap: 12px;
+            margin-bottom: 12px;
+            justify-content: center;
+        }
+
+        .bg-position-row label {
+            font-size: 12px;
+            color: var(--text-secondary);
+            display: flex;
+            align-items: center;
+            gap: 4px;
+        }
+
+        .bg-position-row input {
+            width: 60px;
+            padding: 4px 8px;
+            border: 1px solid rgba(76, 175, 80, 0.2);
+            border-radius: 4px;
+            font-size: 12px;
+            text-align: center;
+        }
+
+        .bg-direction-controls {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 3px;
+        }
+
+        .bg-direction-row {
+            display: flex;
+            gap: 3px;
+        }
+
+        .bg-direction-btn {
+            width: 28px;
+            height: 28px;
+            border: 1px solid rgba(76, 175, 80, 0.3);
+            border-radius: 6px;
+            background: white;
+            cursor: pointer;
+            font-size: 11px;
+            transition: all 0.2s ease;
+        }
+
+        .bg-direction-btn:hover {
+            background: var(--primary-color);
+            color: white;
+            border-color: var(--primary-color);
+        }
+
+        .diy-canvas-container {
+            flex: 1;
+            position: relative;
+            background: linear-gradient(145deg, #ffffff 0%, #f8faf8 100%);
+            border-radius: var(--radius-lg);
+            box-shadow: var(--shadow-md);
+            overflow: hidden;
+            border: 1px solid rgba(76, 175, 80, 0.08);
+            min-width: 0;
+            margin: 0;
+        }
+
+        .canvas-wrapper {
+            width: 100%;
+            height: 100%;
+            position: relative;
+            overflow: hidden;
+        }
+
+        #gardenCanvas {
+            width: 100%;
+            height: 100%;
+            position: relative;
+            background-image: 
+                linear-gradient(rgba(76, 175, 80, 0.03) 1px, transparent 1px),
+                linear-gradient(90deg, rgba(76, 175, 80, 0.03) 1px, transparent 1px);
+            background-size: 20px 20px;
+        }
+
+        #gardenCanvas.no-grid {
+            background-image: none;
+        }
+
+        #canvas {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            z-index: 10;
+            cursor: crosshair;
+        }
+
+        #canvas.select-mode {
+            cursor: default;
+        }
+
+        #tempCanvas {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            z-index: 15;
+            pointer-events: none;
+        }
+
+        #backgroundContainer {
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            z-index: 1;
+        }
+
+        #backgroundLayer {
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            max-width: none;
+            max-height: none;
+            width: auto;
+            height: auto;
+            object-fit: none;
+            opacity: 1;
+            display: none;
+            cursor: move;
+            transition: opacity 0.3s ease;
+        }
+
+        #planted-items {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            z-index: 20;
+            pointer-events: none;
+        }
+
+        .planted-plant {
+            position: absolute;
+            cursor: pointer;
+            transition: all 0.2s ease;
+            pointer-events: auto;
+            z-index: 25;
+        }
+
+        .planted-plant:hover {
+            transform: scale(1.05);
+            z-index: 30;
+        }
+
+        .planted-plant.selected {
+            outline: 3px solid var(--primary-color);
+            border-radius: 8px;
+            box-shadow: 0 0 20px rgba(76, 175, 80, 0.5);
+        }
+
+        .text-annotation.text-selected {
+            outline: 3px solid var(--primary-color);
+            border-radius: 4px;
+            box-shadow: 0 0 15px rgba(76, 175, 80, 0.5);
+            z-index: 100 !important;
+        }
+
+        .planted-plant img {
+            max-width: 100px;
+            max-height: 100px;
+            object-fit: contain;
+            background: transparent;
+        }
+
+        .layer-panel {
+            padding: 8px;
+            max-height: 160px;
+            overflow-y: auto;
+        }
+
+        .layer-item {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            padding: 6px 8px;
+            margin-bottom: 4px;
+            background: rgba(255, 255, 255, 0.8);
+            border-radius: 4px;
+            cursor: pointer;
+            transition: all 0.2s ease;
+            border: 1px solid transparent;
+        }
+
+        .layer-item:hover {
+            background: rgba(76, 175, 80, 0.1);
+        }
+
+        .layer-item.selected {
+            border-color: var(--primary-color);
+            background: rgba(76, 175, 80, 0.15);
+        }
+
+        .layer-icon {
+            margin-right: 8px;
+            font-size: 14px;
+        }
+
+        .layer-name {
+            flex: 1;
+            font-size: 13px;
+            color: #333;
+            overflow: hidden;
+            text-overflow: ellipsis;
+            white-space: nowrap;
+        }
+
+        .layer-number {
+            font-size: 11px;
+            color: var(--text-muted);
+            background: rgba(76, 175, 80, 0.1);
+            padding: 2px 6px;
+            border-radius: 4px;
+            font-weight: 600;
+        }
+
+        .layer-actions {
+            display: flex;
+            gap: 4px;
+        }
+
+        .layer-btn {
+            width: 22px;
+            height: 22px;
+            border: none;
+            border-radius: 3px;
+            background: var(--primary-color);
+            color: white;
+            font-size: 12px;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            transition: background 0.2s ease;
+        }
+
+        .layer-btn:hover:not(:disabled) {
+            background: #388e3c;
+        }
+
+        .layer-btn:disabled {
+            background: #ccc;
+            cursor: not-allowed;
+        }
+
+        .plant-transform-actions {
+            position: absolute;
+            top: -40px;
+            left: 50%;
+            transform: translateX(-50%);
+            display: flex;
+            gap: 6px;
+            opacity: 0;
+            transition: opacity 0.3s ease;
+            z-index: 35;
+        }
+
+        .planted-plant:hover .plant-transform-actions {
+            opacity: 1;
+        }
+
+        .transform-action-btn {
+            width: 32px;
+            height: 32px;
+            border: none;
+            border-radius: 8px;
+            background: white;
+            box-shadow: 0 2px 8px rgba(0, 0, 0, 0.15);
+            cursor: pointer;
+            font-size: 14px;
+            transition: all 0.2s ease;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .transform-action-btn:hover {
+            background: var(--primary-color);
+            color: white;
+        }
+
+        .transform-panel {
+            background: var(--card-bg);
+            border-radius: var(--radius-md);
+            padding: 20px;
+            box-shadow: var(--shadow-lg);
+            border: 1px solid rgba(76, 175, 80, 0.1);
+        }
+
+        .transform-panel-header {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            margin-bottom: 18px;
+            padding-bottom: 12px;
+            border-bottom: 2px solid rgba(76, 175, 80, 0.1);
+        }
+
+        .transform-panel-header h4 {
+            font-size: 16px;
+            font-weight: 600;
+            color: var(--text-primary);
+        }
+
+        .close-btn {
+            width: 28px;
+            height: 28px;
+            border: none;
+            border-radius: 8px;
+            background: rgba(0, 0, 0, 0.05);
+            cursor: pointer;
+            font-size: 14px;
+            transition: all 0.2s ease;
+        }
+
+        .close-btn:hover {
+            background: rgba(0, 0, 0, 0.1);
+        }
+
+        .transform-controls {
+            display: grid;
+            grid-template-columns: repeat(4, 1fr);
+            gap: 6px;
+            margin-bottom: 16px;
+        }
+
+        .transform-btn {
+            padding: 10px;
+            border: 2px solid rgba(76, 175, 80, 0.15);
+            border-radius: 8px;
+            background: var(--card-bg);
+            cursor: pointer;
+            font-size: 16px;
+            transition: all 0.3s ease;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .transform-btn:hover {
+            border-color: var(--primary-color);
+            background: rgba(76, 175, 80, 0.05);
+        }
+
+        .transform-btn.danger {
+            border-color: #ff6b6b;
+            color: #ff6b6b;
+        }
+
+        .transform-btn.danger:hover {
+            background: rgba(255, 107, 107, 0.1);
+        }
+
+        .direction-controls {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 3px;
+            margin-top: 12px;
+            padding-top: 12px;
+            border-top: 1px solid rgba(76, 175, 80, 0.1);
+        }
+
+        .direction-row {
+            display: flex;
+            gap: 3px;
+        }
+
+        .direction-btn {
+            width: 32px;
+            height: 32px;
+            border: 2px solid rgba(76, 175, 80, 0.15);
+            border-radius: 6px;
+            background: var(--card-bg);
+            cursor: pointer;
+            font-size: 12px;
+            font-weight: bold;
+            color: var(--text-secondary);
+            transition: all 0.2s ease;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .direction-btn:hover {
+            border-color: var(--primary-color);
+            background: rgba(76, 175, 80, 0.05);
+            color: var(--primary-color);
+        }
+
+        .transform-slider {
+            margin-bottom: 16px;
+        }
+
+        .transform-slider label {
+            display: flex;
+            justify-content: space-between;
+            font-size: 13px;
+            color: var(--text-secondary);
+            margin-bottom: 10px;
+            font-weight: 500;
+        }
+
+        .transform-slider input[type="range"] {
+            width: 100%;
+            height: 6px;
+            border-radius: 3px;
+            background: rgba(76, 175, 80, 0.1);
+            outline: none;
+            -webkit-appearance: none;
+        }
+
+        .transform-slider input[type="range"]::-webkit-slider-thumb {
+            -webkit-appearance: none;
+            width: 18px;
+            height: 18px;
+            border-radius: 50%;
+            background: linear-gradient(135deg, var(--primary-color) 0%, var(--primary-light) 100%);
+            cursor: pointer;
+        }
+
+        .canvas-toolbar {
+            position: absolute;
+            bottom: 12px;
+            left: 50%;
+            transform: translateX(-50%);
+            display: flex;
+            gap: 8px;
+            padding: 8px 16px;
+            background: rgba(255, 255, 255, 0.95);
+            border-radius: 24px;
+            box-shadow: var(--shadow-lg);
+            z-index: 50;
+            backdrop-filter: blur(10px);
+        }
+
+        .canvas-toolbar button {
+            width: 38px;
+            height: 38px;
+            border: 2px solid rgba(76, 175, 80, 0.15);
+            border-radius: 10px;
+            background: white;
+            cursor: pointer;
+            font-size: 16px;
+            transition: all 0.3s ease;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .canvas-toolbar button:hover {
+            border-color: var(--primary-color);
+            background: rgba(76, 175, 80, 0.05);
+            transform: translateY(-2px);
+        }
+
+        .canvas-toolbar button.active {
+            background: linear-gradient(135deg, var(--primary-color) 0%, var(--primary-light) 100%);
+            color: white;
+            border-color: var(--primary-color);
+        }
+
+        .canvas-toolbar button:disabled {
+            opacity: 0.4;
+            cursor: not-allowed;
+        }
+
+        .status-bar {
+            position: absolute;
+            bottom: 20px;
+            right: 20px;
+            padding: 10px 16px;
+            background: rgba(255, 255, 255, 0.9);
+            border-radius: 10px;
+            box-shadow: var(--shadow-md);
+            font-size: 13px;
+            color: var(--text-secondary);
+            z-index: 45;
+            backdrop-filter: blur(10px);
+        }
+
+        .status-bar span {
+            font-weight: 600;
+            color: var(--primary-color);
+        }
+
+        .scale-bar-container.horizontal {
+            position: absolute;
+            bottom: 60px;
+            left: 12px;
+            display: flex;
+            align-items: center;
+            gap: 6px;
+        }
+
+        .scale-bar-container.vertical {
+            position: absolute;
+            bottom: 60px;
+            right: 20px;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .scale-bar {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            padding: 6px 12px;
+            background: rgba(255, 255, 255, 0.95);
+            border-radius: 8px;
+            box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+        }
+
+        .scale-bar.vertical {
+            flex-direction: row;
+            padding: 12px 6px;
+        }
+
+        .scale-bar-line {
+            width: 100px;
+            height: 4px;
+            background: linear-gradient(90deg, #333 0%, #333 50%, #666 50%, #666 100%);
+            border-radius: 2px;
+            position: relative;
+        }
+
+        .scale-bar-line.vertical {
+            width: 4px;
+            height: 100px;
+            background: linear-gradient(180deg, #666 0%, #666 50%, #333 50%, #333 100%);
+        }
+
+        .scale-bar-line::before {
+            content: '';
+            position: absolute;
+            left: 0;
+            top: -6px;
+            width: 2px;
+            height: 10px;
+            background: #333;
+        }
+
+        .scale-bar-line.vertical::before {
+            left: -6px;
+            top: 0;
+            width: 10px;
+            height: 2px;
+        }
+
+        .scale-bar-line::after {
+            content: '';
+            position: absolute;
+            right: 0;
+            top: -6px;
+            width: 2px;
+            height: 10px;
+            background: #333;
+        }
+
+        .scale-bar-line.vertical::after {
+            right: -6px;
+            top: 0;
+            width: 10px;
+            height: 2px;
+        }
+
+        .scale-bar-label {
+            font-size: 12px;
+            font-weight: 600;
+            color: #333;
+            margin-top: 4px;
+        }
+
+        .scale-bar.vertical .scale-bar-label {
+            margin-top: 0;
+            margin-left: 4px;
+            writing-mode: vertical-rl;
+            text-orientation: mixed;
+        }
+
+        .scale-btn {
+            width: 32px;
+            height: 32px;
+            border: none;
+            border-radius: 8px;
+            background: rgba(255, 255, 255, 0.95);
+            box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+            cursor: pointer;
+            font-size: 14px;
+            transition: all 0.2s ease;
+        }
+
+        .scale-btn:hover {
+            background: var(--primary-color);
+            color: white;
+        }
+
+        .modal-overlay {
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: rgba(0, 0, 0, 0.5);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            z-index: 1000;
+        }
+
+        .modal-content {
+            background: white;
+            border-radius: 16px;
+            width: 90%;
+            max-width: 400px;
+            box-shadow: 0 20px 60px rgba(0, 0, 0, 0.2);
+            overflow: hidden;
+        }
+
+        .modal-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 20px;
+            border-bottom: 1px solid #eee;
+        }
+
+        .modal-header h3 {
+            margin: 0;
+            color: #333;
+        }
+
+        .close-btn {
+            width: 32px;
+            height: 32px;
+            border: none;
+            border-radius: 50%;
+            background: #f5f5f5;
+            cursor: pointer;
+            font-size: 20px;
+            color: #666;
+            transition: all 0.2s ease;
+        }
+
+        .close-btn:hover {
+            background: #eee;
+            color: #333;
+        }
+
+        .modal-body {
+            padding: 20px;
+        }
+
+        .form-group {
+            margin-bottom: 20px;
+        }
+
+        .form-group label {
+            display: block;
+            margin-bottom: 8px;
+            font-weight: 600;
+            color: #333;
+        }
+
+        .form-group input[type="range"] {
+            width: 100%;
+            margin-bottom: 8px;
+        }
+
+        .form-group input[type="color"] {
+            width: 100%;
+            height: 40px;
+            border: none;
+            border-radius: 8px;
+            cursor: pointer;
+        }
+
+        .form-group span {
+            display: inline-block;
+            padding: 6px 12px;
+            background: #f5f5f5;
+            border-radius: 6px;
+            font-weight: 600;
+            color: #333;
+        }
+
+        .modal-footer {
+            display: flex;
+            justify-content: flex-end;
+            gap: 10px;
+            padding: 20px;
+            border-top: 1px solid #eee;
+        }
+
+        .btn {
+            padding: 10px 20px;
+            border: none;
+            border-radius: 8px;
+            cursor: pointer;
+            font-weight: 600;
+            transition: all 0.2s ease;
+        }
+
+        .btn-primary {
+            background: var(--primary-color);
+            color: white;
+        }
+
+        .btn-primary:hover {
+            background: var(--primary-dark);
+        }
+
+        .btn-secondary {
+            background: #f5f5f5;
+            color: #333;
+        }
+
+        .btn-secondary:hover {
+            background: #eee;
+        }
+
+        .workspace-info {
+            position: absolute;
+            top: 10px;
+            left: 10px;
+            padding: 6px 12px;
+            background: rgba(255, 255, 255, 0.9);
+            border-radius: 8px;
+            box-shadow: var(--shadow-md);
+            font-size: 12px;
+            color: var(--text-secondary);
+            z-index: 45;
+            backdrop-filter: blur(10px);
+        }
+
+        .zoom-controls {
+            position: absolute;
+            top: 10px;
+            right: 10px;
+            display: flex;
+            flex-direction: column;
+            gap: 6px;
+            padding: 8px;
+            background: rgba(255, 255, 255, 0.9);
+            border-radius: 8px;
+            box-shadow: var(--shadow-md);
+            z-index: 45;
+            backdrop-filter: blur(10px);
+        }
+
+        .zoom-btn {
+            width: 36px;
+            height: 36px;
+            border: none;
+            border-radius: 8px;
+            background: rgba(76, 175, 80, 0.05);
+            cursor: pointer;
+            font-size: 16px;
+            transition: all 0.2s ease;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .zoom-btn:hover {
+            background: rgba(76, 175, 80, 0.15);
+        }
+
+        .zoom-level {
+            font-size: 12px;
+            text-align: center;
+            color: var(--text-muted);
+            font-weight: 500;
+        }
+
+        .action-bar {
+            display: flex;
+            gap: 12px;
+            margin-top: 16px;
+        }
+
+        .action-btn {
+            flex: 1;
+            padding: 14px 20px;
+            border: none;
+            border-radius: 12px;
+            font-size: 14px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 8px;
+        }
+
+        .action-btn.primary {
+            background: linear-gradient(135deg, var(--primary-color) 0%, var(--primary-light) 100%);
+            color: white;
+            box-shadow: 0 4px 16px rgba(76, 175, 80, 0.3);
+        }
+
+        .action-btn.primary:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 6px 20px rgba(76, 175, 80, 0.4);
+        }
+
+        .action-btn.secondary {
+            background: rgba(76, 175, 80, 0.08);
+            color: var(--primary-color);
+            border: 2px solid rgba(76, 175, 80, 0.2);
+        }
+
+        .action-btn.secondary:hover {
+            background: rgba(76, 175, 80, 0.15);
+        }
+
+        .action-btn.danger {
+            background: rgba(255, 107, 107, 0.08);
+            color: #ff6b6b;
+            border: 2px solid rgba(255, 107, 107, 0.2);
+        }
+
+        .action-btn.danger:hover {
+            background: rgba(255, 107, 107, 0.15);
+        }
+
+        .modal-overlay {
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: rgba(0, 0, 0, 0.5);
+            display: none;
+            align-items: center;
+            justify-content: center;
+            z-index: 2000;
+            backdrop-filter: blur(4px);
+        }
+
+        .modal-overlay.active {
+            display: flex;
+        }
+
+        .modal {
+            background: var(--card-bg);
+            border-radius: var(--radius-xl);
+            padding: 32px;
+            max-width: 500px;
+            width: 90%;
+            max-height: 80vh;
+            overflow-y: auto;
+            box-shadow: var(--shadow-lg);
+            animation: modalFadeIn 0.3s ease;
+        }
+
+        @keyframes modalFadeIn {
+            from {
+                opacity: 0;
+                transform: scale(0.95) translateY(20px);
+            }
+            to {
+                opacity: 1;
+                transform: scale(1) translateY(0);
+            }
+        }
+
+        .modal-header {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            margin-bottom: 24px;
+        }
+
+        .modal-header h3 {
+            font-size: 22px;
+            font-weight: 700;
+            color: var(--text-primary);
+        }
+
+        .modal-close {
+            width: 32px;
+            height: 32px;
+            border: none;
+            border-radius: 8px;
+            background: rgba(0, 0, 0, 0.05);
+            cursor: pointer;
+            font-size: 16px;
+            transition: all 0.2s ease;
+        }
+
+        .modal-close:hover {
+            background: rgba(0, 0, 0, 0.1);
+        }
+
+        .form-group {
+            margin-bottom: 20px;
+        }
+
+        .form-group label {
+            display: block;
+            font-size: 14px;
+            font-weight: 600;
+            color: var(--text-secondary);
+            margin-bottom: 10px;
+        }
+
+        .form-group input,
+        .form-group textarea {
+            width: 100%;
+            padding: 14px;
+            border: 2px solid rgba(76, 175, 80, 0.15);
+            border-radius: 12px;
+            font-size: 14px;
+            transition: all 0.3s ease;
+            background: linear-gradient(145deg, #ffffff 0%, #fafafa 100%);
+        }
+
+        .form-group input:focus,
+        .form-group textarea:focus {
+            outline: none;
+            border-color: var(--primary-color);
+            box-shadow: 0 0 0 3px rgba(76, 175, 80, 0.1);
+        }
+
+        .form-group textarea {
+            resize: vertical;
+            min-height: 100px;
+        }
+
+        .form-actions {
+            display: flex;
+            gap: 12px;
+            margin-top: 24px;
+        }
+
+        .form-actions button {
+            flex: 1;
+            padding: 14px 20px;
+            border: none;
+            border-radius: 12px;
+            font-size: 14px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+
+        .form-actions button.primary {
+            background: linear-gradient(135deg, var(--primary-color) 0%, var(--primary-light) 100%);
+            color: white;
+        }
+
+        .form-actions button.secondary {
+            background: rgba(76, 175, 80, 0.08);
+            color: var(--primary-color);
+            border: 2px solid rgba(76, 175, 80, 0.2);
+        }
+
+        .works-gallery {
+            margin-top: 32px;
+        }
+
+        .works-header {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            margin-bottom: 24px;
+        }
+
+        .works-header h3 {
+            font-size: 24px;
+            font-weight: 700;
+            color: var(--text-primary);
+        }
+
+        .works-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+            gap: 20px;
+        }
+
+        .work-card {
+            background: var(--card-bg);
+            border-radius: var(--radius-md);
+            overflow: hidden;
+            box-shadow: var(--shadow-sm);
+            transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+            border: 1px solid rgba(76, 175, 80, 0.08);
+        }
+
+        .work-card:hover {
+            transform: translateY(-4px);
+            box-shadow: var(--shadow-lg);
+        }
+
+        .work-card img {
+            width: 100%;
+            height: 180px;
+            object-fit: cover;
+        }
+
+        .work-card-content {
+            padding: 18px;
+        }
+
+        .work-card-title {
+            font-size: 16px;
+            font-weight: 600;
+            color: var(--text-primary);
+            margin-bottom: 8px;
+        }
+
+        .work-card-desc {
+            font-size: 13px;
+            color: var(--text-muted);
+            margin-bottom: 14px;
+            display: -webkit-box;
+            -webkit-line-clamp: 2;
+            -webkit-box-orient: vertical;
+            overflow: hidden;
+        }
+
+        .work-card-meta {
+            display: flex;
+            align-items: center;
+            gap: 16px;
+            font-size: 12px;
+            color: var(--text-muted);
+        }
+
+        .work-card-meta span {
+            display: flex;
+            align-items: center;
+            gap: 4px;
+        }
+
+        .work-card-actions {
+            display: flex;
+            gap: 10px;
+            margin-top: 14px;
+        }
+
+        .work-action-btn {
+            flex: 1;
+            padding: 10px;
+            border: 2px solid rgba(76, 175, 80, 0.15);
+            border-radius: 8px;
+            background: var(--card-bg);
+            cursor: pointer;
+            font-size: 13px;
+            transition: all 0.2s ease;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 4px;
+        }
+
+        .work-action-btn:hover {
+            border-color: var(--primary-color);
+            background: rgba(76, 175, 80, 0.05);
+        }
+
+        .work-action-btn.liked {
+            border-color: #ff6b6b;
+            color: #ff6b6b;
+        }
+
+        .work-action-btn.favorited {
+            border-color: #ffb74d;
+            color: #ffb74d;
+        }
+
+        .empty-state {
+            text-align: center;
+            padding: 40px;
+            color: var(--text-muted);
+        }
+
+        .empty-state svg {
+            width: 80px;
+            height: 80px;
+            margin-bottom: 16px;
+            opacity: 0.5;
+        }
+
+        .scale-controls {
+            display: flex;
+            flex-direction: column;
+            gap: 14px;
+        }
+
+        .scale-control {
+            display: flex;
+            flex-direction: column;
+            gap: 6px;
+        }
+
+        .scale-control label {
+            font-size: 13px;
+            font-weight: 500;
+            color: var(--text-secondary);
+        }
+
+        .scale-control input[type="number"],
+        .scale-control select {
+            width: 100%;
+            padding: 10px 14px;
+            border: 2px solid rgba(76, 175, 80, 0.15);
+            border-radius: 10px;
+            font-size: 14px;
+            background: var(--card-bg);
+            transition: all 0.3s ease;
+        }
+
+        .scale-control input[type="number"]:focus,
+        .scale-control select:focus {
+            outline: none;
+            border-color: var(--primary-color);
+            box-shadow: 0 0 0 3px rgba(76, 175, 80, 0.1);
+        }
+
+        .scale-control input[type="color"] {
+            width: 100%;
+            height: 40px;
+            border: 2px solid rgba(76, 175, 80, 0.15);
+            border-radius: 10px;
+            cursor: pointer;
+        }
+
+        .scale-control input[type="checkbox"] {
+            width: 18px;
+            height: 18px;
+            cursor: pointer;
+            accent-color: var(--primary-color);
+        }
+
+        .scale-input-group {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .scale-prefix {
+            font-size: 16px;
+            font-weight: 600;
+            color: var(--text-secondary);
+        }
+
+        .scale-value {
+            font-size: 13px;
+            color: var(--text-muted);
+            font-weight: 500;
+        }
+
+        .elevation-category {
+            margin-top: 8px;
+            border-top: 1px solid rgba(76, 175, 80, 0.1);
+            padding-top: 12px;
+        }
+
+        .elevation-category button {
+            font-size: 12px;
+            padding: 8px 12px;
+        }
+
+        .elevation-category button.active {
+            background: linear-gradient(135deg, #66BB6A 0%, #43A047 100%);
+        }
+
+        @media (max-width: 1200px) {
+            .diy-container {
+                flex-direction: column;
+                height: auto;
+            }
+
+            .diy-sidebar {
+                width: 100%;
+                flex-direction: row;
+                flex-wrap: wrap;
+                overflow-y: visible;
+            }
+
+            .panel {
+                flex: 1;
+                min-width: 280px;
+            }
+
+            .diy-canvas-container {
+                height: 500px;
+            }
+        }
+
+        @media (max-width: 768px) {
+            .navbar-links a span {
+                display: none;
+            }
+
+            .navbar-links a {
+                padding: 10px;
+            }
+
+            .section-header h3 {
+                font-size: 28px;
+            }
+
+            .drawing-tools {
+                grid-template-columns: repeat(3, 1fr);
+            }
+
+            .plants-grid {
+                grid-template-columns: repeat(2, 1fr);
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="header">
+        <div class="header-content">
+            <a href="index.html" class="logo">
+                <div class="logo-icon">🌸</div>
+                <span>花净</span>
+            </a>
+            <div class="nav">
+                <a href="index.html">首页</a>
+                <a href="plants_new.html">植物图鉴</a>
+                <a href="garden-diy.html" class="active">简创花境</a>
+                <a href="pet-diary.html">养宠日记</a>
+                <a href="profile.html">个人中心</a>
+                <a href="feedback.html">用户反馈</a>
+            </div>
+        </div>
+    </div>
+
+    <div class="main-content">
+        <div class="section-header">
+            <h3>🎨 简创花境</h3>
+            <p>发挥创意，设计属于你的理想花园。支持自由绘图、植物贴图、底图导入等多种创作方式</p>
+        </div>
+
+        <div class="diy-container">
+            <div class="diy-sidebar">
+                <div class="panel">
+                    <div class="panel-header">
+                        <h4><span class="panel-icon">✏️</span> 绘制工具</h4>
+                    </div>
+                    
+                    <div class="tool-section">
+                        <div class="tool-section-title">选择工具</div>
+                        <div class="brush-types">
+                            <button class="brush-type-btn active" data-tool="select" title="选择工具">👆</button>
+                            <button class="brush-type-btn" data-tool="pen" title="画笔">✏️</button>
+                            <button class="brush-type-btn" data-tool="eraser" title="橡皮擦">🧹</button>
+                        </div>
+                    </div>
+
+                    <div class="tool-section">
+                        <div class="tool-section-title">几何图形</div>
+                        <div class="drawing-tools">
+                            <button class="tool-btn" data-tool="circle" title="圆形"><span>⭕</span></button>
+                            <button class="tool-btn" data-tool="rectangle" title="矩形"><span>⬜</span></button>
+                            <button class="tool-btn" data-tool="square" title="正方形"><span>⬛</span></button>
+                            <button class="tool-btn" data-tool="triangle" title="三角形"><span>🔺</span></button>
+                            <button class="tool-btn" data-tool="diamond" title="菱形"><span>◇</span></button>
+                            <button class="tool-btn" data-tool="hexagon" title="六边形"><span>⬡</span></button>
+                            <button class="tool-btn" data-tool="star" title="星形"><span>⭐</span></button>
+                            <button class="tool-btn" data-tool="ellipse" title="椭圆"><span>⬭</span></button>
+                        </div>
+                    </div>
+
+                    <div class="tool-section">
+                        <div class="tool-section-title">特殊工具</div>
+                        <div class="drawing-tools">
+                            <button class="tool-btn" data-tool="line" title="直线"><span>〰️</span></button>
+                            <button class="tool-btn" data-tool="contour" title="等高线"><span>〽️</span></button>
+                            <button class="tool-btn" data-tool="text" title="文字标注"><span>📝</span></button>
+                        </div>
+                    </div>
+
+                    <div class="color-picker">
+                        <label>绘制颜色</label>
+                        <div class="color-options">
+                            <button class="color-btn active" style="background: #1B5E20;" data-color="#1B5E20"></button>
+                            <button class="color-btn" style="background: #FF5722;" data-color="#FF5722"></button>
+                            <button class="color-btn" style="background: #2196F3;" data-color="#2196F3"></button>
+                            <button class="color-btn" style="background: #E91E63;" data-color="#E91E63"></button>
+                            <button class="color-btn" style="background: #FFC107;" data-color="#FFC107"></button>
+                            <button class="color-btn" style="background: #9C27B0;" data-color="#9C27B0"></button>
+                            <button class="color-btn" style="background: #00BCD4;" data-color="#00BCD4"></button>
+                            <button class="color-btn" style="background: #795548;" data-color="#795548"></button>
+                        </div>
+                        <input type="color" id="customColorPicker" value="#1B5E20">
+                    </div>
+
+                    <div class="brush-size">
+                        <label>画笔大小 <span id="brushSizeValue">5</span>px</label>
+                        <input type="range" id="brushSize" min="1" max="50" value="5">
+                    </div>
+
+                    <div class="fill-toggle">
+                        <label>
+                            <input type="checkbox" id="fillShape">
+                            填充图形
+                        </label>
+                    </div>
+                </div>
+
+                <div class="panel">
+                    <div class="panel-header">
+                        <h4><span class="panel-icon">🌿</span> 植物贴图</h4>
+                    </div>
+                    
+                    <div class="plant-category">
+                        <button class="active" data-category="all">全部</button>
+                        <button data-category="plane">平面类</button>
+                        <button data-category="elevation">立面类</button>
+                    </div>
+                    
+                    <div class="plant-category elevation-category">
+                        <button data-category="foreground">🌱 前景</button>
+                        <button data-category="midground">🌿 中景</button>
+                        <button data-category="background">🌳 后景</button>
+                    </div>
+                    
+                    <div class="plants-grid" id="plantStickers">
+                    </div>
+                    
+                    <div class="custom-upload-section">
+                        <div class="upload-area" id="customUploadArea">
+                            <input type="file" id="customImageUpload" accept="image/*" style="display: none;">
+                            <div class="upload-icon">📤</div>
+                            <div class="upload-text">上传自定义贴图</div>
+                            <div class="upload-hint">支持 JPG、PNG、GIF 格式</div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="panel transform-panel" id="transformPanel" style="display: none;">
+                    <div class="transform-panel-header">
+                        <h4 id="selectedItemName">已选中: 底图</h4>
+                        <button class="close-btn" onclick="deselectAll()">✕</button>
+                    </div>
+                    
+                    <div class="transform-controls">
+                        <button class="transform-btn" onclick="rotateSelected(-15)">↺</button>
+                        <button class="transform-btn" onclick="rotateSelected(15)">↻</button>
+                        <button class="transform-btn" onclick="scaleSelected(-10)">−</button>
+                        <button class="transform-btn" onclick="scaleSelected(10)">+</button>
+                        <button class="transform-btn" onclick="resetTransform()">🔄</button>
+                        <button class="transform-btn" id="resetPositionBtn" onclick="resetBackgroundPosition()">📍</button>
+                        <button class="transform-btn danger" onclick="deleteSelected()">🗑️</button>
+                    </div>
+                    
+                    <div class="direction-controls">
+                        <div class="direction-row">
+                            <button class="direction-btn" onclick="moveSelected(0, -10)">↑</button>
+                        </div>
+                        <div class="direction-row">
+                            <button class="direction-btn" onclick="moveSelected(-10, 0)">←</button>
+                            <button class="direction-btn" onclick="moveSelected(10, 0)">→</button>
+                        </div>
+                        <div class="direction-row">
+                            <button class="direction-btn" onclick="moveSelected(0, 10)">↓</button>
+                        </div>
+                    </div>
+                    
+                    <div class="transform-slider">
+                        <label>旋转角度 <span id="transformRotation">0°</span></label>
+                        <input type="range" id="transformRotationSlider" min="-180" max="180" value="0">
+                    </div>
+                    
+                    <div class="transform-slider">
+                        <label>缩放比例 <span id="transformScale">100%</span></label>
+                        <input type="range" id="transformScaleSlider" min="30" max="300" value="100">
+                    </div>
+                </div>
+
+                <div class="panel">
+                    <div class="panel-header">
+                        <h4><span class="panel-icon">📊</span> 图层管理</h4>
+                    </div>
+                    
+                    <div class="layer-panel">
+                        <div class="layer-item" id="backgroundLayerItem">
+                            <span class="layer-icon">🖼️</span>
+                            <span class="layer-name">底图</span>
+                            <div class="layer-actions">
+                                <button class="layer-btn" onclick="moveLayer(-1, 'background')" title="下移" disabled>↓</button>
+                                <button class="layer-btn" onclick="moveLayer(1, 'background')" title="上移">↑</button>
+                            </div>
+                        </div>
+                        <div id="layersList">
+                        </div>
+                    </div>
+                </div>
+
+                <div class="panel">
+                    <div class="panel-header">
+                        <h4><span class="panel-icon">🖼️</span> 底图设置</h4>
+                    </div>
+                    
+                    <div class="terrain-options">
+                        <div 
+                            class="custom-terrain-upload" 
+                            onclick="document.getElementById('terrainFileInput').click()"
+                            ondragover="event.preventDefault(); this.classList.add('dragover')"
+                            ondragleave="this.classList.remove('dragover')"
+                            ondrop="event.preventDefault(); this.classList.remove('dragover'); handleFileDrop(event)"
+                        >
+                            <div class="upload-icon">📤</div>
+                            <span>上传底图</span>
+                            <p>支持 JPG、PNG、GIF 格式</p>
+                        </div>
+                        
+                        <input type="file" id="terrainFileInput" accept="image/*" onchange="loadTerrainImage(this.files[0])">
+                        
+                        <div id="customTerrainPreview" style="display: none;">
+                            <img id="previewImage" src="" alt="预览">
+                            <div class="terrain-controls">
+                                <button class="active" onclick="adjustBackground('auto')">🤖 智能适配</button>
+                                <button onclick="adjustBackground('cover')">🔲 铺满画布</button>
+                                <button onclick="adjustBackground('contain')">📐 保持比例</button>
+                            </div>
+                            <div class="opacity-control">
+                                <label>透明度 <span id="opacityValue">100%</span></label>
+                                <input type="range" id="bgOpacity" min="10" max="100" value="100">
+                            </div>
+                            <div class="bg-scale-control">
+                                <label>缩放比例 <span id="bgScaleValue">100%</span></label>
+                                <input type="range" id="bgScale" min="20" max="300" value="100">
+                            </div>
+                            <div class="bg-position-controls">
+                                <div class="bg-position-row">
+                                    <label>位置 X: <input type="number" id="bgPosX" value="0" step="10"></label>
+                                    <label>位置 Y: <input type="number" id="bgPosY" value="0" step="10"></label>
+                                </div>
+                                <div class="bg-direction-controls">
+                                    <div class="bg-direction-row">
+                                        <button class="bg-direction-btn" onclick="moveBackground(0, -10)">↑</button>
+                                    </div>
+                                    <div class="bg-direction-row">
+                                        <button class="bg-direction-btn" onclick="moveBackground(-10, 0)">←</button>
+                                        <button class="bg-direction-btn" onclick="moveBackground(10, 0)">→</button>
+                                    </div>
+                                    <div class="bg-direction-row">
+                                        <button class="bg-direction-btn" onclick="moveBackground(0, 10)">↓</button>
+                                    </div>
+                                </div>
+                            </div>
+                            <button class="action-btn" onclick="resetBackgroundTransform()">🔄 重置变换</button>
+                            <button class="action-btn secondary" onclick="selectBackground()">🎯 选中底图</button>
+                            <button class="action-btn danger" onclick="clearCustomTerrain()">🗑️ 清除底图</button>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="panel">
+                    <div class="panel-header">
+                        <h4><span class="panel-icon">📏</span> 比例尺设置</h4>
+                    </div>
+                    <div class="scale-controls">
+                        <div class="scale-control">
+                            <label>比例尺数值</label>
+                            <div class="scale-input-group">
+                                <span class="scale-prefix">1:</span>
+                                <input type="number" id="scaleValue" min="10" max="500" value="100">
+                            </div>
+                        </div>
+                        <div class="scale-control">
+                            <label>比例尺长度</label>
+                            <input type="range" id="scaleLength" min="50" max="300" value="100">
+                            <span class="scale-value" id="lengthDisplay">100px</span>
+                        </div>
+                        <div class="scale-control">
+                            <label>比例尺颜色</label>
+                            <input type="color" id="scaleColor" value="#333333">
+                        </div>
+                        <div class="scale-control">
+                            <label>
+                                <input type="checkbox" id="showHorizontalScale" checked>
+                                显示横向比例尺
+                            </label>
+                        </div>
+                        <div class="scale-control">
+                            <label>
+                                <input type="checkbox" id="showVerticalScale" checked>
+                                显示竖向比例尺
+                            </label>
+                        </div>
+                        <div class="scale-control">
+                            <label>
+                                <input type="checkbox" id="showScaleLabels" checked>
+                                显示比例尺标签
+                            </label>
+                        </div>
+                        <div class="scale-control">
+                            <label>单位</label>
+                            <select id="scaleUnit">
+                                <option value="m">米 (m)</option>
+                                <option value="cm">厘米 (cm)</option>
+                                <option value="mm">毫米 (mm)</option>
+                                <option value="km">千米 (km)</option>
+                            </select>
+                        </div>
+                        <button class="action-btn secondary" onclick="resetScalePosition()">🔄 重置位置</button>
+                    </div>
+                </div>
+            </div>
+
+            <div class="diy-canvas-container">
+                <div class="canvas-wrapper" id="gardenCanvas">
+                    <div id="backgroundContainer"></div>
+                    <canvas id="canvas"></canvas>
+                    <canvas id="tempCanvas"></canvas>
+                    <div id="planted-items"></div>
+                </div>
+
+                <div class="workspace-info">
+                    <span>🎨</span> 简创花境 - 设计中
+                </div>
+
+                <div class="zoom-controls">
+                    <button class="zoom-btn" onclick="zoomCanvas(1.1)">+</button>
+                    <div class="zoom-level" id="zoomLevel">100%</div>
+                    <button class="zoom-btn" onclick="zoomCanvas(0.9)">−</button>
+                    <button class="zoom-btn" onclick="resetZoom()">⟲</button>
+                </div>
+
+                <div class="canvas-toolbar">
+                    <button id="undoBtn" disabled onclick="undo()" title="撤销"><span>↩️</span></button>
+                    <button id="redoBtn" disabled onclick="redo()" title="重做"><span>↪️</span></button>
+                    <div style="width: 1px; background: rgba(0,0,0,0.1);"></div>
+                    <button id="gridToggle" onclick="toggleGrid()" title="网格显示"><span>📐</span></button>
+                    <button onclick="clearDrawing()" title="清空画布"><span>🗑️</span></button>
+
+                    <button onclick="showPublishModal()" title="发布作品"><span>📢</span></button>
+                </div>
+
+                <div class="status-bar">
+                    当前工具: <span id="currentTool">选择工具</span>
+                </div>
+
+                <div class="scale-bar-container horizontal">
+                    <div class="scale-bar" id="scaleBar">
+                        <div class="scale-bar-line"></div>
+                        <div class="scale-bar-label" id="scaleBarLabel">1:100</div>
+                    </div>
+                </div>
+                <div class="scale-bar-container vertical">
+                    <div class="scale-bar vertical" id="scaleBarVertical">
+                        <div class="scale-bar-line vertical"></div>
+                        <div class="scale-bar-label" id="scaleBarLabelVertical">1:100</div>
+                    </div>
+                </div>
+
+            </div>
+        </div>
+
+        <div class="works-gallery">
+            <div class="works-header">
+                <h3>🌟 用户作品展示</h3>
+                <button class="action-btn primary" onclick="showPublishModal()">发布作品</button>
+            </div>
+            <div class="works-grid" id="worksGrid">
+            </div>
+        </div>
+    </div>
+
+    <div class="modal-overlay" id="textInputModal" style="display: none;">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h3 id="textModalTitle">文字标注设置</h3>
+                <button class="close-btn" onclick="hideTextInputModal()">×</button>
+            </div>
+            <div class="modal-body">
+                <div class="form-group">
+                    <label>标注文字</label>
+                    <input type="text" id="textInput" placeholder="请输入标注文字">
+                </div>
+                <div class="form-group">
+                    <label>文字颜色</label>
+                    <input type="color" id="textColorPicker" value="#333333">
+                </div>
+                <div class="form-group">
+                    <label>文字大小 <span id="textSizeValue">24</span>px</label>
+                    <input type="range" id="textSizeSlider" min="12" max="72" value="24">
+                </div>
+                <div class="form-group">
+                    <label>
+                        <input type="checkbox" id="textBorderToggle" checked>
+                        添加线框
+                    </label>
+                </div>
+                <div class="form-group" id="borderSettings">
+                    <label>线框颜色</label>
+                    <input type="color" id="borderColorPicker" value="#333333">
+                </div>
+                <div class="form-group" id="borderWidthSettings">
+                    <label>线框宽度 <span id="borderWidthValue">2</span>px</label>
+                    <input type="range" id="borderWidthSlider" min="1" max="10" value="2">
+                </div>
+            </div>
+            <div class="modal-footer">
+                <button class="btn btn-danger" id="deleteTextBtn" style="display: none;" onclick="deleteSelectedText()">删除标注</button>
+                <button class="btn btn-secondary" onclick="hideTextInputModal()">取消</button>
+                <button class="btn btn-primary" id="textActionBtn" onclick="saveTextAnnotation()">添加标注</button>
+            </div>
+        </div>
+    </div>
+
+    <div class="modal-overlay" id="publishModal">
+        <div class="modal">
+            <div class="modal-header">
+                <h3>发布作品</h3>
+                <button class="modal-close" onclick="closeModal('publishModal')">✕</button>
+            </div>
+            <div class="form-group">
+                <label>作品名称</label>
+                <input type="text" id="workTitle" placeholder="请输入作品名称">
+            </div>
+            <div class="form-group">
+                <label>作品描述</label>
+                <textarea id="workDesc" placeholder="描述你的作品..."></textarea>
+            </div>
+            <div class="form-actions">
+                <button class="secondary" onclick="closeModal('publishModal')">取消</button>
+                <button class="primary" onclick="publishWork()">发布</button>
+            </div>
+        </div>
+    </div>
+
+    <div class="modal-overlay" id="workDetailModal">
+        <div class="modal" style="max-width: 600px;">
+            <div class="modal-header">
+                <h3 id="detailTitle">作品详情</h3>
+                <button class="modal-close" onclick="closeModal('workDetailModal')">✕</button>
+            </div>
+            <img id="detailImage" src="" alt="作品图片" style="width: 100%; border-radius: 12px; margin-bottom: 16px;">
+            <p id="detailDesc" style="color: var(--text-secondary); margin-bottom: 16px;"></p>
+            <div class="work-card-meta" style="margin-bottom: 16px;">
+                <span id="detailLikes">❤️ 0</span>
+                <span id="detailFavorites">⭐ 0</span>
+                <span id="detailComments">💬 0</span>
+            </div>
+            <div class="form-group">
+                <label>评论</label>
+                <textarea id="commentInput" placeholder="写下你的评论..."></textarea>
+            </div>
+            <div class="form-actions">
+                <button class="work-action-btn" onclick="likeWork()">❤️ 点赞</button>
+                <button class="work-action-btn" onclick="favoriteWork()">⭐ 收藏</button>
+                <button class="primary" onclick="submitComment()">发表评论</button>
+            </div>
+            <div id="commentsList" style="margin-top: 20px; max-height: 200px; overflow-y: auto;">
+            </div>
+        </div>
+    </div>
+
+    <script>
+        const canvas = document.getElementById('canvas');
+        const ctx = canvas.getContext('2d');
+        const tempCanvas = document.getElementById('tempCanvas');
+        const tempCtx = tempCanvas.getContext('2d');
+        
+        let currentTool = 'select';
+        let currentColor = '#1B5E20';
+        let brushSize = 5;
+        let isDrawing = false;
+        let startX, startY;
+        let shapes = [];
+        let history = [];
+        let historyIndex = -1;
+        let plantedPlants = [];
+        let selectedItem = null;
+        let selectedType = null;
+        let customTerrainImage = null;
+        let gridVisible = true;
+        let zoom = 1;
+
+        const toolNames = {
+            'select': '选择工具',
+            'pen': '画笔',
+            'eraser': '橡皮擦',
+            'circle': '圆形',
+            'rectangle': '矩形',
+            'square': '正方形',
+            'triangle': '三角形',
+            'diamond': '菱形',
+            'hexagon': '六边形',
+            'star': '星形',
+            'ellipse': '椭圆',
+            'line': '直线',
+            'contour': '等高线',
+            'text': '文字标注'
+        };
+
+        const plants = [
+            { id: 1, name: '白皮松', category: 'plane', image: '植物贴图/平面类/白皮松-平1.png' },
+            { id: 2, name: '白玉兰', category: 'plane', image: '植物贴图/平面类/白玉兰.png' },
+            { id: 3, name: '垂柳', category: 'plane', image: '植物贴图/平面类/垂柳.png' },
+            { id: 4, name: '大叶榕', category: 'plane', image: '植物贴图/平面类/大叶榕.png' },
+            { id: 5, name: '凤凰木', category: 'plane', image: '植物贴图/平面类/凤凰木.png' },
+            { id: 6, name: '荷花', category: 'plane', image: '植物贴图/平面类/荷花.png' },
+            { id: 7, name: '合欢', category: 'plane', image: '植物贴图/平面类/合欢-平2.png' },
+            { id: 8, name: '含笑', category: 'plane', image: '植物贴图/平面类/含笑.png' },
+            { id: 9, name: '海棠', category: 'plane', image: '植物贴图/平面类/海棠-平2.png' },
+            { id: 10, name: '广玉兰', category: 'plane', image: '植物贴图/平面类/广玉兰-平2.png' },
+            { id: 11, name: '国槐', category: 'plane', image: '植物贴图/平面类/国槐-平2.png' },
+            { id: 12, name: '法桐', category: 'plane', image: '植物贴图/平面类/法桐-平2.png' },
+            { id: 13, name: '龟背竹', category: 'plane', image: '植物贴图/平面类/龟背竹.png' },
+            { id: 14, name: '碧桃', category: 'plane', image: '植物贴图/平面类/碧桃-平面.png' },
+            { id: 15, name: '鹅掌楸', category: 'plane', image: '植物贴图/平面类/鹅掌楸-平1.png' },
+            { id: 16, name: '宫粉紫荆', category: 'plane', image: '植物贴图/平面类/宫粉紫荆.png' },
+            { id: 17, name: '高山榕', category: 'plane', image: '植物贴图/平面类/高山榕.png' },
+            { id: 18, name: '海南椰子', category: 'plane', image: '植物贴图/平面类/海南椰子.png' },
+            { id: 19, name: '国王椰子', category: 'plane', image: '植物贴图/平面类/国王椰子.png' },
+            { id: 20, name: '大王椰子', category: 'plane', image: '植物贴图/平面类/大王椰子.png' },
+            { id: 21, name: '棕榈', category: 'elevation', image: '植物贴图/立面类/棕榈树.png' },
+            { id: 22, name: '樱花', category: 'elevation', image: '植物贴图/立面类/樱花立面图.png' },
+            { id: 23, name: '五角枫', category: 'elevation', image: '植物贴图/立面类/五角枫立面图.png' },
+            { id: 24, name: '泡桐', category: 'elevation', image: '植物贴图/立面类/泡桐立面图.png' },
+            { id: 25, name: '榆树', category: 'elevation', image: '植物贴图/立面类/榆树立面图.png' },
+            { id: 26, name: '桑树', category: 'elevation', image: '植物贴图/立面类/桑树立面图.png' },
+            { id: 27, name: '构树', category: 'elevation', image: '植物贴图/立面类/构树立面图.png' },
+            { id: 28, name: '鸡爪槭', category: 'elevation', image: '植物贴图/立面类/鸡爪槭立面图.png' },
+            { id: 29, name: '小乔木', category: 'elevation', image: '植物贴图/立面类/通用绿色小乔木.png' },
+            { id: 30, name: '手绘组团1', category: 'plane', image: '植物贴图/平面类/手绘植物组团 (1).png' },
+            { id: 31, name: '手绘组团2', category: 'plane', image: '植物贴图/平面类/手绘植物组团 (2).png' },
+            { id: 32, name: '手绘组团3', category: 'plane', image: '植物贴图/平面类/手绘植物组团 (3).png' },
+            { id: 33, name: '手绘组团4', category: 'plane', image: '植物贴图/平面类/手绘植物组团 (4).png' },
+            { id: 34, name: '手绘组团5', category: 'plane', image: '植物贴图/平面类/手绘植物组团 (5).png' },
+            { id: 35, name: '白蜡', category: 'plane', image: '植物贴图/平面类/白蜡-2.png' },
+            { id: 36, name: '白千层', category: 'plane', image: '植物贴图/平面类/白千层.png' },
+            { id: 37, name: '赤松', category: 'plane', image: '植物贴图/平面类/赤松-平1.png' },
+            { id: 38, name: '刺桐', category: 'plane', image: '植物贴图/平面类/刺桐.png' },
+            { id: 39, name: '垂叶榕', category: 'plane', image: '植物贴图/平面类/垂叶榕.png' },
+            { id: 40, name: '春羽', category: 'plane', image: '植物贴图/平面类/春羽.png' },
+            { id: 41, name: '矾根', category: 'foreground', image: '新植物立面贴图2/矾根.png' },
+            { id: 42, name: '蓝羊茅', category: 'foreground', image: '新植物立面贴图2/蓝羊茅.png' },
+            { id: 43, name: '香雪球', category: 'foreground', image: '新植物立面贴图2/香雪球.png' },
+            { id: 44, name: '薰衣草', category: 'foreground', image: '新植物立面贴图2/薰衣草.png' },
+            { id: 45, name: '荆芥', category: 'foreground', image: '新植物立面贴图2/荆芥.png' },
+            { id: 46, name: '大滨菊', category: 'midground', image: '新植物立面贴图2/大滨菊.png' },
+            { id: 47, name: '大花飞燕草', category: 'midground', image: '新植物立面贴图2/大花飞燕草.png' },
+            { id: 48, name: '毛地黄', category: 'midground', image: '新植物立面贴图2/毛地黄.png' },
+            { id: 49, name: '火炬花', category: 'midground', image: '新植物立面贴图2/火炬花.png' },
+            { id: 50, name: '百合', category: 'midground', image: '新植物立面贴图2/百合.png' },
+            { id: 51, name: '紫松果菊', category: 'midground', image: '新植物立面贴图2/紫松果菊.png' },
+            { id: 52, name: '萱草', category: 'midground', image: '新植物立面贴图2/萱草.png' },
+            { id: 53, name: '落新妇', category: 'midground', image: '新植物立面贴图2/落新妇.png' },
+            { id: 54, name: '郁金香', category: 'midground', image: '新植物立面贴图2/郁金香.png' },
+            { id: 55, name: '金光菊', category: 'midground', image: '新植物立面贴图2/金光菊.png' },
+            { id: 56, name: '风信子', category: 'midground', image: '新植物立面贴图2/风信子.png' },
+            { id: 57, name: '鸢尾', category: 'midground', image: '新植物立面贴图2/鸢尾.png' },
+            { id: 58, name: '狼尾草', category: 'background', image: '新植物立面贴图2/狼尾草.png' },
+            { id: 59, name: '玉簪', category: 'background', image: '新植物立面贴图2/玉簪.png' },
+            { id: 60, name: '绣球', category: 'background', image: '新植物立面贴图2/绣球.png' },
+            { id: 61, name: '绣线菊', category: 'background', image: '新植物立面贴图2/绣线菊.png' },
+            { id: 62, name: '荷包牡丹', category: 'background', image: '新植物立面贴图2/荷包牡丹.png' },
+            { id: 63, name: '菖蒲', category: 'background', image: '新植物立面贴图2/菖蒲.png' },
+            { id: 64, name: '醉鱼草', category: 'background', image: '新植物立面贴图2/醉鱼草.png' },
+            { id: 65, name: '细叶芒', category: 'background', image: '新植物立面贴图2/细叶芒.png' },
+            { id: 66, name: '棕榈树', category: 'background', image: '新植物立面贴图2/棕榈树.png' },
+            { id: 67, name: '樱花', category: 'background', image: '新植物立面贴图2/樱花立面图.png' },
+            { id: 68, name: '五角枫', category: 'background', image: '新植物立面贴图2/五角枫立面图.png' },
+            { id: 69, name: '泡桐', category: 'background', image: '新植物立面贴图2/泡桐立面图.png' },
+            { id: 70, name: '鸡爪槭', category: 'background', image: '新植物立面贴图2/鸡爪槭立面图.png' },
+            { id: 71, name: '榆树', category: 'background', image: '新植物立面贴图2/榆树立面图.png' },
+            { id: 72, name: '构树', category: 'background', image: '新植物立面贴图2/构树立面图.png' },
+            { id: 73, name: '桑树', category: 'background', image: '新植物立面贴图2/桑树立面图.png' },
+            { id: 74, name: '小乔木', category: 'background', image: '新植物立面贴图2/通用绿色小乔木.png' }
+        ];
+
+        let works = [
+            {
+                id: 1,
+                title: '我的秘密花园',
+                description: '精心设计的小花园，包含各种花卉和绿植',
+                image: 'https://neeko-copilot.bytedance.net/api/text2image?prompt=beautiful%20garden%20design%20colorful%20flowers%20plants&image_size=landscape_16_9',
+                likes: 23,
+                favorites: 12,
+                comments: [
+                    { id: 1, text: '太美了！', user: '园艺爱好者' },
+                    { id: 2, text: '设计得很棒！', user: '小花匠' }
+                ],
+                liked: false,
+                favorited: false
+            },
+            {
+                id: 2,
+                title: '日式庭院',
+                description: '简约优雅的日式风格庭院设计',
+                image: 'https://neeko-copilot.bytedance.net/api/text2image?prompt=japanese%20zen%20garden%20peaceful%20minimalist&image_size=landscape_16_9',
+                likes: 45,
+                favorites: 28,
+                comments: [
+                    { id: 1, text: '禅意十足！', user: '禅修者' }
+                ],
+                liked: false,
+                favorited: false
+            },
+            {
+                id: 3,
+                title: '玫瑰花园',
+                description: '浪漫的玫瑰主题花园',
+                image: 'https://neeko-copilot.bytedance.net/api/text2image?prompt=rose%20garden%20romantic%20red%20pink%20flowers&image_size=landscape_16_9',
+                likes: 67,
+                favorites: 41,
+                comments: [],
+                liked: false,
+                favorited: false
+            },
+            {
+                id: 4,
+                title: '水景花园',
+                description: '以水池为中心的水景花园设计',
+                image: 'https://neeko-copilot.bytedance.net/api/text2image?prompt=water%20garden%20pond%20fountain%20peaceful&image_size=landscape_16_9',
+                likes: 38,
+                favorites: 22,
+                comments: [
+                    { id: 1, text: '很有意境！', user: '自然爱好者' }
+                ],
+                liked: false,
+                favorited: false
+            }
+        ];
+
+        let currentWorkDetail = null;
+
+        function init() {
+            setupCanvas();
+            initStickerPalette();
+            initCustomUpload();
+            setupEventListeners();
+            initScaleControls();
+            makeScaleBarDraggable();
+            loadScalePositions();
+            renderWorks();
+        }
+
+        function setupCanvas() {
+            const container = document.querySelector('.canvas-wrapper');
+            canvas.width = container.clientWidth;
+            canvas.height = container.clientHeight;
+            tempCanvas.width = container.clientWidth;
+            tempCanvas.height = container.clientHeight;
+            
+            const bgContainer = document.createElement('div');
+            bgContainer.id = 'backgroundContainer';
+            bgContainer.style.position = 'absolute';
+            bgContainer.style.top = '0';
+            bgContainer.style.left = '0';
+            bgContainer.style.right = '0';
+            bgContainer.style.bottom = '0';
+            bgContainer.style.zIndex = '1';
+            
+            const bgLayer = document.createElement('img');
+            bgLayer.id = 'backgroundLayer';
+            bgLayer.style.position = 'absolute';
+            bgLayer.style.top = '50%';
+            bgLayer.style.left = '50%';
+            bgLayer.style.transform = 'translate(-50%, -50%)';
+            bgLayer.style.maxWidth = '100%';
+            bgLayer.style.maxHeight = '100%';
+            bgLayer.style.objectFit = 'contain';
+            bgLayer.style.opacity = '1';
+            bgLayer.style.display = 'none';
+            bgLayer.style.cursor = 'move';
+            
+            bgContainer.appendChild(bgLayer);
+            document.getElementById('gardenCanvas').appendChild(bgContainer);
+            
+            makeBackgroundDraggable();
+        }
+
+        function setupEventListeners() {
+            document.querySelectorAll('.brush-type-btn, .tool-btn').forEach(btn => {
+                btn.addEventListener('click', function() {
+                    setTool(this.dataset.tool);
+                });
+            });
+
+            document.querySelectorAll('.color-btn').forEach(btn => {
+                btn.addEventListener('click', function() {
+                    setColor(this.dataset.color);
+                });
+            });
+
+            document.getElementById('customColorPicker').addEventListener('input', function() {
+                setColor(this.value);
+            });
+
+            document.getElementById('brushSize').addEventListener('input', function() {
+                brushSize = parseInt(this.value);
+                document.getElementById('brushSizeValue').textContent = brushSize;
+            });
+
+            document.querySelectorAll('.plant-category button').forEach(btn => {
+                btn.addEventListener('click', function() {
+                    filterStickers(this.dataset.category);
+                });
+            });
+
+            document.getElementById('bgOpacity').addEventListener('input', function() {
+                const opacity = this.value / 100;
+                document.getElementById('opacityValue').textContent = this.value + '%';
+                document.getElementById('backgroundLayer').style.opacity = opacity;
+            });
+
+            document.getElementById('bgScale').addEventListener('input', function() {
+                const scale = this.value;
+                document.getElementById('bgScaleValue').textContent = scale + '%';
+                const bgLayer = document.getElementById('backgroundLayer');
+                const posX = parseInt(document.getElementById('bgPosX').value) || 0;
+                const posY = parseInt(document.getElementById('bgPosY').value) || 0;
+                bgLayer.style.transform = `translate(${posX}px, ${posY}px) scale(${scale / 100})`;
+            });
+
+            document.getElementById('bgPosX').addEventListener('input', function() {
+                const bgLayer = document.getElementById('backgroundLayer');
+                const posX = parseInt(this.value) || 0;
+                const posY = parseInt(document.getElementById('bgPosY').value) || 0;
+                const scale = parseInt(document.getElementById('bgScale').value) / 100;
+                bgLayer.style.transform = `translate(${posX}px, ${posY}px) scale(${scale})`;
+            });
+
+            document.getElementById('bgPosY').addEventListener('input', function() {
+                const bgLayer = document.getElementById('backgroundLayer');
+                const posX = parseInt(document.getElementById('bgPosX').value) || 0;
+                const posY = parseInt(this.value) || 0;
+                const scale = parseInt(document.getElementById('bgScale').value) / 100;
+                bgLayer.style.transform = `translate(${posX}px, ${posY}px) scale(${scale})`;
+            });
+
+            document.getElementById('transformRotationSlider').addEventListener('input', function() {
+                const rotation = this.value;
+                document.getElementById('transformRotation').textContent = rotation + '°';
+                applyTransform(rotation, document.getElementById('transformScaleSlider').value);
+            });
+
+            document.getElementById('transformScaleSlider').addEventListener('input', function() {
+                const scale = this.value;
+                document.getElementById('transformScale').textContent = scale + '%';
+                applyTransform(document.getElementById('transformRotationSlider').value, scale);
+            });
+
+            canvas.addEventListener('mousedown', startDrawing);
+            canvas.addEventListener('mousemove', draw);
+            canvas.addEventListener('mouseup', stopDrawing);
+            canvas.addEventListener('mouseleave', stopDrawing);
+
+            document.getElementById('gardenCanvas').addEventListener('click', function(e) {
+                if (e.target === document.getElementById('gardenCanvas') || e.target === canvas) {
+                    document.querySelectorAll('.text-annotation').forEach(el => {
+                        el.classList.remove('text-selected');
+                    });
+                    selectedTextElement = null;
+                }
+            });
+
+            window.addEventListener('resize', setupCanvas);
+        }
+
+        function setTool(tool) {
+            currentTool = tool;
+            document.querySelectorAll('.brush-type-btn, .tool-btn').forEach(btn => btn.classList.remove('active'));
+            document.querySelectorAll(`[data-tool="${tool}"]`).forEach(btn => btn.classList.add('active'));
+            
+            document.getElementById('currentTool').textContent = toolNames[tool] || tool;
+            
+            if (tool === 'select') {
+                canvas.classList.add('select-mode');
+            } else {
+                canvas.classList.remove('select-mode');
+            }
+        }
+
+        function setColor(color) {
+            currentColor = color;
+            document.querySelectorAll('.color-btn').forEach(btn => btn.classList.remove('active'));
+            document.querySelector(`[data-color="${color}"]`)?.classList.add('active');
+            document.getElementById('customColorPicker').value = color;
+        }
+
+        function startDrawing(e) {
+            if (!currentTool || currentTool === 'select') return;
+            
+            isDrawing = true;
+            const rect = canvas.getBoundingClientRect();
+            startX = e.clientX - rect.left;
+            startY = e.clientY - rect.top;
+            
+            ctx.beginPath();
+            ctx.strokeStyle = currentColor;
+            ctx.fillStyle = currentColor;
+            ctx.lineWidth = brushSize;
+            ctx.lineCap = 'round';
+            ctx.lineJoin = 'round';
+        }
+
+        function draw(e) {
+            if (!isDrawing || !currentTool || currentTool === 'select') return;
+            
+            const rect = canvas.getBoundingClientRect();
+            const x = e.clientX - rect.left;
+            const y = e.clientY - rect.top;
+            
+            tempCtx.clearRect(0, 0, tempCanvas.width, tempCanvas.height);
+            
+            if (currentTool === 'pen') {
+                ctx.lineTo(x, y);
+                ctx.stroke();
+            } else if (currentTool === 'eraser') {
+                ctx.globalCompositeOperation = 'destination-out';
+                ctx.beginPath();
+                ctx.arc(x, y, brushSize / 2, 0, Math.PI * 2);
+                ctx.fill();
+                ctx.globalCompositeOperation = 'source-over';
+            } else if (currentTool === 'line') {
+                tempCtx.beginPath();
+                tempCtx.strokeStyle = currentColor;
+                tempCtx.lineWidth = brushSize;
+                tempCtx.moveTo(startX, startY);
+                tempCtx.lineTo(x, y);
+                tempCtx.stroke();
+            } else if (currentTool === 'circle') {
+                const radius = Math.sqrt(Math.pow(x - startX, 2) + Math.pow(y - startY, 2));
+                tempCtx.beginPath();
+                tempCtx.strokeStyle = currentColor;
+                tempCtx.fillStyle = document.getElementById('fillShape').checked ? currentColor : 'transparent';
+                tempCtx.lineWidth = brushSize;
+                tempCtx.arc(startX, startY, radius, 0, Math.PI * 2);
+                tempCtx.fill();
+                tempCtx.stroke();
+            } else if (currentTool === 'rectangle') {
+                const width = x - startX;
+                const height = y - startY;
+                tempCtx.beginPath();
+                tempCtx.strokeStyle = currentColor;
+                tempCtx.fillStyle = document.getElementById('fillShape').checked ? currentColor : 'transparent';
+                tempCtx.lineWidth = brushSize;
+                tempCtx.rect(startX, startY, width, height);
+                tempCtx.fill();
+                tempCtx.stroke();
+            } else if (currentTool === 'square') {
+                const size = Math.max(Math.abs(x - startX), Math.abs(y - startY)) * Math.sign(x - startX);
+                tempCtx.beginPath();
+                tempCtx.strokeStyle = currentColor;
+                tempCtx.fillStyle = document.getElementById('fillShape').checked ? currentColor : 'transparent';
+                tempCtx.lineWidth = brushSize;
+                tempCtx.rect(startX, startY, size, size);
+                tempCtx.fill();
+                tempCtx.stroke();
+            } else if (currentTool === 'triangle') {
+                tempCtx.beginPath();
+                tempCtx.strokeStyle = currentColor;
+                tempCtx.fillStyle = document.getElementById('fillShape').checked ? currentColor : 'transparent';
+                tempCtx.lineWidth = brushSize;
+                tempCtx.moveTo(startX, startY);
+                tempCtx.lineTo(x, y);
+                tempCtx.lineTo(startX + (x - startX) * 2, startY);
+                tempCtx.closePath();
+                tempCtx.fill();
+                tempCtx.stroke();
+            } else if (currentTool === 'diamond') {
+                const width = x - startX;
+                const height = y - startY;
+                tempCtx.beginPath();
+                tempCtx.strokeStyle = currentColor;
+                tempCtx.fillStyle = document.getElementById('fillShape').checked ? currentColor : 'transparent';
+                tempCtx.lineWidth = brushSize;
+                tempCtx.moveTo(startX, startY + height);
+                tempCtx.lineTo(startX + width, startY);
+                tempCtx.lineTo(startX, startY - height);
+                tempCtx.lineTo(startX - width, startY);
+                tempCtx.closePath();
+                tempCtx.fill();
+                tempCtx.stroke();
+            } else if (currentTool === 'hexagon') {
+                const radius = Math.sqrt(Math.pow(x - startX, 2) + Math.pow(y - startY, 2));
+                tempCtx.beginPath();
+                tempCtx.strokeStyle = currentColor;
+                tempCtx.fillStyle = document.getElementById('fillShape').checked ? currentColor : 'transparent';
+                tempCtx.lineWidth = brushSize;
+                for (let i = 0; i < 6; i++) {
+                    const angle = (Math.PI / 3) * i - Math.PI / 2;
+                    const hx = startX + radius * Math.cos(angle);
+                    const hy = startY + radius * Math.sin(angle);
+                    if (i === 0) tempCtx.moveTo(hx, hy);
+                    else tempCtx.lineTo(hx, hy);
+                }
+                tempCtx.closePath();
+                tempCtx.fill();
+                tempCtx.stroke();
+            } else if (currentTool === 'star') {
+                const radius = Math.sqrt(Math.pow(x - startX, 2) + Math.pow(y - startY, 2));
+                tempCtx.beginPath();
+                tempCtx.strokeStyle = currentColor;
+                tempCtx.fillStyle = document.getElementById('fillShape').checked ? currentColor : 'transparent';
+                tempCtx.lineWidth = brushSize;
+                for (let i = 0; i < 5; i++) {
+                    const outerAngle = (Math.PI * 2 / 5) * i - Math.PI / 2;
+                    const innerAngle = outerAngle + Math.PI / 5;
+                    const outerX = startX + radius * Math.cos(outerAngle);
+                    const outerY = startY + radius * Math.sin(outerAngle);
+                    const innerX = startX + radius * 0.5 * Math.cos(innerAngle);
+                    const innerY = startY + radius * 0.5 * Math.sin(innerAngle);
+                    if (i === 0) tempCtx.moveTo(outerX, outerY);
+                    else tempCtx.lineTo(outerX, outerY);
+                    tempCtx.lineTo(innerX, innerY);
+                }
+                tempCtx.closePath();
+                tempCtx.fill();
+                tempCtx.stroke();
+            } else if (currentTool === 'ellipse') {
+                const rx = Math.abs(x - startX);
+                const ry = Math.abs(y - startY);
+                tempCtx.beginPath();
+                tempCtx.strokeStyle = currentColor;
+                tempCtx.fillStyle = document.getElementById('fillShape').checked ? currentColor : 'transparent';
+                tempCtx.lineWidth = brushSize;
+                tempCtx.ellipse(startX, startY, rx, ry, 0, 0, Math.PI * 2);
+                tempCtx.fill();
+                tempCtx.stroke();
+            } else if (currentTool === 'contour') {
+                for (let i = 0; i < 5; i++) {
+                    const offset = i * 20;
+                    const radius = Math.sqrt(Math.pow(x - startX, 2) + Math.pow(y - startY, 2)) + offset;
+                    tempCtx.beginPath();
+                    tempCtx.strokeStyle = currentColor;
+                    tempCtx.lineWidth = brushSize;
+                    tempCtx.globalAlpha = 1 - i * 0.15;
+                    tempCtx.arc(startX, startY, radius, 0, Math.PI * 2);
+                    tempCtx.stroke();
+                }
+                tempCtx.globalAlpha = 1;
+            } else if (currentTool === 'text') {
+                showTextInputModal(startX, startY);
+                isDrawing = false;
+            }
+        }
+
+        function stopDrawing() {
+            if (!isDrawing) return;
+            isDrawing = false;
+            
+            if (currentTool !== 'pen' && currentTool !== 'eraser' && currentTool !== 'text') {
+                ctx.drawImage(tempCanvas, 0, 0);
+            }
+            tempCtx.clearRect(0, 0, tempCanvas.width, tempCanvas.height);
+            
+            saveState();
+        }
+
+        function saveState() {
+            const state = canvas.toDataURL();
+            history = history.slice(0, historyIndex + 1);
+            history.push(state);
+            historyIndex++;
+            updateHistoryButtons();
+        }
+
+        function undo() {
+            if (historyIndex > 0) {
+                historyIndex--;
+                restoreState(history[historyIndex]);
+                updateHistoryButtons();
+            }
+        }
+
+        function redo() {
+            if (historyIndex < history.length - 1) {
+                historyIndex++;
+                restoreState(history[historyIndex]);
+                updateHistoryButtons();
+            }
+        }
+
+        function restoreState(dataUrl) {
+            const img = new Image();
+            img.onload = function() {
+                ctx.clearRect(0, 0, canvas.width, canvas.height);
+                ctx.drawImage(img, 0, 0);
+            };
+            img.src = dataUrl;
+        }
+
+        function updateHistoryButtons() {
+            document.getElementById('undoBtn').disabled = historyIndex <= 0;
+            document.getElementById('redoBtn').disabled = historyIndex >= history.length - 1;
+        }
+
+        function clearDrawing() {
+            ctx.clearRect(0, 0, canvas.width, canvas.height);
+            plantedPlants = [];
+            renderPlantedPlants();
+            saveState();
+        }
+
+        function toggleGrid() {
+            gridVisible = !gridVisible;
+            document.getElementById('gardenCanvas').classList.toggle('no-grid', !gridVisible);
+        }
+
+        function zoomCanvas(factor) {
+            zoom = Math.max(0.5, Math.min(2, zoom * factor));
+            document.getElementById('zoomLevel').textContent = Math.round(zoom * 100) + '%';
+            document.getElementById('gardenCanvas').style.transform = `scale(${zoom})`;
+        }
+
+        function resetZoom() {
+            zoom = 1;
+            document.getElementById('zoomLevel').textContent = '100%';
+            document.getElementById('gardenCanvas').style.transform = 'scale(1)';
+        }
+
+        function showScaleSettings() {
+            document.getElementById('scaleModal').style.display = 'flex';
+            document.getElementById('scaleValue').addEventListener('input', function() {
+                document.getElementById('scaleDisplay').textContent = '1:' + this.value;
+            });
+            document.getElementById('scaleLength').addEventListener('input', function() {
+                document.getElementById('lengthDisplay').textContent = this.value + 'px';
+            });
+        }
+
+        function hideScaleSettings() {
+            document.getElementById('scaleModal').style.display = 'none';
+        }
+
+        function applyScaleSettings() {
+            const scaleValue = document.getElementById('scaleValue').value;
+            const scaleLength = document.getElementById('scaleLength').value;
+            const scaleColor = document.getElementById('scaleColor').value;
+            const showHorizontal = document.getElementById('showHorizontalScale').checked;
+            const showVertical = document.getElementById('showVerticalScale').checked;
+            const showLabels = document.getElementById('showScaleLabels').checked;
+            const scaleUnit = document.getElementById('scaleUnit').value;
+
+            const labelText = '1:' + scaleValue;
+
+            document.getElementById('scaleBarLabel').textContent = labelText;
+            document.getElementById('scaleBarLabelVertical').textContent = labelText;
+
+            const horizontalContainer = document.querySelector('.scale-bar-container.horizontal');
+            const verticalContainer = document.querySelector('.scale-bar-container.vertical');
+            
+            horizontalContainer.style.display = showHorizontal ? 'flex' : 'none';
+            verticalContainer.style.display = showVertical ? 'flex' : 'none';
+
+            document.querySelectorAll('.scale-bar-label').forEach(label => {
+                label.style.display = showLabels ? 'block' : 'none';
+            });
+
+            const horizontalLine = document.querySelector('.scale-bar-line:not(.vertical)');
+            if (horizontalLine) {
+                horizontalLine.style.width = scaleLength + 'px';
+                horizontalLine.style.background = 'linear-gradient(90deg, ' + scaleColor + ' 0%, ' + scaleColor + ' 50%, ' + adjustColor(scaleColor, 30) + ' 50%, ' + adjustColor(scaleColor, 30) + ' 100%)';
+            }
+
+            const verticalLine = document.querySelector('.scale-bar-line.vertical');
+            if (verticalLine) {
+                verticalLine.style.height = scaleLength + 'px';
+                verticalLine.style.background = 'linear-gradient(180deg, ' + adjustColor(scaleColor, 30) + ' 0%, ' + adjustColor(scaleColor, 30) + ' 50%, ' + scaleColor + ' 50%, ' + scaleColor + ' 100%)';
+            }
+
+            document.querySelectorAll('.scale-bar-label').forEach(label => {
+                label.style.color = scaleColor;
+            });
+        }
+
+        function initScaleControls() {
+            const scaleValueInput = document.getElementById('scaleValue');
+            const scaleLengthInput = document.getElementById('scaleLength');
+            const scaleColorInput = document.getElementById('scaleColor');
+            const showHorizontalInput = document.getElementById('showHorizontalScale');
+            const showVerticalInput = document.getElementById('showVerticalScale');
+            const showLabelsInput = document.getElementById('showScaleLabels');
+            const scaleUnitSelect = document.getElementById('scaleUnit');
+
+            scaleValueInput.addEventListener('input', applyScaleSettings);
+            scaleLengthInput.addEventListener('input', function() {
+                document.getElementById('lengthDisplay').textContent = this.value + 'px';
+                applyScaleSettings();
+            });
+            scaleColorInput.addEventListener('input', applyScaleSettings);
+            showHorizontalInput.addEventListener('change', applyScaleSettings);
+            showVerticalInput.addEventListener('change', applyScaleSettings);
+            showLabelsInput.addEventListener('change', applyScaleSettings);
+            scaleUnitSelect.addEventListener('change', applyScaleSettings);
+        }
+
+        function resetScalePosition() {
+            const horizontalContainer = document.querySelector('.scale-bar-container.horizontal');
+            const verticalContainer = document.querySelector('.scale-bar-container.vertical');
+            
+            horizontalContainer.style.left = '20px';
+            horizontalContainer.style.top = 'auto';
+            horizontalContainer.style.right = 'auto';
+            horizontalContainer.style.bottom = '20px';
+            
+            verticalContainer.style.right = '20px';
+            verticalContainer.style.top = 'auto';
+            verticalContainer.style.left = 'auto';
+            verticalContainer.style.bottom = '60px';
+            
+            localStorage.removeItem('scalePositions');
+        }
+
+        function makeScaleBarDraggable() {
+            const scaleContainers = document.querySelectorAll('.scale-bar-container');
+            
+            scaleContainers.forEach(container => {
+                let isDragging = false;
+                let offsetX, offsetY;
+                
+                container.style.cursor = 'move';
+                container.style.userSelect = 'none';
+                
+                container.addEventListener('mousedown', function(e) {
+                    isDragging = true;
+                    const rect = container.getBoundingClientRect();
+                    const canvasContainer = document.querySelector('.diy-canvas-container');
+                    const canvasRect = canvasContainer.getBoundingClientRect();
+                    
+                    offsetX = e.clientX - canvasRect.left - rect.left;
+                    offsetY = e.clientY - canvasRect.top - rect.top;
+                    
+                    container.style.zIndex = '200';
+                    
+                    document.addEventListener('mousemove', onScaleDrag);
+                    document.addEventListener('mouseup', onScaleDragEnd);
+                });
+                
+                function onScaleDrag(e) {
+                    if (!isDragging) return;
+                    
+                    const canvasContainer = document.querySelector('.diy-canvas-container');
+                    const canvasRect = canvasContainer.getBoundingClientRect();
+                    
+                    let x = e.clientX - canvasRect.left - offsetX;
+                    let y = e.clientY - canvasRect.top - offsetY;
+                    
+                    x = Math.max(0, Math.min(canvasRect.width - container.offsetWidth, x));
+                    y = Math.max(0, Math.min(canvasRect.height - container.offsetHeight, y));
+                    
+                    container.style.left = x + 'px';
+                    container.style.top = y + 'px';
+                    container.style.right = 'auto';
+                    container.style.bottom = 'auto';
+                }
+                
+                function onScaleDragEnd() {
+                    isDragging = false;
+                    container.style.zIndex = '45';
+                    document.removeEventListener('mousemove', onScaleDrag);
+                    document.removeEventListener('mouseup', onScaleDragEnd);
+                    
+                    saveScalePositions();
+                }
+            });
+        }
+        
+        function saveScalePositions() {
+            const horizontalContainer = document.querySelector('.scale-bar-container.horizontal');
+            const verticalContainer = document.querySelector('.scale-bar-container.vertical');
+            
+            const positions = {
+                horizontal: {
+                    left: horizontalContainer.style.left,
+                    top: horizontalContainer.style.top,
+                    right: horizontalContainer.style.right,
+                    bottom: horizontalContainer.style.bottom
+                },
+                vertical: {
+                    left: verticalContainer.style.left,
+                    top: verticalContainer.style.top,
+                    right: verticalContainer.style.right,
+                    bottom: verticalContainer.style.bottom
+                }
+            };
+            
+            localStorage.setItem('scalePositions', JSON.stringify(positions));
+        }
+        
+        function loadScalePositions() {
+            const saved = localStorage.getItem('scalePositions');
+            if (!saved) return;
+            
+            try {
+                const positions = JSON.parse(saved);
+                const horizontalContainer = document.querySelector('.scale-bar-container.horizontal');
+                const verticalContainer = document.querySelector('.scale-bar-container.vertical');
+                
+                Object.keys(positions.horizontal).forEach(key => {
+                    horizontalContainer.style[key] = positions.horizontal[key];
+                });
+                
+                Object.keys(positions.vertical).forEach(key => {
+                    verticalContainer.style[key] = positions.vertical[key];
+                });
+            } catch (e) {
+                console.error('Failed to load scale positions:', e);
+            }
+        }
+
+        function adjustColor(color, amount) {
+            const hex = color.replace('#', '');
+            const r = Math.min(255, parseInt(hex.substring(0, 2), 16) + amount);
+            const g = Math.min(255, parseInt(hex.substring(2, 4), 16) + amount);
+            const b = Math.min(255, parseInt(hex.substring(4, 6), 16) + amount);
+            return '#' + r.toString(16).padStart(2, '0') + g.toString(16).padStart(2, '0') + b.toString(16).padStart(2, '0');
+        }
+
+        document.addEventListener('click', function(e) {
+            if (e.target === document.getElementById('scaleModal')) {
+                hideScaleSettings();
+            }
+            if (e.target === document.getElementById('textInputModal')) {
+                hideTextInputModal();
+            }
+        });
+
+        let textAnnotationPos = { x: 0, y: 0 };
+
+        function showTextInputModal(x, y) {
+            textAnnotationPos = { x, y };
+            document.getElementById('textInputModal').style.display = 'flex';
+            document.getElementById('textSizeSlider').addEventListener('input', function() {
+                document.getElementById('textSizeValue').textContent = this.value;
+            });
+            document.getElementById('textBorderToggle').addEventListener('change', function() {
+                const borderSettings = document.getElementById('borderSettings');
+                const borderWidthSettings = document.getElementById('borderWidthSettings');
+                if (this.checked) {
+                    borderSettings.style.display = 'block';
+                    borderWidthSettings.style.display = 'block';
+                } else {
+                    borderSettings.style.display = 'none';
+                    borderWidthSettings.style.display = 'none';
+                }
+            });
+            document.getElementById('borderWidthSlider').addEventListener('input', function() {
+                document.getElementById('borderWidthValue').textContent = this.value;
+            });
+        }
+
+        function hideTextInputModal() {
+            document.getElementById('textInputModal').style.display = 'none';
+            document.getElementById('textModalTitle').textContent = '文字标注设置';
+            document.getElementById('textActionBtn').textContent = '添加标注';
+            document.getElementById('deleteTextBtn').style.display = 'none';
+            document.getElementById('textInput').value = '';
+            if (selectedTextElement) {
+                selectedTextElement.classList.remove('text-selected');
+                selectedTextElement = null;
+            }
+        }
+
+        let selectedTextElement = null;
+
+        function saveTextAnnotation() {
+            const text = document.getElementById('textInput').value;
+            if (!text.trim()) {
+                alert('请输入标注文字');
+                return;
+            }
+
+            const textColor = document.getElementById('textColorPicker').value;
+            const textSize = parseInt(document.getElementById('textSizeSlider').value);
+            const hasBorder = document.getElementById('textBorderToggle').checked;
+            const borderColor = document.getElementById('borderColorPicker').value;
+            const borderWidth = parseInt(document.getElementById('borderWidthSlider').value);
+
+            if (selectedTextElement) {
+                selectedTextElement.textContent = text;
+                selectedTextElement.style.color = textColor;
+                selectedTextElement.style.fontSize = textSize + 'px';
+                
+                if (hasBorder) {
+                    selectedTextElement.style.border = borderWidth + 'px solid ' + borderColor;
+                    selectedTextElement.style.borderRadius = '4px';
+                } else {
+                    selectedTextElement.style.border = 'none';
+                }
+                
+                selectedTextElement.classList.remove('text-selected');
+                selectedTextElement = null;
+            } else {
+                const canvasWrapper = document.getElementById('gardenCanvas');
+                
+                const textElement = document.createElement('div');
+                textElement.className = 'text-annotation';
+                textElement.style.position = 'absolute';
+                textElement.style.left = textAnnotationPos.x + 'px';
+                textElement.style.top = textAnnotationPos.y + 'px';
+                textElement.style.color = textColor;
+                textElement.style.fontSize = textSize + 'px';
+                textElement.style.fontWeight = 'bold';
+                textElement.style.cursor = 'pointer';
+                textElement.style.zIndex = '50';
+                textElement.style.whiteSpace = 'nowrap';
+                textElement.style.padding = '4px 8px';
+                textElement.textContent = text;
+
+                if (hasBorder) {
+                    textElement.style.border = borderWidth + 'px solid ' + borderColor;
+                    textElement.style.borderRadius = '4px';
+                }
+
+                canvasWrapper.appendChild(textElement);
+                makeTextDraggable(textElement);
+                textElement.addEventListener('click', function(e) {
+                    e.stopPropagation();
+                    selectTextElement(textElement);
+                });
+            }
+            
+            hideTextInputModal();
+            saveState();
+        }
+
+        function selectTextElement(element) {
+            document.querySelectorAll('.text-annotation').forEach(el => {
+                el.classList.remove('text-selected');
+            });
+            
+            selectedTextElement = element;
+            element.classList.add('text-selected');
+            
+            document.getElementById('textModalTitle').textContent = '编辑文字标注';
+            document.getElementById('textInput').value = element.textContent;
+            document.getElementById('textColorPicker').value = element.style.color || '#333333';
+            document.getElementById('textSizeSlider').value = parseInt(element.style.fontSize) || 24;
+            document.getElementById('textSizeValue').textContent = parseInt(element.style.fontSize) || 24;
+            
+            const hasBorder = element.style.border && element.style.border !== 'none';
+            document.getElementById('textBorderToggle').checked = hasBorder;
+            document.getElementById('borderSettings').style.display = hasBorder ? 'block' : 'none';
+            document.getElementById('borderWidthSettings').style.display = hasBorder ? 'block' : 'none';
+            
+            if (hasBorder) {
+                const borderColor = element.style.borderColor || '#333333';
+                document.getElementById('borderColorPicker').value = borderColor;
+                
+                const borderWidth = parseInt(element.style.borderWidth) || 2;
+                document.getElementById('borderWidthSlider').value = borderWidth;
+                document.getElementById('borderWidthValue').textContent = borderWidth;
+            }
+            
+            document.getElementById('deleteTextBtn').style.display = 'inline-block';
+            document.getElementById('textActionBtn').textContent = '保存修改';
+            document.getElementById('textInputModal').style.display = 'flex';
+        }
+
+        function deleteSelectedText() {
+            if (selectedTextElement) {
+                selectedTextElement.remove();
+                selectedTextElement = null;
+                hideTextInputModal();
+                saveState();
+            }
+        }
+
+        function makeTextDraggable(element) {
+            let isDragging = false;
+            let offsetX, offsetY;
+
+            element.addEventListener('mousedown', function(e) {
+                isDragging = true;
+                const rect = element.getBoundingClientRect();
+                const canvasRect = document.getElementById('gardenCanvas').getBoundingClientRect();
+                offsetX = e.clientX - rect.left;
+                offsetY = e.clientY - rect.top;
+
+                element.style.zIndex = '100';
+                document.addEventListener('mousemove', onDrag);
+                document.addEventListener('mouseup', onDragEnd);
+            });
+
+            function onDrag(e) {
+                if (!isDragging) return;
+                const canvasRect = document.getElementById('gardenCanvas').getBoundingClientRect();
+                const x = e.clientX - canvasRect.left - offsetX;
+                const y = e.clientY - canvasRect.top - offsetY;
+                
+                element.style.left = Math.max(0, x) + 'px';
+                element.style.top = Math.max(0, y) + 'px';
+            }
+
+            function onDragEnd() {
+                isDragging = false;
+                element.style.zIndex = '50';
+                document.removeEventListener('mousemove', onDrag);
+                document.removeEventListener('mouseup', onDragEnd);
+                saveState();
+            }
+        }
+
+        function initCustomUpload() {
+            const uploadArea = document.getElementById('customUploadArea');
+            const fileInput = document.getElementById('customImageUpload');
+
+            uploadArea.addEventListener('click', function() {
+                fileInput.click();
+            });
+
+            fileInput.addEventListener('change', function(e) {
+                const file = e.target.files[0];
+                if (file) {
+                    handleCustomImage(file);
+                }
+            });
+
+            uploadArea.addEventListener('dragover', function(e) {
+                e.preventDefault();
+                uploadArea.classList.add('dragover');
+            });
+
+            uploadArea.addEventListener('dragleave', function() {
+                uploadArea.classList.remove('dragover');
+            });
+
+            uploadArea.addEventListener('drop', function(e) {
+                e.preventDefault();
+                uploadArea.classList.remove('dragover');
+                const file = e.dataTransfer.files[0];
+                if (file && file.type.startsWith('image/')) {
+                    handleCustomImage(file);
+                }
+            });
+        }
+
+        function handleCustomImage(file) {
+            const reader = new FileReader();
+            reader.onload = function(e) {
+                const imageUrl = e.target.result;
+                const customPlant = {
+                    id: Date.now(),
+                    name: file.name.replace(/\.[^/.]+$/, ''),
+                    category: 'custom',
+                    image: imageUrl
+                };
+                
+                plants.push(customPlant);
+                addCustomSticker(customPlant);
+                
+                showNotification('✅ 贴图上传成功！');
+            };
+            reader.readAsDataURL(file);
+        }
+
+        function addCustomSticker(plant) {
+            const container = document.getElementById('plantStickers');
+            const item = document.createElement('div');
+            item.className = 'plant-item custom';
+            item.draggable = true;
+            item.dataset.plantId = plant.id;
+            
+            const img = document.createElement('img');
+            img.src = plant.image;
+            img.alt = plant.name;
+            
+            const span = document.createElement('span');
+            span.textContent = plant.name;
+            
+            const removeBtn = document.createElement('button');
+            removeBtn.className = 'remove-custom-btn';
+            removeBtn.innerHTML = '✕';
+            removeBtn.onclick = function(e) {
+                e.stopPropagation();
+                item.remove();
+                plants = plants.filter(p => p.id !== plant.id);
+            };
+            
+            item.appendChild(img);
+            item.appendChild(span);
+            item.appendChild(removeBtn);
+            
+            item.addEventListener('dragstart', function(e) {
+                e.dataTransfer.setData('plantId', plant.id.toString());
+            });
+            
+            container.appendChild(item);
+        }
+
+        function initStickerPalette() {
+            const container = document.getElementById('plantStickers');
+            plants.forEach(plant => {
+                const item = document.createElement('div');
+                item.className = 'plant-item';
+                item.draggable = true;
+                item.dataset.plantId = plant.id;
+                
+                const img = document.createElement('img');
+                img.src = plant.image;
+                img.alt = plant.name;
+                img.onerror = function() {
+                    img.src = `data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='60' height='60'%3E%3Crect fill='%23e8f5e9' width='60' height='60' rx='4'/%3E%3Ctext x='30' y='35' text-anchor='middle' font-size='12' fill='%232d5a3d'%3E${encodeURIComponent(plant.name)}%3C/text%3E%3C/svg%3E`;
+                };
+                
+                const span = document.createElement('span');
+                span.textContent = plant.name;
+                
+                item.appendChild(img);
+                item.appendChild(span);
+                
+                item.addEventListener('dragstart', function(e) {
+                    e.dataTransfer.setData('plantId', plant.id.toString());
+                });
+                
+                container.appendChild(item);
+            });
+            
+            document.getElementById('gardenCanvas').addEventListener('dragover', function(e) {
+                e.preventDefault();
+            });
+            
+            document.getElementById('gardenCanvas').addEventListener('drop', function(e) {
+                e.preventDefault();
+                const plantId = parseInt(e.dataTransfer.getData('plantId'));
+                if (plantId) {
+                    const plant = plants.find(p => p.id === plantId);
+                    if (plant) {
+                        const rect = canvas.getBoundingClientRect();
+                        const x = e.clientX - rect.left;
+                        const y = e.clientY - rect.top;
+                        addPlant(plant, x, y);
+                    }
+                }
+            });
+        }
+
+        function filterStickers(category) {
+            document.querySelectorAll('.plant-category button').forEach(btn => btn.classList.remove('active'));
+            document.querySelector(`[data-category="${category}"]`).classList.add('active');
+            
+            document.querySelectorAll('.plant-item').forEach(item => {
+                const plant = plants.find(p => p.id === parseInt(item.dataset.plantId));
+                let show = false;
+                
+                if (category === 'all') {
+                    show = true;
+                } else if (category === 'elevation') {
+                    show = plant.category === 'foreground' || plant.category === 'midground' || plant.category === 'background';
+                } else if (category === 'plane') {
+                    show = plant.category === 'plane';
+                } else {
+                    show = plant.category === category;
+                }
+                
+                item.style.display = show ? 'flex' : 'none';
+            });
+        }
+
+        function addPlant(plant, x, y) {
+            const maxLayer = plantedPlants.length > 0 ? Math.max(...plantedPlants.map(p => p.layer || 1)) : 1;
+            const newPlant = {
+                id: Date.now(),
+                plantId: plant.id,
+                name: plant.name,
+                image: plant.image,
+                x: x - 40,
+                y: y - 40,
+                rotation: 0,
+                scale: 1,
+                layer: maxLayer + 1
+            };
+            plantedPlants.push(newPlant);
+            renderPlantedPlants();
+            saveState();
+        }
+
+        function renderPlantedPlants() {
+            const container = document.getElementById('planted-items');
+            container.innerHTML = '';
+            
+            const sortedPlants = [...plantedPlants].sort((a, b) => {
+                const layerA = a.layer || 1;
+                const layerB = b.layer || 1;
+                if (layerA !== layerB) {
+                    return layerA - layerB;
+                }
+                return a.id - b.id;
+            });
+            
+            const maxLayer = plantedPlants.length > 0 ? Math.max(...plantedPlants.map(p => p.layer || 1)) : 1;
+            
+            sortedPlants.forEach(plant => {
+                const item = document.createElement('div');
+                item.className = `planted-plant ${selectedItem === plant.id ? 'selected' : ''}`;
+                item.style.left = plant.x + 'px';
+                item.style.top = plant.y + 'px';
+                item.style.transform = `rotate(${plant.rotation}deg) scale(${plant.scale})`;
+                item.style.zIndex = (plant.layer || 1) + 100;
+                item.dataset.plantId = plant.id;
+                
+                item.innerHTML = `
+                    <div class="plant-transform-actions">
+                        <button class="transform-action-btn" onclick="rotatePlant(${plant.id}, -15)">↺</button>
+                        <button class="transform-action-btn" onclick="rotatePlant(${plant.id}, 15)">↻</button>
+                        <button class="transform-action-btn" onclick="scalePlant(${plant.id}, 0.9)">−</button>
+                        <button class="transform-action-btn" onclick="scalePlant(${plant.id}, 1.1)">+</button>
+                        <button class="transform-action-btn" onclick="removePlant(${plant.id})">✕</button>
+                    </div>
+                    <img src="${plant.image}" alt="${plant.name}">
+                `;
+                
+                item.addEventListener('click', function(e) {
+                    e.stopPropagation();
+                    selectPlant(plant);
+                });
+                
+                makePlantDraggable(item, plant);
+                container.appendChild(item);
+            });
+            
+            updateLayersList();
+        }
+
+        function updateLayersList() {
+            const layersList = document.getElementById('layersList');
+            layersList.innerHTML = '';
+            
+            const sortedPlants = [...plantedPlants].sort((a, b) => {
+                const layerA = a.layer || 1;
+                const layerB = b.layer || 1;
+                return layerB - layerA;
+            });
+            
+            const maxLayer = plantedPlants.length > 0 ? Math.max(...plantedPlants.map(p => p.layer || 1)) : 1;
+            
+            sortedPlants.forEach((plant, index) => {
+                const layerItem = document.createElement('div');
+                layerItem.className = `layer-item ${selectedItem === plant.id ? 'selected' : ''}`;
+                layerItem.dataset.plantId = plant.id;
+                
+                const minLayer = 1;
+                const currentLayer = plant.layer || 1;
+                
+                layerItem.innerHTML = `
+                    <span class="layer-icon">🌿</span>
+                    <span class="layer-name">${plant.name}</span>
+                    <span class="layer-number">${currentLayer}</span>
+                    <div class="layer-actions">
+                        <button class="layer-btn" onclick="moveLayer(1, ${plant.id})" title="上移" ${currentLayer >= maxLayer ? 'disabled' : ''}>↑</button>
+                        <button class="layer-btn" onclick="moveLayer(-1, ${plant.id})" title="下移" ${currentLayer <= minLayer ? 'disabled' : ''}>↓</button>
+                    </div>
+                `;
+                
+                layerItem.addEventListener('click', function(e) {
+                    if (!e.target.classList.contains('layer-btn')) {
+                        selectPlant(plant);
+                    }
+                });
+                
+                layersList.appendChild(layerItem);
+            });
+        }
+
+        function moveLayer(direction, plantId) {
+            const plant = plantedPlants.find(p => p.id === plantId);
+            if (!plant) return;
+            
+            plant.layer = plant.layer || 1;
+            plant.layer += direction;
+            
+            plant.layer = Math.max(1, Math.min(plantedPlants.length + 1, plant.layer));
+            
+            renderPlantedPlants();
+            saveState();
+        }
+
+        function makePlantDraggable(element, plant) {
+            let isDragging = false;
+            let offsetX, offsetY;
+            
+            element.addEventListener('mousedown', function(e) {
+                if (e.target.closest('.plant-transform-actions')) return;
+                isDragging = true;
+                offsetX = e.clientX - plant.x;
+                offsetY = e.clientY - plant.y;
+                selectPlant(plant);
+                e.preventDefault();
+            });
+            
+            document.addEventListener('mousemove', function(e) {
+                if (!isDragging) return;
+                plant.x = e.clientX - offsetX;
+                plant.y = e.clientY - offsetY;
+                element.style.left = plant.x + 'px';
+                element.style.top = plant.y + 'px';
+            });
+            
+            document.addEventListener('mouseup', function() {
+                if (isDragging) {
+                    saveState();
+                }
+                isDragging = false;
+            });
+        }
+
+        function rotatePlant(id, angle) {
+            const plant = plantedPlants.find(p => p.id === id);
+            if (plant) {
+                plant.rotation += angle;
+                renderPlantedPlants();
+                saveState();
+            }
+        }
+
+        function scalePlant(id, factor) {
+            const plant = plantedPlants.find(p => p.id === id);
+            if (plant) {
+                plant.scale = Math.max(0.3, Math.min(3, plant.scale * factor));
+                renderPlantedPlants();
+                saveState();
+            }
+        }
+
+        function removePlant(id) {
+            plantedPlants = plantedPlants.filter(p => p.id !== id);
+            renderPlantedPlants();
+            deselectAll();
+            saveState();
+        }
+
+        function selectPlant(plant) {
+            selectedItem = plant.id;
+            selectedType = 'plant';
+            document.getElementById('transformPanel').style.display = 'block';
+            document.getElementById('selectedItemName').textContent = `已选中: ${plant.name}`;
+            document.getElementById('transformRotation').textContent = (plant.rotation || 0) + '°';
+            document.getElementById('transformRotationSlider').value = plant.rotation || 0;
+            document.getElementById('transformScale').textContent = Math.round((plant.scale || 1) * 100) + '%';
+            document.getElementById('transformScaleSlider').value = Math.round((plant.scale || 1) * 100);
+            document.getElementById('resetPositionBtn').style.display = 'none';
+            renderPlantedPlants();
+        }
+
+        function selectBackground() {
+            if (!customTerrainImage) {
+                alert('请先上传底图');
+                return;
+            }
+            selectedItem = 'background';
+            selectedType = 'background';
+            document.getElementById('transformPanel').style.display = 'block';
+            document.getElementById('selectedItemName').textContent = '已选中: 底图';
+            document.getElementById('transformRotation').textContent = (parseInt(document.getElementById('bgRotation').value) || 0) + '°';
+            document.getElementById('transformRotationSlider').value = parseInt(document.getElementById('bgRotation').value) || 0;
+            document.getElementById('transformScale').textContent = document.getElementById('bgScale').value + '%';
+            document.getElementById('transformScaleSlider').value = document.getElementById('bgScale').value;
+            document.getElementById('resetPositionBtn').style.display = 'flex';
+        }
+
+        function deselectAll() {
+            selectedItem = null;
+            selectedType = null;
+            document.getElementById('transformPanel').style.display = 'none';
+            renderPlantedPlants();
+        }
+
+        function rotateSelected(angle) {
+            if (!selectedItem) return;
+            
+            if (selectedType === 'background') {
+                const current = parseInt(document.getElementById('bgRotation').value) || 0;
+                document.getElementById('bgRotation').value = current + angle;
+                document.getElementById('transformRotationSlider').value = current + angle;
+                document.getElementById('transformRotation').textContent = (current + angle) + '°';
+                applyTransform(current + angle, document.getElementById('bgScale').value);
+            } else if (selectedType === 'plant') {
+                const plant = plantedPlants.find(p => p.id === selectedItem);
+                if (plant) {
+                    plant.rotation += angle;
+                    document.getElementById('transformRotationSlider').value = plant.rotation;
+                    document.getElementById('transformRotation').textContent = plant.rotation + '°';
+                    renderPlantedPlants();
+                    saveState();
+                }
+            }
+        }
+
+        function scaleSelected(percent) {
+            if (!selectedItem) return;
+            
+            if (selectedType === 'background') {
+                const current = parseInt(document.getElementById('bgScale').value);
+                const newValue = Math.max(30, Math.min(300, current + percent));
+                document.getElementById('bgScale').value = newValue;
+                document.getElementById('transformScaleSlider').value = newValue;
+                document.getElementById('transformScale').textContent = newValue + '%';
+                applyTransform(document.getElementById('bgRotation').value, newValue);
+            } else if (selectedType === 'plant') {
+                const plant = plantedPlants.find(p => p.id === selectedItem);
+                if (plant) {
+                    plant.scale = Math.max(0.3, Math.min(3, plant.scale * (100 + percent) / 100));
+                    document.getElementById('transformScaleSlider').value = Math.round(plant.scale * 100);
+                    document.getElementById('transformScale').textContent = Math.round(plant.scale * 100) + '%';
+                    renderPlantedPlants();
+                    saveState();
+                }
+            }
+        }
+
+        function applyTransform(rotation, scale) {
+            if (selectedType === 'background') {
+                const bgLayer = document.getElementById('backgroundLayer');
+                bgLayer.style.transform = `translate(-50%, -50%) rotate(${rotation}deg) scale(${scale / 100})`;
+            }
+        }
+
+        function resetTransform() {
+            if (!selectedItem) return;
+            
+            if (selectedType === 'background') {
+                document.getElementById('bgRotation').value = 0;
+                document.getElementById('transformRotationSlider').value = 0;
+                document.getElementById('transformRotation').textContent = '0°';
+                document.getElementById('bgScale').value = 100;
+                document.getElementById('transformScaleSlider').value = 100;
+                document.getElementById('transformScale').textContent = '100%';
+                const bgLayer = document.getElementById('backgroundLayer');
+                bgLayer.style.transform = 'translate(-50%, -50%) rotate(0deg) scale(1)';
+            } else if (selectedType === 'plant') {
+                const plant = plantedPlants.find(p => p.id === selectedItem);
+                if (plant) {
+                    plant.rotation = 0;
+                    plant.scale = 1;
+                    document.getElementById('transformRotationSlider').value = 0;
+                    document.getElementById('transformRotation').textContent = '0°';
+                    document.getElementById('transformScaleSlider').value = 100;
+                    document.getElementById('transformScale').textContent = '100%';
+                    renderPlantedPlants();
+                    saveState();
+                }
+            }
+        }
+
+        function resetBackgroundPosition() {
+            const bgLayer = document.getElementById('backgroundLayer');
+            bgLayer.style.transform = 'translate(-50%, -50%)';
+            saveState();
+        }
+
+        function deleteSelected() {
+            if (selectedType === 'plant') {
+                removePlant(selectedItem);
+            }
+        }
+
+        function moveSelected(dx, dy) {
+            if (!selectedItem || selectedType !== 'plant') return;
+            
+            const plant = plantedPlants.find(p => p.id === selectedItem);
+            if (plant) {
+                plant.x += dx;
+                plant.y += dy;
+                
+                plant.x = Math.max(-plant.imageWidth || 50, plant.x);
+                plant.y = Math.max(-plant.imageHeight || 50, plant.y);
+                
+                renderPlantedPlants();
+                saveState();
+            }
+        }
+
+        function loadTerrainImage(file) {
+            if (!file.type.startsWith('image/')) {
+                alert('请上传图片文件!');
+                return;
+            }
+
+            const reader = new FileReader();
+            reader.onload = function(e) {
+                customTerrainImage = e.target.result;
+                
+                document.getElementById('previewImage').src = customTerrainImage;
+                document.getElementById('customTerrainPreview').style.display = 'block';
+                document.getElementById('opacityValue').textContent = '100%';
+                document.getElementById('bgOpacity').value = 100;
+                
+                const bgLayer = document.getElementById('backgroundLayer');
+                bgLayer.src = customTerrainImage;
+                bgLayer.style.display = 'block';
+                
+                const img = new Image();
+                img.onload = function() {
+                    autoAdjustBackground(img.width, img.height);
+                };
+                img.src = customTerrainImage;
+            };
+            reader.readAsDataURL(file);
+        }
+
+        function handleFileDrop(e) {
+            const files = e.dataTransfer.files;
+            if (files.length > 0) {
+                loadTerrainImage(files[0]);
+            }
+        }
+
+        function autoAdjustBackground(imgWidth, imgHeight) {
+            const bgLayer = document.getElementById('backgroundLayer');
+            bgLayer.style.width = 'auto';
+            bgLayer.style.height = 'auto';
+            bgLayer.style.maxWidth = '100%';
+            bgLayer.style.maxHeight = '100%';
+            bgLayer.style.objectFit = 'contain';
+            
+            document.getElementById('currentTerrain').textContent = '底图已加载 (完整显示)';
+        }
+
+        function adjustBackground(fitType) {
+            document.querySelectorAll('.terrain-controls button').forEach(btn => btn.classList.remove('active'));
+            event.target.classList.add('active');
+            
+            const bgLayer = document.getElementById('backgroundLayer');
+            switch(fitType) {
+                case 'auto':
+                    if (customTerrainImage) {
+                        const img = new Image();
+                        img.onload = function() {
+                            autoAdjustBackground(img.width, img.height);
+                        };
+                        img.src = customTerrainImage;
+                    }
+                    break;
+                case 'cover':
+                    bgLayer.style.width = '100%';
+                    bgLayer.style.height = '100%';
+                    bgLayer.style.maxWidth = 'none';
+                    bgLayer.style.maxHeight = 'none';
+                    bgLayer.style.objectFit = 'cover';
+                    bgLayer.style.transform = 'translate(0, 0) scale(1)';
+                    document.getElementById('bgScale').value = 100;
+                    document.getElementById('bgScaleValue').textContent = '100%';
+                    document.getElementById('bgPosX').value = 0;
+                    document.getElementById('bgPosY').value = 0;
+                    document.getElementById('currentTerrain').textContent = '底图已加载 (铺满画布)';
+                    break;
+                case 'contain':
+                    bgLayer.style.width = 'auto';
+                    bgLayer.style.height = 'auto';
+                    bgLayer.style.maxWidth = '100%';
+                    bgLayer.style.maxHeight = '100%';
+                    bgLayer.style.objectFit = 'contain';
+                    bgLayer.style.transform = 'translate(0, 0) scale(1)';
+                    document.getElementById('bgScale').value = 100;
+                    document.getElementById('bgScaleValue').textContent = '100%';
+                    document.getElementById('bgPosX').value = 0;
+                    document.getElementById('bgPosY').value = 0;
+                    document.getElementById('currentTerrain').textContent = '底图已加载 (保持比例)';
+                    break;
+            }
+        }
+
+        function moveBackground(dx, dy) {
+            const bgLayer = document.getElementById('backgroundLayer');
+            const posX = parseInt(document.getElementById('bgPosX').value) || 0;
+            const posY = parseInt(document.getElementById('bgPosY').value) || 0;
+            
+            const newX = posX + dx;
+            const newY = posY + dy;
+            
+            document.getElementById('bgPosX').value = newX;
+            document.getElementById('bgPosY').value = newY;
+            
+            const scale = parseInt(document.getElementById('bgScale').value) / 100;
+            bgLayer.style.transform = `translate(${newX}px, ${newY}px) scale(${scale})`;
+        }
+
+        function resetBackgroundTransform() {
+            const bgLayer = document.getElementById('backgroundLayer');
+            document.getElementById('bgScale').value = 100;
+            document.getElementById('bgScaleValue').textContent = '100%';
+            document.getElementById('bgPosX').value = 0;
+            document.getElementById('bgPosY').value = 0;
+            bgLayer.style.transform = 'translate(0, 0) scale(1)';
+        }
+
+        function clearCustomTerrain() {
+            customTerrainImage = null;
+            document.getElementById('customTerrainPreview').style.display = 'none';
+            document.getElementById('terrainFileInput').value = '';
+            document.getElementById('opacityValue').textContent = '100%';
+            document.getElementById('bgOpacity').value = 100;
+            
+            const bgLayer = document.getElementById('backgroundLayer');
+            bgLayer.src = '';
+            bgLayer.style.display = 'none';
+            bgLayer.style.opacity = '1';
+            bgLayer.style.transform = '';
+            bgLayer.style.width = 'auto';
+            bgLayer.style.height = 'auto';
+            bgLayer.style.maxWidth = '100%';
+            bgLayer.style.maxHeight = '100%';
+            bgLayer.style.objectFit = 'contain';
+            
+            deselectAll();
+        }
+
+        function makeBackgroundDraggable() {
+            const bgLayer = document.getElementById('backgroundLayer');
+            let isDragging = false;
+            let offsetX, offsetY;
+            let currentTranslateX = -50;
+            let currentTranslateY = -50;
+            
+            bgLayer.addEventListener('mousedown', function(e) {
+                if (!customTerrainImage) return;
+                if (selectedType === 'plant') return;
+                
+                isDragging = true;
+                const transform = bgLayer.style.transform;
+                const match = transform.match(/translate\(([^,]+),\s*([^)]+)\)/);
+                currentTranslateX = match ? parseFloat(match[1]) : -50;
+                currentTranslateY = match ? parseFloat(match[2]) : -50;
+                
+                offsetX = e.clientX;
+                offsetY = e.clientY;
+                e.preventDefault();
+            });
+            
+            document.addEventListener('mousemove', function(e) {
+                if (!isDragging) return;
+                
+                const deltaX = (e.clientX - offsetX) / window.innerWidth * 100;
+                const deltaY = (e.clientY - offsetY) / window.innerHeight * 100;
+                
+                const newTranslateX = currentTranslateX + deltaX;
+                const newTranslateY = currentTranslateY + deltaY;
+                
+                const scale = parseInt(document.getElementById('bgScale').value) / 100;
+                const rotation = parseInt(document.getElementById('bgRotation').value) || 0;
+                
+                bgLayer.style.transform = `translate(${newTranslateX}%, ${newTranslateY}%) rotate(${rotation}deg) scale(${scale})`;
+            });
+            
+            document.addEventListener('mouseup', function() {
+                if (isDragging) {
+                    saveState();
+                }
+                isDragging = false;
+            });
+        }
+
+        function showPublishModal() {
+            document.getElementById('publishModal').classList.add('active');
+        }
+
+        function closeModal(modalId) {
+            document.getElementById(modalId).classList.remove('active');
+        }
+
+        function publishWork() {
+            const title = document.getElementById('workTitle').value;
+            const desc = document.getElementById('workDesc').value;
+            
+            if (!title) {
+                alert('请输入作品名称');
+                return;
+            }
+            
+            const newWork = {
+                id: Date.now(),
+                title: title,
+                description: desc,
+                image: canvas.toDataURL(),
+                likes: 0,
+                favorites: 0,
+                comments: [],
+                liked: false,
+                favorited: false
+            };
+            
+            works.unshift(newWork);
+            renderWorks();
+            closeModal('publishModal');
+            
+            document.getElementById('workTitle').value = '';
+            document.getElementById('workDesc').value = '';
+        }
+
+        function renderWorks() {
+            const container = document.getElementById('worksGrid');
+            
+            if (works.length === 0) {
+                container.innerHTML = '<div class="empty-state"><p>暂无作品，快来发布你的第一个作品吧！</p></div>';
+                return;
+            }
+            
+            container.innerHTML = works.map(work => `
+                <div class="work-card" onclick="showWorkDetail(${work.id})">
+                    <img src="${work.image}" alt="${work.title}">
+                    <div class="work-card-content">
+                        <div class="work-card-title">${work.title}</div>
+                        <div class="work-card-desc">${work.description}</div>
+                        <div class="work-card-meta">
+                            <span>❤️ ${work.likes}</span>
+                            <span>⭐ ${work.favorites}</span>
+                            <span>💬 ${work.comments.length}</span>
+                        </div>
+                        <div class="work-card-actions">
+                            <button class="work-action-btn ${work.liked ? 'liked' : ''}" onclick="event.stopPropagation(); likeWorkFromCard(${work.id})">❤️ ${work.liked ? '已赞' : '点赞'}</button>
+                            <button class="work-action-btn ${work.favorited ? 'favorited' : ''}" onclick="event.stopPropagation(); favoriteWorkFromCard(${work.id})">⭐ ${work.favorited ? '已收藏' : '收藏'}</button>
+                        </div>
+                    </div>
+                </div>
+            `).join('');
+        }
+
+        function showWorkDetail(id) {
+            currentWorkDetail = works.find(w => w.id === id);
+            if (!currentWorkDetail) return;
+            
+            document.getElementById('detailTitle').textContent = currentWorkDetail.title;
+            document.getElementById('detailImage').src = currentWorkDetail.image;
+            document.getElementById('detailDesc').textContent = currentWorkDetail.description;
+            document.getElementById('detailLikes').textContent = `❤️ ${currentWorkDetail.likes}`;
+            document.getElementById('detailFavorites').textContent = `⭐ ${currentWorkDetail.favorites}`;
+            document.getElementById('detailComments').textContent = `💬 ${currentWorkDetail.comments.length}`;
+            
+            renderComments();
+            document.getElementById('workDetailModal').classList.add('active');
+        }
+
+        function renderComments() {
+            const container = document.getElementById('commentsList');
+            if (!currentWorkDetail || currentWorkDetail.comments.length === 0) {
+                container.innerHTML = '<p style="color: var(--text-muted); text-align: center; padding: 10px;">暂无评论</p>';
+                return;
+            }
+            
+            container.innerHTML = currentWorkDetail.comments.map(comment => `
+                <div style="padding: 12px; border-bottom: 1px solid rgba(76, 175, 80, 0.1);">
+                    <strong style="color: var(--primary-color);">${comment.user}</strong>
+                    <p style="color: var(--text-secondary); margin-top: 4px;">${comment.text}</p>
+                </div>
+            `).join('');
+        }
+
+        function likeWork() {
+            if (!currentWorkDetail) return;
+            
+            if (currentWorkDetail.liked) {
+                currentWorkDetail.likes--;
+                currentWorkDetail.liked = false;
+            } else {
+                currentWorkDetail.likes++;
+                currentWorkDetail.liked = true;
+            }
+            
+            document.getElementById('detailLikes').textContent = `❤️ ${currentWorkDetail.likes}`;
+            renderWorks();
+        }
+
+        function favoriteWork() {
+            if (!currentWorkDetail) return;
+            
+            if (currentWorkDetail.favorited) {
+                currentWorkDetail.favorites--;
+                currentWorkDetail.favorited = false;
+            } else {
+                currentWorkDetail.favorites++;
+                currentWorkDetail.favorited = true;
+            }
+            
+            document.getElementById('detailFavorites').textContent = `⭐ ${currentWorkDetail.favorites}`;
+            renderWorks();
+        }
+
+        function likeWorkFromCard(id) {
+            const work = works.find(w => w.id === id);
+            if (!work) return;
+            
+            if (work.liked) {
+                work.likes--;
+                work.liked = false;
+            } else {
+                work.likes++;
+                work.liked = true;
+            }
+            
+            renderWorks();
+        }
+
+        function favoriteWorkFromCard(id) {
+            const work = works.find(w => w.id === id);
+            if (!work) return;
+            
+            if (work.favorited) {
+                work.favorites--;
+                work.favorited = false;
+            } else {
+                work.favorites++;
+                work.favorited = true;
+            }
+            
+            renderWorks();
+        }
+
+        function submitComment() {
+            const text = document.getElementById('commentInput').value.trim();
+            if (!text || !currentWorkDetail) return;
+            
+            currentWorkDetail.comments.push({
+                id: Date.now(),
+                text: text,
+                user: '游客'
+            });
+            
+            document.getElementById('commentInput').value = '';
+            document.getElementById('detailComments').textContent = `💬 ${currentWorkDetail.comments.length}`;
+            renderComments();
+        }
+
+        document.addEventListener('DOMContentLoaded', init);
+    </script>
+</body>
+</html>
